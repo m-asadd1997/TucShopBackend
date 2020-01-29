@@ -1,12 +1,13 @@
 package com.example.TucShopBackend.DTO;
 
 import com.example.TucShopBackend.Models.Products;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public class CategoryDTO {
     String name;
-    String image;
+    MultipartFile image;
 
     List<Products> productsList;
 
@@ -21,11 +22,11 @@ public class CategoryDTO {
         this.name = name;
     }
 
-    public String getImage() {
+    public MultipartFile getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(MultipartFile image) {
         this.image = image;
     }
 
