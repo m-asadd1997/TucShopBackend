@@ -5,6 +5,8 @@ import com.example.TucShopBackend.Models.Products;
 import java.util.List;
 
 public class CategoryDTO {
+
+
     String name;
     String image;
 
