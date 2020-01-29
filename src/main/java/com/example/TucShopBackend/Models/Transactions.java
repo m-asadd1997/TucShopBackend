@@ -8,6 +8,7 @@ import java.util.List;
 @Entity
 public class Transactions {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -21,6 +22,8 @@ public class Transactions {
     @JoinTable(name = "Product_Transaction",joinColumns = @JoinColumn(name = "transaction_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "products_id",referencedColumnName = "id"))
     public List<Products> products;
+
+
 
     public Transactions() {
     }

@@ -6,6 +6,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public class CategoryDTO {
+
+
     String name;
     MultipartFile image;
 

@@ -21,6 +21,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CategoryService {
 
@@ -28,9 +31,6 @@ public class CategoryService {
     CategoryRepository categoryRepository;
 
     public ApiResponse postCategory(CategoryDTO categoryDTO){
-
-
-
         Category categoryName;
         categoryName = categoryRepository.findCategoriesByName(categoryDTO.getName());
         if(categoryName!= null){
@@ -76,6 +76,9 @@ public class CategoryService {
             e.printStackTrace();
             return false;
         }
+    }
+
+   
 
         return true;
     }
@@ -95,5 +98,48 @@ public class CategoryService {
     }
 
 
+ public Category getById(Long id){
+        Optional<Category> category=categoryRepository.findById(id);
+
+
+       if(category.isPresent()) {
+           return category.get();
+       }
+       else {
+           return new Category();
+       }
+    }
+
+
+    public List <Category> getAll (){
+
+        List <Category> categoryList =categoryRepository.findAll();
+        return categoryList;
+    }
+
+
+   public  ApiResponse updateById (CategoryDTO categoryDTO, Long id){
+
+        Optional <Category> category = categoryRepository.findById(id);
+        Category category1 = category.get();
+        category1.setName(categoryDTO.getName());
+        category1.setImage(categoryDTO.getImage());
+        categoryRepository.save(category1);
+        return new ApiResponse(200, "Success", category1);
+    }
+
+   public  ApiResponse  deleteCategory (Long id){
+     categoryRepository.deleteById(id);
+
+    return  new ApiResponse (200, "Delete Success", null, getAll());
+    }
+
+
+   public ApiResponse <Category> deleteAll (){
+
+    categoryRepository.deleteAll();
+
+     return new ApiResponse  (200, "Deleted", null);
+    }
 
 }
