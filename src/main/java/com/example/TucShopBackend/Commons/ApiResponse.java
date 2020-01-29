@@ -1,12 +1,31 @@
 package com.example.TucShopBackend.Commons;
 
+import java.util.List;
+
 /**
  * Created by ASAD QURESHI on 1/23/2020.
  */
-public class ApiResponse {
+public class ApiResponse<T> {
     private int status;
     private String message;
     private Object result;
+    private List<T> objectList;
+    public ApiResponse(int status, String message, Object result, List<T> objectList) {
+
+        this.status = status;
+        this.message = message;
+        this.result = result;
+        this.objectList=objectList;
+
+    }
+
+    public List<T> getObjectList() {
+        return objectList;
+    }
+
+    public void setObjectList(List<T> objectList) {
+        this.objectList = objectList;
+    }
 
     public ApiResponse(int status, String message, Object result) {
         this.status = status;
