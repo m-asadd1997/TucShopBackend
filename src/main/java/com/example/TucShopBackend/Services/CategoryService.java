@@ -76,7 +76,7 @@ public class CategoryService {
             e.printStackTrace();
             return false;
         }
-    }
+
 
    
 
@@ -123,7 +123,7 @@ public class CategoryService {
         Optional <Category> category = categoryRepository.findById(id);
         Category category1 = category.get();
         category1.setName(categoryDTO.getName());
-        category1.setImage(categoryDTO.getImage());
+//        category1.setImage(categoryDTO.getImage());
         categoryRepository.save(category1);
         return new ApiResponse(200, "Success", category1);
     }
