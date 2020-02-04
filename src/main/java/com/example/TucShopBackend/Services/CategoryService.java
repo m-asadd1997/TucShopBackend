@@ -31,13 +31,11 @@ public class CategoryService {
     CategoryRepository categoryRepository;
 
     public ApiResponse postCategory(CategoryDTO categoryDTO){
-        Category categoryName;
-        categoryName = categoryRepository.findCategoriesByName(categoryDTO.getName());
+        Category categoryName = categoryRepository.findCategoriesByName(categoryDTO.getName());
         if(categoryName!= null){
             return new ApiResponse(409,"Duplicate",null);
         }
         else{
-
             String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
             if(saveCategoryImage(categoryDTO.getImage(),categoryDTO.getName(),unique)){
                 Category category = new Category();
@@ -46,19 +44,13 @@ public class CategoryService {
                 categoryRepository.save(category);
                 return new ApiResponse(200,"Success",category);
             }
-
         }
         return new ApiResponse(401,"Image not saved",null);
-
     }
-
-
-
 
     public Boolean saveCategoryImage(MultipartFile file, String name, String unique){
         try {
-
-            String UPLOADED_FOLDER_NEW = "E://TucShopBackend//serverFiles//"+name+"//";
+            String UPLOADED_FOLDER_NEW = "E://TuckshopBackend_Main//TucShopBackend//serverFiles//"+name+"//";
             File dir = new File(UPLOADED_FOLDER_NEW);
             dir.setExecutable(true);
             dir.setReadable(true);
@@ -71,38 +63,29 @@ public class CategoryService {
             byte[] bytes = file.getBytes();
             Path path = Paths.get(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename());
             Files.write(path, bytes);
-
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
             return false;
         }
-
-
-   
-
         return true;
     }
 
     public ResponseEntity<InputStreamResource> getCategoryImage(String filename, String category) throws IOException{
-        String filepath = "E://TucShopBackend//serverFiles//"+category+"//"+filename;
+        String filepath = "E://TuckshopBackend_Main/TucShopBackend//serverFiles//"+category+"//"+filename;
         File f = new File(filepath);
         Resource file = new UrlResource(f.toURI());
-
         return ResponseEntity
                 .ok()
                 .contentLength(file.contentLength())
                 .contentType(
                         MediaType.parseMediaType("image/JPG"))
                 .body(new InputStreamResource(file.getInputStream()));
-
     }
 
-
- public Category getById(Long id){
-        Optional<Category> category=categoryRepository.findById(id);
-
-
-       if(category.isPresent()) {
+    public Category getById(Long id){
+        Optional<Category> category = categoryRepository.findById(id);
+        if(category.isPresent()) {
            return category.get();
        }
        else {
@@ -110,16 +93,12 @@ public class CategoryService {
        }
     }
 
-
     public List <Category> getAll (){
-
         List <Category> categoryList =categoryRepository.findAll();
         return categoryList;
     }
 
-
-   public  ApiResponse updateById (CategoryDTO categoryDTO, Long id){
-
+    public  ApiResponse updateById (CategoryDTO categoryDTO, Long id){
         Optional <Category> category = categoryRepository.findById(id);
         Category category1 = category.get();
         category1.setName(categoryDTO.getName());
@@ -130,15 +109,12 @@ public class CategoryService {
 
    public  ApiResponse  deleteCategory (Long id){
      categoryRepository.deleteById(id);
-
-    return  new ApiResponse (200, "Delete Success", null, getAll());
+     return  new ApiResponse (200, "Delete Success", null, getAll());
     }
 
 
    public ApiResponse <Category> deleteAll (){
-
-    categoryRepository.deleteAll();
-
+     categoryRepository.deleteAll();
      return new ApiResponse  (200, "Deleted", null);
     }
 
