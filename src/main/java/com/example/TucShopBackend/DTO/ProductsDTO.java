@@ -1,10 +1,11 @@
 package com.example.TucShopBackend.DTO;
 
 import com.example.TucShopBackend.Models.Category;
+import org.springframework.web.multipart.MultipartFile;
 
 public class ProductsDTO {
     String name;
-    String image;
+    MultipartFile image;
     String description;
     double price;
     Category category;
@@ -12,21 +13,29 @@ public class ProductsDTO {
     public ProductsDTO() {
     }
 
+    public ProductsDTO(String name, MultipartFile image, String description, double price, Category category) {
+        this.name = name;
+        this.image = image;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+    }
     public String getName() {
         return name;
+    }
+
+    public MultipartFile getImage() {
+        return image;
+    }
+
+    public void setImage(MultipartFile image) {
+        this.image = image;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public String getDescription() {
         return description;
