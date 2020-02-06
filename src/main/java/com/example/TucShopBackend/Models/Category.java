@@ -13,11 +13,18 @@ public class Category {
     Long id;
     String name;
     String image;
+
     @OneToMany(mappedBy = "category")
      @JsonIgnore
     List<Products> products;
 
     public Category() {
+    }
+
+    public Category(String name, String image, List<Products> products) {
+        this.name = name;
+        this.image = image;
+        this.products = products;
     }
 
     public Long getId() {
