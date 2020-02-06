@@ -12,8 +12,8 @@ public class ProductsDTO {
     @NotNull(message = "Name not found")
     @Size(min = 3)
     String name;
-    @NotNull(message = "Image not found")
-    String image;
+    //@NotNull(message = "Image not found")
+    //String image;
     @NotNull(message = "Description not found")
     @Size(min = 3)
     MultipartFile image;
