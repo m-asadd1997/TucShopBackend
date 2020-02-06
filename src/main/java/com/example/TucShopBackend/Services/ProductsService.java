@@ -1,6 +1,7 @@
 package com.example.TucShopBackend.Services;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
+import com.example.TucShopBackend.Commons.CustomConstants;
 import com.example.TucShopBackend.DTO.CategoryDTO;
 import com.example.TucShopBackend.DTO.ProductsDTO;
 import com.example.TucShopBackend.Models.Category;
@@ -45,7 +46,7 @@ public class ProductsService {
             String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
             Category category = getCategoryById(productsDTO.getCategory().getId());
             if(category == null){
-                return new ApiResponse(200, "Failed to find category",null);
+                return new ApiResponse(200, CustomConstants.CAT_GETERROR,null);
             }
             if(saveProductImage(productsDTO.getImage(),category.getName(),unique)){
 
@@ -56,14 +57,14 @@ public class ProductsService {
             products.setPrice(productsDTO.getPrice());
             products.setName(productsDTO.getName());
             productsRepository.save(products);
-            return new ApiResponse(200, "Success", products);
+            return new ApiResponse(200, CustomConstants.PROD_POSTED, products);
         }
             }
         else{
-            return new ApiResponse(409, "Product Already Exists", null);
+            return new ApiResponse(409, CustomConstants.PROD_DUPLICATE, null);
         }
 
-        return new ApiResponse(401,"Image not saved",null);
+        return new ApiResponse(401,CustomConstants.PRODIMAGE_ERROR,null);
     }
 
     private Category getCategoryById(Long id) {
@@ -114,7 +115,7 @@ public class ProductsService {
 
         List<Products> products = productsRepository.getAllByCategoryId(category1.getId());
 
-        return new ApiResponse(200,"Success",products); //products;
+        return new ApiResponse(200,CustomConstants.PROD_GET,products); //products;
     }
     public List<Products> getAllProducts(){
         return productsRepository.findAll();
@@ -130,11 +131,11 @@ public class ProductsService {
     }
     public ApiResponse deleteAll(){
         productsRepository.deleteAll();
-        return new ApiResponse(200,"Delete All Successfully",null  );
+        return new ApiResponse(200,CustomConstants.PROD_DELETE,null  );
     }
     public ApiResponse deleteProductById(Long id){
         productsRepository.deleteById(id);
-        return new ApiResponse(200, "Product Deleted", null);
+        return new ApiResponse(200, CustomConstants.PROD_DELETE, null);
     }
     public ApiResponse updateById(Long id , ProductsDTO productsDTO){
 
@@ -145,6 +146,6 @@ public class ProductsService {
         product1.setDescription(productsDTO.getDescription());
         product1.setPrice(productsDTO.getPrice());
         productsRepository.save(product1);
-        return new ApiResponse(200, "Updated Successfully",product1);
+        return new ApiResponse(200, CustomConstants.PROD_UPDATE,product1);
     }
 }

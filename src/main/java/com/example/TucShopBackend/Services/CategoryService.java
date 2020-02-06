@@ -47,7 +47,7 @@ public class CategoryService {
             }
         }
 
-        return new ApiResponse(401,CustomConstants.IMAGE_ERROR,null);
+        return new ApiResponse(401,CustomConstants.CATIMAGE_ERROR,null);
     }
 
     public Boolean saveCategoryImage(MultipartFile file, String name, String unique){
