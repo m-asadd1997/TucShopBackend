@@ -31,9 +31,7 @@ public class TransactionsController {
 
     @GetMapping("/{id}")
     public Transactions getById (@PathVariable ("id") Long id, @RequestBody  TransactionsDTO transactionsDTO){
-
         return this.transactionService.getById(id);
-
-
     }
+
 }

@@ -13,7 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
+import javax.validation.Valid;
+
 import java.io.IOException;
+
 import java.util.List;
 
 @CrossOrigin
@@ -35,7 +39,7 @@ public class ProductsController {
     }
 
     @PostMapping("/postproduct")
-    public ApiResponse saveProducts(@RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
+    public ApiResponse saveProducts(@Valid @RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
         productsDTO.setImage(image);
         return productsService.saveProducts(productsDTO);
     }

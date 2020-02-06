@@ -3,11 +3,24 @@ package com.example.TucShopBackend.DTO;
 import com.example.TucShopBackend.Models.Category;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
+
 public class ProductsDTO {
+
+    @NotNull(message = "Name not found")
+    @Size(min = 3)
     String name;
+    @NotNull(message = "Image not found")
+    String image;
+    @NotNull(message = "Description not found")
+    @Size(min = 3)
     MultipartFile image;
     String description;
+    @Positive(message = "Price cant be negative")
     double price;
+    @NotNull(message = "Category not found")
     Category category;
 
     public ProductsDTO() {
