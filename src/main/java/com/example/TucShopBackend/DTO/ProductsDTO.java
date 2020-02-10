@@ -2,10 +2,22 @@ package com.example.TucShopBackend.DTO;
 
 import com.example.TucShopBackend.Models.Category;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+
 public class ProductsDTO {
+
+    @NotNull(message = "Name cannot be null")
+    @NotBlank(message = "Name cannot be blank" )
     String name;
+    @NotNull(message = "Image cannot be null")
+    @NotBlank(message = "Image cannot be blank" )
     String image;
     String description;
+    @NotNull(message = "Price cannot be null")
+    @Positive(message = "Price cannot be negative or 0")
     double price;
     Category category;
 

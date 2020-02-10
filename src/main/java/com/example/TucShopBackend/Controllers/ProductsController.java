@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -26,13 +27,13 @@ public class ProductsController {
 
 
     @PostMapping("/postreqproduct")
-    public ApiResponse saveRequestForProduct(@RequestBody RequestForProductDTO requestForProduct){
+    public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProductDTO requestForProduct){
         return requestForProductService.saveRequestForProduct(requestForProduct);
 
     }
 
     @PostMapping("/postproduct")
-    public ApiResponse saveProducts(@RequestBody ProductsDTO productsDTO){
+    public ApiResponse saveProducts(@Valid @RequestBody ProductsDTO productsDTO){
         return productsService.saveProducts(productsDTO);
     }
 

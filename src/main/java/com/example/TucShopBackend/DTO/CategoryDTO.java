@@ -3,11 +3,12 @@ package com.example.TucShopBackend.DTO;
 import com.example.TucShopBackend.Models.Products;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 public class CategoryDTO {
 
-
+    @NotNull(message = "Name cannot be null")
     String name;
     MultipartFile image;
 
