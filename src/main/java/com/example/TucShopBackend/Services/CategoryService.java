@@ -15,6 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -61,10 +64,18 @@ public class CategoryService {
             if(!dir.exists()){
                 dir.mkdirs();
             }
+          //  file.getsl
+            BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
-            byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename());
-            Files.write(path, bytes);
+            BufferedImage resized = resize(inputImage, 100, 100);
+//            BufferedImage outputImage = new BufferedImage(100,
+//                    100, inputImage.getType());
+
+            String format = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+            ImageIO.write(resized, format, new File(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename()));
+//            byte[] bytes = outputImage.get//file.getBytes();
+//            Path path = Paths.get(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename());
+//            Files.write(path, bytes);
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -124,6 +135,15 @@ public class CategoryService {
 
      return new ApiResponse  (200, CustomConstants.CAT_DELETE, null);
 
+    }
+
+    private BufferedImage resize(BufferedImage img, int height, int width) {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = resized.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return resized;
     }
 
 }
