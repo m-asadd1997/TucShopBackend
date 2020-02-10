@@ -2,17 +2,16 @@ package com.example.TucShopBackend.Services;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.CustomConstants;
-import com.example.TucShopBackend.DTO.CategoryDTO;
 import com.example.TucShopBackend.DTO.ProductsDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Models.Products;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
 import com.example.TucShopBackend.Repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,8 +35,10 @@ public class ProductsService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    public ApiResponse saveProducts(ProductsDTO productsDTO){
+    @Value("${product.image.url}")
+    String productImageUrl;
 
+    public ApiResponse saveProducts(ProductsDTO productsDTO){
 
         Products productsName = productsRepository.findByName(productsDTO.getName());
 
@@ -45,13 +46,15 @@ public class ProductsService {
 
             String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
             Category category = getCategoryById(productsDTO.getCategory().getId());
+
             if(category == null){
                 return new ApiResponse(200, CustomConstants.CAT_GETERROR,null);
             }
+
             if(saveProductImage(productsDTO.getImage(),category.getName(),unique)){
 
             Products products = new Products();
-            products.setImage("http://localhost:8080/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+            products.setImage(productImageUrl+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
             products.setCategory(category);
             products.setDescription(productsDTO.getDescription());
             products.setPrice(productsDTO.getPrice());
@@ -74,7 +77,6 @@ public class ProductsService {
 
     public Boolean saveProductImage(MultipartFile file, String name, String unique  ){
         try{
-
 
         String UPLOADED_FOLDER_NEW = "E://TuckshopBackend_Main//TucShopBackend//serverFiles//"+name+"//"+"products"+"//";
 
@@ -137,15 +139,54 @@ public class ProductsService {
         productsRepository.deleteById(id);
         return new ApiResponse(200, CustomConstants.PROD_DELETE, null);
     }
-    public ApiResponse updateById(Long id , ProductsDTO productsDTO){
+    public ApiResponse updateById(Long id , ProductsDTO productsDTO) {
 
-        Optional<Products> productOptional = productsRepository.findById(id);
-        Products product1 = productOptional.get();
-        product1.setName(productsDTO.getName());
-//        product1.setImage(productsDTO.getImage());
-        product1.setDescription(productsDTO.getDescription());
-        product1.setPrice(productsDTO.getPrice());
-        productsRepository.save(product1);
-        return new ApiResponse(200, CustomConstants.PROD_UPDATE,product1);
+        Category category = getCategoryById(productsDTO.getCategory().getId());
+
+        if(category == null){
+            return new ApiResponse(200, CustomConstants.CAT_GETERROR,null);
+        }
+
+        Optional<Products>findProduct = productsRepository.findById(id);
+        Products product = findProduct.get();
+
+        if(productsDTO.getImage().getOriginalFilename().isEmpty()) {
+            product.setImage(null);
+            return populateResponse(productsDTO, category, product);
+        }
+
+         if(product.getImage()!=null && product.getImage().equalsIgnoreCase( productsDTO.getImage().getName())){
+
+             return populateResponse(productsDTO, category, product);
+         }
+         else{
+
+            String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+
+            if (saveProductImage(productsDTO.getImage(), category.getName(), unique)) {
+
+                product.setName(productsDTO.getName());
+                product.setImage(productImageUrl+category.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+                product.setDescription(productsDTO.getDescription());
+                product.setPrice(productsDTO.getPrice());
+                product.setCategory(category);
+                productsRepository.save(product);
+                return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
+            }
+
+        return new ApiResponse(401,CustomConstants.PRODIMAGE_ERROR,null);
+
+        }
+
     }
+
+    private ApiResponse populateResponse(ProductsDTO productsDTO, Category category, Products product) {
+        product.setName(productsDTO.getName());
+        product.setDescription(productsDTO.getDescription());
+        product.setPrice(productsDTO.getPrice());
+        product.setCategory(category);
+        productsRepository.save(product);
+        return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
+    }
+
 }

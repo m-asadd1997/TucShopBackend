@@ -31,20 +31,20 @@ public class ProductsController {
     @Autowired
     ProductsService productsService;
 
-
+   //Request Product
     @PostMapping("/postreqproduct")
     public ApiResponse saveRequestForProduct(@RequestBody RequestForProductDTO requestForProduct){
         return requestForProductService.saveRequestForProduct(requestForProduct);
 
     }
-
+   //Post Product
     @PostMapping("/postproduct")
     public ApiResponse saveProducts(@Valid @RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
         productsDTO.setImage(image);
         return productsService.saveProducts(productsDTO);
     }
     //Get Products according to Category
-    @GetMapping("/{category}")
+    @GetMapping("/category/{category}")
     public ApiResponse getProductsByCategory(@PathVariable("category") String category){
         return productsService.getProductsByCategory(category);
     }
@@ -55,8 +55,9 @@ public class ProductsController {
     }
 
     //Get Product on the basis of ID
-    @GetMapping("/p/{id}")
-    public Object getProductById(@PathVariable("id") Long id){
+    @GetMapping("/{id}")
+    public Products getProductById(@PathVariable("id") Long id){
+
         return productsService.getProductById(id);
     }
     //Delete All Products
@@ -66,13 +67,14 @@ public class ProductsController {
     }
 
     //Delete Product on the basis of ID
-    @DeleteMapping("/d/{id}")
+    @DeleteMapping("/{id}")
     public ApiResponse deleteProductById(@PathVariable("id") Long id){
         return productsService.deleteProductById(id);
     }
 
     @PutMapping("/{id}")
-    public ApiResponse updateById(@PathVariable("id") Long id ,@RequestBody ProductsDTO productsDTO){
+    public ApiResponse updateById(@PathVariable("id") Long id ,@RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
+       productsDTO.setImage(image);
         return productsService.updateById(id,productsDTO);
     }
     @RequestMapping(value ="/image/{category}/{filename:.+}", method = RequestMethod.GET)
