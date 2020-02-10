@@ -52,7 +52,10 @@ public class CategoryService {
 
     public Boolean saveCategoryImage(MultipartFile file, String name, String unique){
         try {
+
+
             String UPLOADED_FOLDER_NEW = "E://TuckshopBackend_Main//TucShopBackend//serverFiles//"+name+"//";
+
             File dir = new File(UPLOADED_FOLDER_NEW);
             dir.setExecutable(true);
             dir.setReadable(true);
@@ -74,7 +77,10 @@ public class CategoryService {
     }
 
     public ResponseEntity<InputStreamResource> getCategoryImage(String filename, String category) throws IOException{
+
+
         String filepath = "E://TuckshopBackend_Main/TucShopBackend//serverFiles//"+category+"//"+filename;
+
         File f = new File(filepath);
         Resource file = new UrlResource(f.toURI());
         return ResponseEntity

@@ -18,6 +18,7 @@ import javax.validation.Valid;
 
 import java.io.IOException;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -33,14 +34,17 @@ public class ProductsController {
 
 
     @PostMapping("/postreqproduct")
-    public ApiResponse saveRequestForProduct(@RequestBody RequestForProductDTO requestForProduct){
+    public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProductDTO requestForProduct){
         return requestForProductService.saveRequestForProduct(requestForProduct);
 
     }
 
     @PostMapping("/postproduct")
+
+
     public ApiResponse saveProducts(@Valid @RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
         productsDTO.setImage(image);
+
         return productsService.saveProducts(productsDTO);
     }
     //Get Products according to Category

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class CategoryController {
 
 
     @PostMapping("/")
-    public ApiResponse saveCategory(@RequestParam("image") MultipartFile image, CategoryDTO categoryDTO) {
+    public ApiResponse addCategory(@Valid  @RequestParam("image") MultipartFile image, CategoryDTO categoryDTO) {
         categoryDTO.setImage(image);
         return categoryService.postCategory(categoryDTO);
 
