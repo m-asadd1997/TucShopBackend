@@ -33,8 +33,7 @@ public class CategoryController {
 
     }
     @GetMapping ("/{id}")
-    public Category getByid (@PathVariable("id") Long id, @RequestBody CategoryDTO categoryDTO ){
-
+    public Category getById (@PathVariable("id") Long id, @RequestBody CategoryDTO categoryDTO ){
         return this.categoryService.getById(id);
     }
 
@@ -42,19 +41,16 @@ public class CategoryController {
     @GetMapping ("/")
     public List<Category> getAll (CategoryDTO categoryDTO ){
         return categoryService.getAll();
-
     }
 
     @PutMapping("/{id}")
     public  ApiResponse updateById (@PathVariable ("id") Long id, @RequestBody CategoryDTO categoryDTO){
         return categoryService.updateById(categoryDTO, id);
-
     }
 
     @DeleteMapping ("/{id}")
     public ApiResponse deleteById (@PathVariable ("id") Long id){
         return  categoryService.deleteCategory(id);
-
     }
 
     @DeleteMapping ("/")

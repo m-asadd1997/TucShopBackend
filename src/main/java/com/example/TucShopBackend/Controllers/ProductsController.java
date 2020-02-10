@@ -8,8 +8,15 @@ import com.example.TucShopBackend.Models.RequestForProduct;
 import com.example.TucShopBackend.Services.ProductsService;
 import com.example.TucShopBackend.Services.RequestForProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+
+import javax.validation.Valid;
+
+import java.io.IOException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -33,10 +40,14 @@ public class ProductsController {
     }
 
     @PostMapping("/postproduct")
-    public ApiResponse saveProducts(@Valid @RequestBody ProductsDTO productsDTO){
+
+
+    public ApiResponse saveProducts(@Valid @RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
+        productsDTO.setImage(image);
+
         return productsService.saveProducts(productsDTO);
     }
-
+    //Get Products according to Category
     @GetMapping("/{category}")
     public ApiResponse getProductsByCategory(@PathVariable("category") String category){
         return productsService.getProductsByCategory(category);
@@ -67,6 +78,11 @@ public class ProductsController {
     @PutMapping("/{id}")
     public ApiResponse updateById(@PathVariable("id") Long id ,@RequestBody ProductsDTO productsDTO){
         return productsService.updateById(id,productsDTO);
+    }
+    @RequestMapping(value ="/image/{category}/{filename:.+}", method = RequestMethod.GET)
+    public ResponseEntity<InputStreamResource> getProductImage(@PathVariable("filename") String filename,  @PathVariable("category") String category)
+            throws IOException {
+        return productsService.getProductImage(filename,category);
     }
 
 
