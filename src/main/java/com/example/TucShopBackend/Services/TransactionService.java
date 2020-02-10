@@ -1,6 +1,7 @@
 package com.example.TucShopBackend.Services;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
+import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.TransactionsDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Models.Transactions;
@@ -30,7 +31,7 @@ public class TransactionService {
         transactions.setUpdatedBy(transactionsDTO.getUpdatedBy());
         transactionsRepository.save(transactions);
 
-        return new ApiResponse(200,"Transaction saved successfully",transactions);
+        return new ApiResponse(Status.Status_Ok,"Transaction saved successfully",transactions);
     }
 
 
