@@ -2,6 +2,10 @@ package com.example.TucShopBackend.Services;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.CustomConstants;
+
+import com.example.TucShopBackend.Commons.Status;
+import com.example.TucShopBackend.DTO.CategoryDTO;
+
 import com.example.TucShopBackend.DTO.ProductsDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Models.Products;
@@ -48,7 +52,7 @@ public class ProductsService {
             Category category = getCategoryById(productsDTO.getCategory().getId());
 
             if(category == null){
-                return new ApiResponse(200, CustomConstants.CAT_GETERROR,null);
+                return new ApiResponse(Status.Status_ERROR, CustomConstants.CAT_GETERROR,null);
             }
 
             if(saveProductImage(productsDTO.getImage(),category.getName(),unique)){
@@ -60,14 +64,14 @@ public class ProductsService {
             products.setPrice(productsDTO.getPrice());
             products.setName(productsDTO.getName());
             productsRepository.save(products);
-            return new ApiResponse(200, CustomConstants.PROD_POSTED, products);
+            return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
         }
             }
         else{
-            return new ApiResponse(409, CustomConstants.PROD_DUPLICATE, null);
+            return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.PROD_DUPLICATE, null);
         }
 
-        return new ApiResponse(401,CustomConstants.PRODIMAGE_ERROR,null);
+        return new ApiResponse(Status.Status_ERROR,CustomConstants.PRODIMAGE_ERROR,null);
     }
 
     private Category getCategoryById(Long id) {
@@ -117,7 +121,7 @@ public class ProductsService {
 
         List<Products> products = productsRepository.getAllByCategoryId(category1.getId());
 
-        return new ApiResponse(200,CustomConstants.PROD_GET,products); //products;
+        return new ApiResponse(Status.Status_Ok,CustomConstants.PROD_GET,products); //products;
     }
     public List<Products> getAllProducts(){
         return productsRepository.findAll();
@@ -133,12 +137,13 @@ public class ProductsService {
     }
     public ApiResponse deleteAll(){
         productsRepository.deleteAll();
-        return new ApiResponse(200,CustomConstants.PROD_DELETE,null  );
+        return new ApiResponse(Status.Status_Ok,CustomConstants.PROD_DELETE,null  );
     }
     public ApiResponse deleteProductById(Long id){
         productsRepository.deleteById(id);
-        return new ApiResponse(200, CustomConstants.PROD_DELETE, null);
+        return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_DELETE, null);
     }
+
     public ApiResponse updateById(Long id , ProductsDTO productsDTO) {
 
         Category category = getCategoryById(productsDTO.getCategory().getId());
@@ -187,6 +192,7 @@ public class ProductsService {
         product.setCategory(category);
         productsRepository.save(product);
         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
+
     }
 
 }

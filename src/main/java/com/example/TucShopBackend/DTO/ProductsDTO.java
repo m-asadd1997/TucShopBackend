@@ -7,18 +7,27 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+
 public class ProductsDTO {
 
-    @NotNull(message = "Name not found")
-    @Size(min = 3)
+
+    @NotNull(message = "Name cannot be null")
+    @NotBlank(message = "Name cannot be blank" )
+  @Size(min = 3)
     String name;
-    //@NotNull(message = "Image not found")
-    //String image;
-    @NotNull(message = "Description not found")
-    @Size(min = 3)
+    @NotNull(message = "Image cannot be null")
+    @NotBlank(message = "Image cannot be blank" )
     MultipartFile image;
+  @NotNull(message = "Description not found")
+    @Size(min = 3)
     String description;
-    @Positive(message = "Price cant be negative")
+    @NotNull(message = "Price cannot be null")
+    @Positive(message = "Price cannot be negative or 0")
+
     double price;
     @NotNull(message = "Category not found")
     Category category;
