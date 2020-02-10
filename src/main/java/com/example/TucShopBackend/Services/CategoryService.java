@@ -2,6 +2,7 @@ package com.example.TucShopBackend.Services;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.CustomConstants;
+import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.CategoryDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
@@ -34,7 +35,7 @@ public class CategoryService {
     public ApiResponse postCategory(CategoryDTO categoryDTO){
         Category categoryName = categoryRepository.findCategoriesByName(categoryDTO.getName());
         if(categoryName!= null){
-            return new ApiResponse(409, CustomConstants.CAT_DUPLICATE,null);
+            return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.CAT_DUPLICATE,null);
         }
         else{
             String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
@@ -43,11 +44,11 @@ public class CategoryService {
                 category.setImage("http://localhost:8080/"+categoryDTO.getName()+"/"+unique+categoryDTO.getImage().getOriginalFilename());
                 category.setName(categoryDTO.getName());
                 categoryRepository.save(category);
-                return new ApiResponse(200,CustomConstants.CAT_POSTED,category);
+                return new ApiResponse(Status.Status_Ok,CustomConstants.CAT_POSTED,category);
             }
         }
 
-        return new ApiResponse(401,CustomConstants.CATIMAGE_ERROR,null);
+        return new ApiResponse(Status.Status_ERROR,CustomConstants.CATIMAGE_ERROR,null);
     }
 
     public Boolean saveCategoryImage(MultipartFile file, String name, String unique){
@@ -112,13 +113,13 @@ public class CategoryService {
         category1.setName(categoryDTO.getName());
 //        category1.setImage(categoryDTO.getImage());
         categoryRepository.save(category1);
-        return new ApiResponse(200, CustomConstants.CAT_UPDATE, category1);
+        return new ApiResponse(Status.Status_Ok, CustomConstants.CAT_UPDATE, category1);
     }
 
    public  ApiResponse  deleteCategory (Long id){
      categoryRepository.deleteById(id);
 
-    return  new ApiResponse (200, CustomConstants.CAT_DELETE, null, getAll());
+    return  new ApiResponse (Status.Status_Ok, CustomConstants.CAT_DELETE, null, getAll());
 
     }
 
@@ -128,7 +129,7 @@ public class CategoryService {
 
     categoryRepository.deleteAll();
 
-     return new ApiResponse  (200, CustomConstants.CAT_DELETE, null);
+     return new ApiResponse  (Status.Status_Ok, CustomConstants.CAT_DELETE, null);
 
     }
 

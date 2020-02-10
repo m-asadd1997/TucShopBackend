@@ -1,6 +1,7 @@
 package com.example.TucShopBackend.Services;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
+import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;
 import com.example.TucShopBackend.Models.Products;
 import com.example.TucShopBackend.Models.RequestForProduct;
@@ -24,7 +25,7 @@ public class RequestForProductService {
         RequestForProduct requestForProduct = new RequestForProduct();
         requestForProduct.setName(requestForProductDTO.getName());
         requestForProductRepository.save(requestForProduct);
-        return new ApiResponse(200,"Success",requestForProduct);
+        return new ApiResponse(Status.Status_Ok,"Success",requestForProduct);
 
     }
 
