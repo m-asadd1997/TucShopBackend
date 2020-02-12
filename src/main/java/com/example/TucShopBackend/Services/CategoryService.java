@@ -67,7 +67,7 @@ public class CategoryService {
         try {
 
 
-            String UPLOADED_FOLDER_NEW = "E://TuckshopBackend_Main//TucShopBackend//serverFiles//"+name+"//";
+            String UPLOADED_FOLDER_NEW = "F://tuckshop//TucShopBackend//serverFiles//"+name+"//";
 
             File dir = new File(UPLOADED_FOLDER_NEW);
             dir.setExecutable(true);
@@ -80,7 +80,7 @@ public class CategoryService {
           //  file.getsl
             BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
-            BufferedImage resized = resize(inputImage, 100, 100);
+            BufferedImage resized = resize(inputImage, 30, 30);
 //            BufferedImage outputImage = new BufferedImage(100,
 //                    100, inputImage.getType());
 

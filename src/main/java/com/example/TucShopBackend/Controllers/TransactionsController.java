@@ -18,7 +18,7 @@ public class TransactionsController {
     @Autowired
     TransactionService transactionService;
 
-    @PostMapping("/")
+    @PostMapping("/post")
     public ApiResponse postTransaction(@RequestBody TransactionsDTO transactionsDTO){
         return transactionService.saveTransactions(transactionsDTO);
     }
@@ -30,7 +30,7 @@ public class TransactionsController {
     }
 
     @GetMapping("/{id}")
-    public Transactions getById (@PathVariable ("id") Long id, @RequestBody  TransactionsDTO transactionsDTO){
+    public Transactions getById (@PathVariable ("id") Long id){
         return this.transactionService.getById(id);
     }
 

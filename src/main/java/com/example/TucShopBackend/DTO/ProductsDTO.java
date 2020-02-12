@@ -32,14 +32,19 @@ public class ProductsDTO {
     @NotNull(message = "Category not found")
     Category category;
 
+    Double quantity;
+    Double costprice;
+
     public ProductsDTO() {
     }
 
-    public ProductsDTO(String name, MultipartFile image, String description, double price, Category category) {
+    public ProductsDTO(String name, MultipartFile image, String description, double price, Category category, double qty, double costprice) {
         this.name = name;
         this.image = image;
         this.description = description;
+
         this.price = price;
+
         this.category = category;
     }
     public String getName() {
@@ -58,6 +63,25 @@ public class ProductsDTO {
         this.name = name;
     }
 
+    public Double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Double quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setCostprice(Double costprice) {
+        this.costprice = costprice;
+    }
+
+    public double getCostprice() {
+        return costprice;
+    }
+
+    public void setCostprice(double costprice) {
+        this.costprice = costprice;
+    }
 
     public String getDescription() {
         return description;
