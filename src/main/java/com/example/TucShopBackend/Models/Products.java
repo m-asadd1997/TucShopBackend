@@ -14,6 +14,10 @@ public class Products {
     String image;
     String description;
     double price;
+    double qty;
+    double costprice;
+
+
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -32,6 +36,22 @@ public class Products {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public double getQty() {
+        return qty;
+    }
+
+    public void setQty(double qty) {
+        this.qty = qty;
+    }
+
+    public double getCostprice() {
+        return costprice;
+    }
+
+    public void setCostprice(double costprice) {
+        this.costprice = costprice;
     }
 
     public String getName() {
