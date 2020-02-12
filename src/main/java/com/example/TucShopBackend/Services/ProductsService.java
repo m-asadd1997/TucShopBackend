@@ -58,10 +58,12 @@ public class ProductsService {
             if(saveProductImage(productsDTO.getImage(),category.getName(),unique)){
 
             Products products = new Products();
-            products.setImage(productImageUrl+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+            products.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
             products.setCategory(category);
             products.setDescription(productsDTO.getDescription());
             products.setPrice(productsDTO.getPrice());
+            products.setQty(productsDTO.getQuantity());
+            products.setCostprice(productsDTO.getCostprice());
             products.setName(productsDTO.getName());
             productsRepository.save(products);
             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
@@ -171,9 +173,11 @@ public class ProductsService {
             if (saveProductImage(productsDTO.getImage(), category.getName(), unique)) {
 
                 product.setName(productsDTO.getName());
-                product.setImage(productImageUrl+category.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+                product.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
                 product.setDescription(productsDTO.getDescription());
                 product.setPrice(productsDTO.getPrice());
+                product.setQty(productsDTO.getQuantity());
+                product.setCostprice(productsDTO.getCostprice());
                 product.setCategory(category);
                 productsRepository.save(product);
                 return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
@@ -189,6 +193,8 @@ public class ProductsService {
         product.setName(productsDTO.getName());
         product.setDescription(productsDTO.getDescription());
         product.setPrice(productsDTO.getPrice());
+        product.setQty(productsDTO.getQuantity());
+        product.setCostprice(productsDTO.getCostprice());
         product.setCategory(category);
         productsRepository.save(product);
         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
