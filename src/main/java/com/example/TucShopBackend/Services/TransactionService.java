@@ -25,10 +25,10 @@ public class TransactionService {
         Transactions transactions = new Transactions();
 
         transactions.setAmount(transactionsDTO.getAmount());
-        transactions.setCreatedBy(transactionsDTO.getCreatedBy());
+        transactions.setCreatedBy("ADMIN");
         transactions.setDate(LocalDate.now());
         transactions.setProducts(transactionsDTO.getProducts());
-        transactions.setUpdatedBy(transactionsDTO.getUpdatedBy());
+        transactions.setUpdatedBy("ADMIN");
         transactionsRepository.save(transactions);
 
         return new ApiResponse(Status.Status_Ok,"Transaction saved successfully",transactions);

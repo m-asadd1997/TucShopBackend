@@ -67,7 +67,7 @@ public class CategoryService {
         try {
 
 
-            String UPLOADED_FOLDER_NEW = "E://TuckshopBackend_Main//TucShopBackend//serverFiles//"+name+"//";
+            String UPLOADED_FOLDER_NEW = "F://tuckshop//TucShopBackend//serverFiles//"+name+"//";
 
             File dir = new File(UPLOADED_FOLDER_NEW);
             dir.setExecutable(true);
