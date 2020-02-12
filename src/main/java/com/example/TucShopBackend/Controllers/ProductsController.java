@@ -40,8 +40,6 @@ public class ProductsController {
     }
    //Post Product
     @PostMapping("/postproduct")
-
-
     public ApiResponse saveProducts(@Valid @RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
         productsDTO.setImage(image);
 
