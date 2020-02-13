@@ -7,6 +7,7 @@ import com.example.TucShopBackend.DTO.CategoryDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -35,16 +36,24 @@ public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Value("${category.image.url}")
+    String categoryImageUrl;
+
     public ApiResponse postCategory(CategoryDTO categoryDTO){
+
         Category categoryName = categoryRepository.findCategoriesByName(categoryDTO.getName());
+
         if(categoryName!= null){
             return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.CAT_DUPLICATE,null);
         }
         else{
+
             String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+
             if(saveCategoryImage(categoryDTO.getImage(),categoryDTO.getName(),unique)){
+
                 Category category = new Category();
-                category.setImage("http://localhost:8080/"+categoryDTO.getName()+"/"+unique+categoryDTO.getImage().getOriginalFilename());
+                category.setImage(categoryImageUrl+categoryDTO.getName()+"/"+unique+categoryDTO.getImage().getOriginalFilename());
                 category.setName(categoryDTO.getName());
                 categoryRepository.save(category);
                 return new ApiResponse(Status.Status_Ok,CustomConstants.CAT_POSTED,category);
@@ -58,7 +67,7 @@ public class CategoryService {
         try {
 
 
-            String UPLOADED_FOLDER_NEW = "E://TuckshopBackend_Main//TucShopBackend//serverFiles//"+name+"//";
+            String UPLOADED_FOLDER_NEW = "F://tuckshop//TucShopBackend//serverFiles//"+name+"//";
 
             File dir = new File(UPLOADED_FOLDER_NEW);
             dir.setExecutable(true);
@@ -71,7 +80,7 @@ public class CategoryService {
           //  file.getsl
             BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
-            BufferedImage resized = resize(inputImage, 100, 100);
+            BufferedImage resized = resize(inputImage, 30, 30);
 //            BufferedImage outputImage = new BufferedImage(100,
 //                    100, inputImage.getType());
 
@@ -118,16 +127,34 @@ public class CategoryService {
         return categoryList;
     }
 
-    public  ApiResponse updateById (CategoryDTO categoryDTO, Long id){
-        Optional <Category> category = categoryRepository.findById(id);
-        Category category1 = category.get();
-        category1.setName(categoryDTO.getName());
-//        category1.setImage(categoryDTO.getImage());
-        categoryRepository.save(category1);
-        return new ApiResponse(Status.Status_Ok, CustomConstants.CAT_UPDATE, category1);
+    public  ApiResponse updateById (CategoryDTO categoryDTO, Long id) {
+
+        Optional<Category> findCategory = categoryRepository.findById(id);
+        Category category1 = findCategory.get();
+
+        if (categoryDTO.getImage().getOriginalFilename().isEmpty()) {
+            categoryDTO.setImage(null);
+            return populateResponse(categoryDTO, category1);
+        }
+        if (category1.getImage()!= null && category1.getImage().equalsIgnoreCase(categoryDTO.getImage().getName())) {
+            return populateResponse(categoryDTO, category1);
+        }
+        else {
+
+            String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+
+            if(saveCategoryImage(categoryDTO.getImage(), categoryDTO.getName(), unique)){
+                category1.setName(categoryDTO.getName());
+                category1.setImage(categoryImageUrl+categoryDTO.getName()+"/"+unique+categoryDTO.getImage().getOriginalFilename());
+                categoryRepository.save(category1);
+                return new ApiResponse(200, CustomConstants.CAT_UPDATE,category1);
+            }
+            return new ApiResponse(401, CustomConstants.CATIMAGE_ERROR,null);
+        }
+
     }
 
-   public  ApiResponse  deleteCategory (Long id){
+    public  ApiResponse  deleteCategory (Long id){
      categoryRepository.deleteById(id);
 
     return  new ApiResponse (Status.Status_Ok, CustomConstants.CAT_DELETE, null, getAll());
@@ -136,13 +163,12 @@ public class CategoryService {
 
 
    public ApiResponse <Category> deleteAll (){
-
-
     categoryRepository.deleteAll();
 
      return new ApiResponse  (Status.Status_Ok, CustomConstants.CAT_DELETE, null);
 
     }
+
 
     private BufferedImage resize(BufferedImage img, int height, int width) {
         Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
@@ -151,6 +177,12 @@ public class CategoryService {
         g2d.drawImage(tmp, 0, 0, null);
         g2d.dispose();
         return resized;
+    }
+
+    private ApiResponse populateResponse(CategoryDTO categoryDTO, Category category1) {
+        category1.setName(categoryDTO.getName());
+        categoryRepository.save(category1);
+        return new ApiResponse(200, CustomConstants.CAT_UPDATE, category1);
     }
 
 }

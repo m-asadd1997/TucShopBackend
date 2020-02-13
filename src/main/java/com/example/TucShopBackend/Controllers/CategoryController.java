@@ -33,7 +33,7 @@ public class CategoryController {
 
     }
     @GetMapping ("/{id}")
-    public Category getById (@PathVariable("id") Long id, @RequestBody CategoryDTO categoryDTO ){
+    public Category getById (@PathVariable("id") Long id ){
         return this.categoryService.getById(id);
     }
 
@@ -44,7 +44,8 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    public  ApiResponse updateById (@PathVariable ("id") Long id, @RequestBody CategoryDTO categoryDTO){
+    public  ApiResponse updateById (@PathVariable ("id") Long id,@RequestParam("image") MultipartFile image, CategoryDTO categoryDTO){
+        categoryDTO.setImage(image);
         return categoryService.updateById(categoryDTO, id);
     }
 
