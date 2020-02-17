@@ -22,4 +22,35 @@ public class DashboardController {
     public ApiResponse productsQuantity(){
         return dashboardService.productsQuantity();
     }
+
+    @GetMapping("/outofstockdetails")
+    public ApiResponse outOfStockProductsDetails(){
+        return dashboardService.outOfStockProductsDetails();
+    }
+
+    @GetMapping("/outofstock")
+    public ApiResponse outofStockProducts(){
+        return  dashboardService.outOfStockProducts();
+    }
+
+    @GetMapping("/totalproductdetails")
+    public ApiResponse productQuantityDetails(){
+        return dashboardService.productQuantityDetails();
+    }
+
+    @GetMapping("/totaltransaction")
+    public ApiResponse totalTransaction(){
+        return dashboardService.totalTransaction();
+    }
+
+    @GetMapping("/transactiondetails")
+    public ApiResponse transactionDetails(){
+        return dashboardService.transactionDetails();
+    }
+
+    @GetMapping("/toprequestedproducts")
+    public ApiResponse requestedProducts(){
+        return dashboardService.requestedProducts();
+    }
+
 }
