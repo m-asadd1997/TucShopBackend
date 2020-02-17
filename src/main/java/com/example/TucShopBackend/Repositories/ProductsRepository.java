@@ -17,16 +17,15 @@ public interface ProductsRepository extends JpaRepository<Products,Long> {
 
     public Products findByName(String name);
 
+    @Query(value = "select * from products where name =:name",nativeQuery = true)
+    public String getAllByCategoryName(@Param("name") String name);
 
-    @Query(value = "select COUNT(id) from products", nativeQuery = true)
-    public Long productQuantity();
+    @Query(value = "select COUNT(id) from products",nativeQuery = true)
+    public Long getAllProductCount();
 
-    @Query(value = "select * from products where qty<10", nativeQuery = true)
-    public List<Products> outOfStockProducts();
+    @Query(value = "select * from products ",nativeQuery = true)
+    public List<Products> getAllProductPriceSumDetails();
 
-    @Query(value = "select COUNT(id) from products where qty<10",nativeQuery = true)
-    public Long outOfStockCount();
 
-    @Query(value ="SELECT * from products", nativeQuery = true)
-    public List<Products> productQuantityDetails();
+
 }
