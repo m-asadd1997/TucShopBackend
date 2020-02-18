@@ -7,7 +7,9 @@ import com.example.TucShopBackend.Services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
 import javax.transaction.Transaction;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -36,4 +38,11 @@ public class TransactionsController {
 
 
     }
+
+//    public class EmailController {
+//        @RequestMapping(value = "/sendemail")
+//        public String sendEmail() throws IOException, MessagingException {
+//            sendmail();
+//            return "Email sent successfully";
+//        }
 }
