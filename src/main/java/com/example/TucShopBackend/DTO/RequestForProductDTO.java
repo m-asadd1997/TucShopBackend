@@ -11,10 +11,11 @@ public class RequestForProductDTO {
     @NotNull(message = "Name cannot be null")
     String name;
 
+
     public RequestForProductDTO() {
     }
 
-    public RequestForProductDTO(String name) {
+    public RequestForProductDTO(@NotBlank(message = "Name cannot be blank") @NotNull(message = "Name cannot be null") String name) {
         this.name = name;
     }
 
@@ -25,5 +26,8 @@ public class RequestForProductDTO {
     public void setName(String name) {
         this.name = name;
     }
+
+
+
 
 }

@@ -25,10 +25,10 @@ public class DashboardService {
     RequestForProductRepository requestForProductRepository;
 
     public ApiResponse productsQuantity(){
-        return new ApiResponse(Status.Status_Ok,"Sucessfully fetch total products",productsRepository.productQuantity());
+        return new ApiResponse(Status.Status_Ok,"Sucessfully fetch total products",productsRepository.productQauntity());
     }
     public ApiResponse  productQuantityDetails(){
-        return new ApiResponse(Status.Status_Ok,"Total products Details",productsRepository.productQuantityDetails());
+        return new ApiResponse(Status.Status_Ok,"Total products Details",productsRepository.productQauntityDetails());
     }
 
     public ApiResponse outOfStockProductsDetails(){
