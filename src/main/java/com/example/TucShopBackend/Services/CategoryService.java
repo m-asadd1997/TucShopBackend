@@ -66,7 +66,6 @@ public class CategoryService {
     public Boolean saveCategoryImage(MultipartFile file, String name, String unique){
         try {
 
-
             String UPLOADED_FOLDER_NEW = "F://tuckshop//TucShopBackend//serverFiles//"+name+"//";
 
             File dir = new File(UPLOADED_FOLDER_NEW);
