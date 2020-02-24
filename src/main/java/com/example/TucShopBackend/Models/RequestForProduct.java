@@ -18,6 +18,10 @@ public class RequestForProduct {
     public RequestForProduct() {
     }
 
+    public RequestForProduct(String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }
@@ -33,4 +37,6 @@ public class RequestForProduct {
     public void setName(String name) {
         this.name = name;
     }
+
+
 }

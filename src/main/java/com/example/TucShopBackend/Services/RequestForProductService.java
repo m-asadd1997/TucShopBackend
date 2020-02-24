@@ -22,11 +22,10 @@ public class RequestForProductService {
 
     public ApiResponse saveRequestForProduct(RequestForProductDTO requestForProductDTO){
 
-        RequestForProduct requestForProduct = new RequestForProduct();
-        requestForProduct.setName(requestForProductDTO.getName());
-        requestForProductRepository.save(requestForProduct);
-        return new ApiResponse(Status.Status_Ok,"Success",requestForProduct);
-
+            RequestForProduct requestForProduct = new RequestForProduct();
+            requestForProduct.setName(requestForProductDTO.getName());
+            requestForProductRepository.save(requestForProduct);
+            return new ApiResponse(Status.Status_Ok, "Success", requestForProduct);
     }
 
 

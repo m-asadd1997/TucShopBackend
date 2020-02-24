@@ -118,6 +118,11 @@ public class ProductsService {
                 .body(new InputStreamResource(file.getInputStream()));
     }
 
+//    public  double getAllSum(Long id){
+//       return productsRepository.findByCategory_Id(id);
+//
+//    }
+
     public ApiResponse getProductsByCategory(String category){
         Category category1 = categoryRepository.findCategoriesByName(category);
 

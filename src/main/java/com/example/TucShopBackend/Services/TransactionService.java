@@ -24,7 +24,6 @@ public class TransactionService {
 
     public ApiResponse saveTransactions(TransactionsDTO transactionsDTO){
         Transactions transactions = new Transactions();
-
         transactions.setAmount(transactionsDTO.getAmount());
         transactions.setCreatedBy("ADMIN");
         transactions.setDate(LocalDate.now());
