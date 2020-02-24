@@ -2,6 +2,7 @@ package com.example.TucShopBackend.Services;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.Status;
+import com.example.TucShopBackend.DTO.ScearchTransactionDTO;
 import com.example.TucShopBackend.DTO.TransactionsDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Models.Transactions;
@@ -37,7 +38,11 @@ public class TransactionService {
 
     public List<Transactions> getAll (){
 
-        List<Transactions> transactionList =transactionsRepository.findAll();
+        LocalDate date1=LocalDate.now();
+        String endDate=date1.toString();
+        LocalDate date=LocalDate.now();
+        String startDate= "1-"+  date.getMonth() + "-"+date.getYear();
+        List<Transactions> transactionList =transactionsRepository.getMonthTransactions(startDate,endDate);
         return transactionList;
     }
 
@@ -51,4 +56,23 @@ public class TransactionService {
             return new Transactions();
         }
     }
+
+    public List<Transactions> getTransactionsByUser( String user){
+
+        List<Transactions> transactionsList=transactionsRepository.findBycreatedBy(user);
+        return transactionsList;
+    }
+
+
+    public List<Transactions> scearchTransactions(ScearchTransactionDTO scearchTransactionDTO){
+
+        List<Transactions> transactionsList=transactionsRepository.scearchTransactionsOfUser(scearchTransactionDTO.getDateFrom(),scearchTransactionDTO.getDateTill(),scearchTransactionDTO.getUser());
+
+                return transactionsList;
+
+
+    }
+
+
+
 }

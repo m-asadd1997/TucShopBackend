@@ -1,6 +1,7 @@
 package com.example.TucShopBackend.Controllers;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
+import com.example.TucShopBackend.DTO.ScearchTransactionDTO;
 import com.example.TucShopBackend.DTO.TransactionsDTO;
 import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.Services.TransactionService;
@@ -32,6 +33,16 @@ public class TransactionsController {
     @GetMapping("/{id}")
     public Transactions getById (@PathVariable ("id") Long id){
         return this.transactionService.getById(id);
+    }
+
+    @GetMapping("/{user}")
+    public List<Transactions> getUserTransactions(@PathVariable("user")String user ){
+        return transactionService.getTransactionsByUser(user);
+
+    }
+    @PostMapping("/scearchTransaction")
+    public List<Transactions> scearchTransactionsOfUser(@RequestBody ScearchTransactionDTO scearchTransactionDTO){
+        return this.transactionService.scearchTransactions(scearchTransactionDTO);
     }
 
 }
