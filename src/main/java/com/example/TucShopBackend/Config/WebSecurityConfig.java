@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/token/*").permitAll()
 //                .antMatchers("/api/dashboard/").permitAll()
                 .antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**").permitAll()
-                .antMatchers("/api/*").hasAuthority("ADMIN")
+                .antMatchers("/api/**").permitAll()
 //                .antMatchers("/api/*").hasAuthority("ADMIN")
                // .antMatchers("/madinaapps/*").permitAll()
                 .anyRequest().authenticated()
