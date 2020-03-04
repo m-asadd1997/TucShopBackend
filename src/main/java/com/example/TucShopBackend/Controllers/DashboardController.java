@@ -53,4 +53,9 @@ public class DashboardController {
         return dashboardService.requestedProducts();
     }
 
+    @GetMapping("/salespermonth")
+    public ApiResponse getMonthlySales(){
+        return dashboardService.getMonthlySales();
+    }
+
 }

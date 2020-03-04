@@ -35,7 +35,7 @@ public class TransactionService {
     }
 
 
-    public List<Transactions> getAll (){
+    public List<Transactions>getAll (){
 
         LocalDate date1=LocalDate.now();
         String endDate=date1.toString();

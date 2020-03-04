@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface RequestForProductRepository extends JpaRepository<RequestForProduct,Long> {
 
-    @Query(value = "select count(name),name,id from request_for_product group by name order by count(name) desc", nativeQuery = true)
+    @Query(value = "select count(name),name,id,count(id) from request_for_product group by name order by count(name) desc limit 5;", nativeQuery = true)
     public List<RequestForProduct> topRequestedProducts();
 
 
