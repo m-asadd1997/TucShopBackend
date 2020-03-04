@@ -24,7 +24,6 @@ public class TransactionsController {
         return transactionService.saveTransactions(transactionsDTO);
     }
 
-
     @GetMapping("/")
     public List<Transactions> getAll (TransactionsDTO transactionsDTO){
      return transactionService.getAll();

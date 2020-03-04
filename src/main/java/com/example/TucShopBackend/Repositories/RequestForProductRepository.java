@@ -12,8 +12,10 @@ import java.util.List;
  */
 public interface RequestForProductRepository extends JpaRepository<RequestForProduct,Long> {
 
+
     @Query(value = "select new com.example.TucShopBackend.DTO.RequestForProductDTO(id,name as name,count(name)as countname) from RequestForProduct  group by name order by count(name) desc")
     public List<RequestForProductDTO> topRequestedProducts();
+
 
 
 }
