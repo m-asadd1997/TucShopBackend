@@ -15,6 +15,7 @@ public class RequestForProduct {
     Long id;
     String name;
 
+
     public RequestForProduct() {
     }
 

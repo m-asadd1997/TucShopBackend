@@ -4,13 +4,17 @@ import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.ChartDataDTO;
 import com.example.TucShopBackend.Models.Transactions;
+import com.example.TucShopBackend.DTO.RequestForProductDTO;
+import com.example.TucShopBackend.Models.RequestForProduct;
 import com.example.TucShopBackend.Repositories.ProductsRepository;
 import com.example.TucShopBackend.Repositories.RequestForProductRepository;
 import com.example.TucShopBackend.Repositories.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by Hassan on 2/12/2020.
@@ -51,8 +55,12 @@ public class DashboardService {
     }
 
     public ApiResponse requestedProducts(){
-        return new ApiResponse(Status.Status_Ok,"Successfully get top requested Products",requestForProductRepository.topRequestedProducts());
+        List<RequestForProductDTO> topRequestedProducts= requestForProductRepository.topRequestedProducts();
+
+        return new ApiResponse(Status.Status_Ok,"Successfully get top requested Products",topRequestedProducts);
     }
+  
+  
     public ApiResponse getMonthlySales(){
 
         String monthName = "";
@@ -84,5 +92,7 @@ public class DashboardService {
         }
 
         return new ApiResponse(Status.Status_Ok, "Get Sales per month",cdt);
+
+
     }
 }
