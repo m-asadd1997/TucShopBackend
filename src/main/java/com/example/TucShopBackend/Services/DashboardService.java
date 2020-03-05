@@ -55,15 +55,13 @@ public class DashboardService {
     }
 
 
-    public ApiResponse requestedProducts(String keyword){
-    List<RequestForProductDTO> topRequestedProducts= requestForProductRepository.topRequestedProducts(keyword);
-     return new ApiResponse(Status.Status_Ok,"Successfully keyword Match From requested Products",topRequestedProducts);
+    public ApiResponse requestedProductsKeyword(String keyword){
+    List<RequestForProductDTO> topRequestedProductsKeyword= requestForProductRepository.topRequestedProductsKeyword(keyword);
+     return new ApiResponse(Status.Status_Ok,"Successfully keyword Match From requested Products",topRequestedProductsKeyword);
     }
 
     public ApiResponse requestedProductsCount(){
-
-        List<RequestForProductDTO> topRequestedProductsCount= requestForProductRepository.getRequestForProductCount();
-
+        List<RequestForProductDTO> topRequestedProductsCount= requestForProductRepository.topRequestedProductsCount();
         return new ApiResponse(Status.Status_Ok,"Successfully get top requested Products Count",topRequestedProductsCount);
     }
   

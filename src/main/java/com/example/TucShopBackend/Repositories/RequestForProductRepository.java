@@ -19,11 +19,11 @@ public interface RequestForProductRepository extends JpaRepository<RequestForPro
 
 
     @Query(value = "select new com.example.TucShopBackend.DTO.RequestForProductDTO(id,name as name,count(name)as countname) from RequestForProduct  group by name order by count(name) desc")
-    public List<RequestForProductDTO> topRequestedProducts();
+    public List<RequestForProductDTO> topRequestedProductsCount();
 
 
     @Query(value = "select new com.example.TucShopBackend.DTO.RequestForProductDTO(id, name as name,count(name)as countname) from RequestForProduct where name LIKE %:keyword% group by name order by count(name) desc")
-    public List<RequestForProductDTO> topRequestedProducts(@Param("keyword")String keyword);
+    public List<RequestForProductDTO> topRequestedProductsKeyword(@Param("keyword")String keyword);
 
 
 }
