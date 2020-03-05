@@ -47,8 +47,15 @@ public class DashboardController {
     }
 
     @GetMapping("/toprequestedproducts")
-    public ApiResponse requestedProducts(){
-        return dashboardService.requestedProducts();
+    public ApiResponse requestedProducts() {
+
+        return this.dashboardService.requestedProductsCount();
+    }
+
+    @GetMapping("/autocomplete/{keyword}")
+    public ApiResponse autoComplete(@PathVariable ("keyword") String keyword) {
+
+        return this.dashboardService.requestedProducts(keyword);
     }
 
     @GetMapping("/salespermonth")

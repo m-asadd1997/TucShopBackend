@@ -84,7 +84,7 @@ public class ProductsService {
     public Boolean saveProductImage(MultipartFile file, String name, String unique  ){
         try{
 
-        String UPLOADED_FOLDER_NEW = "E://TuckshopBackend_Main//TucShopBackend//serverFiles//"+name+"//"+"products"+"//";
+        String UPLOADED_FOLDER_NEW = "C://TuckshopBackend_Main//TucShopBackend//serverFiles//"+name+"//"+"products"+"//";
 
             File dir = new File(UPLOADED_FOLDER_NEW);
             dir.setExecutable(true);
@@ -107,7 +107,7 @@ public class ProductsService {
     }
 
     public ResponseEntity<InputStreamResource> getProductImage(String filename, String category) throws IOException{
-        String filepath = "E://TuckshopBackend_Main/TucShopBackend//serverFiles//"+category+"//products//"+filename;
+        String filepath = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//"+category+"//products//"+filename;
         File f = new File(filepath);
         Resource file = new UrlResource(f.toURI());
         return  ResponseEntity
