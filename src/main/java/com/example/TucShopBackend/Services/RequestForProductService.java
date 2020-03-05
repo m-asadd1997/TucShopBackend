@@ -3,7 +3,6 @@ package com.example.TucShopBackend.Services;
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;
-import com.example.TucShopBackend.Models.Products;
 import com.example.TucShopBackend.Models.RequestForProduct;
 import com.example.TucShopBackend.Repositories.RequestForProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,5 @@ public class RequestForProductService {
             requestForProductRepository.save(requestForProduct);
             return new ApiResponse(Status.Status_Ok, "Success", requestForProduct);
     }
-
 
 }

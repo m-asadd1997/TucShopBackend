@@ -50,10 +50,17 @@ public class DashboardService {
         return new ApiResponse(Status.Status_Ok,"Get Transaction Details", transactionsRepository.getTransactionDetails());
     }
 
-    public ApiResponse requestedProducts(){
+    public ApiResponse requestedProducts(String keyword){
 
-        List<RequestForProductDTO> topRequestedProducts= requestForProductRepository.topRequestedProducts();
+        List<RequestForProductDTO> topRequestedProducts= requestForProductRepository.topRequestedProducts(keyword);
 
-        return new ApiResponse(Status.Status_Ok,"Successfully get top requested Products",topRequestedProducts);
+        return new ApiResponse(Status.Status_Ok,"Successfully keyword Match From requested Products",topRequestedProducts);
+    }
+
+    public ApiResponse requestedProductsCount(){
+
+        List<RequestForProductDTO> topRequestedProductsCount= requestForProductRepository.getRequestForProductCount();
+
+        return new ApiResponse(Status.Status_Ok,"Successfully get top requested Products Count",topRequestedProductsCount);
     }
 }
