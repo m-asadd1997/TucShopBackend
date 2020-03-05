@@ -130,9 +130,11 @@ public class ProductsService {
 
         return new ApiResponse(Status.Status_Ok,CustomConstants.PROD_GET,products); //products;
     }
+
     public List<Products> getAllProducts(){
         return productsRepository.findAll();
     }
+
     public Products getProductById(Long id){
         Optional<Products> product =  productsRepository.findById(id);
         if(product.isPresent()){
