@@ -1,18 +1,37 @@
 package com.example.TucShopBackend.Services;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
+import com.example.TucShopBackend.Commons.CustomConstants;
 import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.ChartDataDTO;
+import com.example.TucShopBackend.DTO.SettingsDTO;
+import com.example.TucShopBackend.Models.Settings;
 import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;
 import com.example.TucShopBackend.Models.RequestForProduct;
 import com.example.TucShopBackend.Repositories.ProductsRepository;
 import com.example.TucShopBackend.Repositories.RequestForProductRepository;
+import com.example.TucShopBackend.Repositories.SettingsRepository;
 import com.example.TucShopBackend.Repositories.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import javax.imageio.ImageIO;
+import javax.validation.Valid;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.List;
 
@@ -31,6 +50,8 @@ public class DashboardService {
     TransactionsRepository transactionsRepository;
     @Autowired
     RequestForProductRepository requestForProductRepository;
+    @Autowired
+    SettingsRepository settingsRepository;
 
     public ApiResponse productsQuantity(){
         return new ApiResponse(Status.Status_Ok,"Sucessfully fetch total products",productsRepository.productQauntity());
@@ -100,4 +121,91 @@ public class DashboardService {
 
 
     }
+
+    @Value("${logo.image.url}")
+    String settingLogoUrl;
+
+    public  ApiResponse postSettings (SettingsDTO settingsDTO){
+
+
+
+        String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+
+        if(saveSettingslogo(settingsDTO.getLogo(),settingsDTO.getHeader(),unique)) {
+            Settings settings = new Settings();
+            settings.setLogo(settingLogoUrl+settingsDTO.getHeader()+"/"+unique+settingsDTO.getLogo().getOriginalFilename());
+            settings.setHeader(settingsDTO.getHeader());
+            settings.setFooter(settingsDTO.getFooter());
+            settingsRepository.save(settings);
+            return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_SettingPost, settings);
+
+        }
+        return new ApiResponse(Status.Status_ERROR,CustomConstants.Setting_IMAGEERROR,null);
+    }
+
+
+    public Boolean saveSettingslogo(MultipartFile file, String header, String unique){
+        try {
+
+            String UPLOADED_FOLDER_NEW = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//"+header+"//";
+
+            File dir = new File(UPLOADED_FOLDER_NEW);
+            dir.setExecutable(true);
+            dir.setReadable(true);
+            dir.setWritable(true);
+
+            if(!dir.exists()){
+                dir.mkdirs();
+            }
+            //  file.getsl
+            BufferedImage inputImage = ImageIO.read(file.getInputStream());
+
+            BufferedImage resized = resize(inputImage, 30, 30);
+//            BufferedImage outputImage = new BufferedImage(100,
+//                    100, inputImage.getType());
+
+            String format = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+            ImageIO.write(resized, format, new File(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename()));
+//            byte[] bytes = outputImage.get//file.getBytes();
+//            Path path = Paths.get(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename());
+//            Files.write(path, bytes);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    private BufferedImage resize(BufferedImage img, int height, int width) {
+        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = resized.createGraphics();
+        g2d.drawImage(tmp, 0, 0, null);
+        g2d.dispose();
+        return resized;
+    }
+
+
+    public ResponseEntity<InputStreamResource> getSettingLogo(String filename, String header) throws IOException{
+
+
+        String filepath = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//"+header+"//"+filename;
+
+        File f = new File(filepath);
+        Resource file = new UrlResource(f.toURI());
+        return ResponseEntity
+                .ok()
+                .contentLength(file.contentLength())
+                .contentType(
+                        MediaType.parseMediaType("image/JPG"))
+                .body(new InputStreamResource(file.getInputStream()));
+    }
+
+    public List <Settings> getAll (){
+        List <Settings> settingsList =settingsRepository.findAll();
+        return settingsList;
+    }
+
+
 }

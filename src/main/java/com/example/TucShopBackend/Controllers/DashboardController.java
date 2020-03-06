@@ -1,9 +1,18 @@
 package com.example.TucShopBackend.Controllers;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
+import com.example.TucShopBackend.DTO.SettingsDTO;
+import com.example.TucShopBackend.Models.Settings;
 import com.example.TucShopBackend.Services.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Hassan on 2/12/2020.
@@ -57,6 +66,22 @@ public class DashboardController {
     @GetMapping("/salespermonth")
     public ApiResponse getMonthlySales(){
         return dashboardService.getMonthlySales();
+    }
+
+    @PostMapping ("/settings")
+    public  ApiResponse settings(@Valid @RequestParam ("logo")MultipartFile logo, SettingsDTO settingsDTO){ settingsDTO.setLogo(logo);
+      return  dashboardService.postSettings(settingsDTO);
+    }
+
+    @RequestMapping(value = "/image/{header}/{filename:.+}", method = RequestMethod.GET)
+    public ResponseEntity<InputStreamResource> getImage(@PathVariable("filename") String filename, @PathVariable("header") String header)
+            throws IOException {
+        return dashboardService.getSettingLogo(filename,header);
+    }
+
+    @GetMapping ("/settings")
+    public List<Settings> getAll (SettingsDTO settingsDTO ){
+        return dashboardService.getAll();
     }
 
 }
