@@ -133,7 +133,7 @@ public class DashboardService {
 
         if(saveSettingslogo(settingsDTO.getLogo(),settingsDTO.getHeader(),unique)) {
             Settings settings = new Settings();
-            settings.setLogo(settingLogoUrl+settingsDTO.getHeader()+"/"+unique+settingsDTO.getLogo().getOriginalFilename());
+            settings.setLogo(settingLogoUrl+settingsDTO.getHeaderWithOutSpaces()+"/"+unique+settingsDTO.getLogo().getOriginalFilename());
             settings.setHeader(settingsDTO.getHeader());
             settings.setFooter(settingsDTO.getFooter());
             settingsRepository.save(settings);
