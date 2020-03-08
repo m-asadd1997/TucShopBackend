@@ -133,6 +133,13 @@ public class DashboardService {
 
             return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.Setting_DUPLICATE, settingsHeader);
 
+        if(saveSettingslogo(settingsDTO.getLogo(),settingsDTO.getHeader(),unique)) {
+            Settings settings = new Settings();
+            settings.setLogo(settingLogoUrl+settingsDTO.getHeaderWithOutSpaces()+"/"+unique+settingsDTO.getLogo().getOriginalFilename());
+            settings.setHeader(settingsDTO.getHeader());
+            settings.setFooter(settingsDTO.getFooter());
+            settingsRepository.save(settings);
+            return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_SettingPost, settings);
         } else {
             settingsRepository.deleteAll();
             String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
@@ -146,6 +153,7 @@ public class DashboardService {
                 return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_SettingPost, settings);
 
             }
+
 
         }
         return new ApiResponse(Status.Status_ERROR, CustomConstants.Setting_IMAGEERROR, null);

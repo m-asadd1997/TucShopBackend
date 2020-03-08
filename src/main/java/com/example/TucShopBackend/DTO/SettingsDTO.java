@@ -37,4 +37,8 @@ public class SettingsDTO {
     public void setFooter(String footer) {
         this.footer = footer;
     }
+
+    public String getHeaderWithOutSpaces() {
+        return header.replaceAll("\\s","");
+    }
 }
