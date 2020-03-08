@@ -125,11 +125,13 @@ public class DashboardService {
     @Value("${logo.image.url}")
     String settingLogoUrl;
 
-    public  ApiResponse postSettings (SettingsDTO settingsDTO){
+    public  ApiResponse postSettings (SettingsDTO settingsDTO) {
 
+        Settings settingsHeader = settingsRepository.findSettingByHeaderAndFooter(settingsDTO.getHeader(),settingsDTO.getFooter());
 
+        if (settingsHeader!= null) {
 
-        String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+            return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.Setting_DUPLICATE, settingsHeader);
 
         if(saveSettingslogo(settingsDTO.getLogo(),settingsDTO.getHeader(),unique)) {
             Settings settings = new Settings();
@@ -138,11 +140,24 @@ public class DashboardService {
             settings.setFooter(settingsDTO.getFooter());
             settingsRepository.save(settings);
             return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_SettingPost, settings);
+        } else {
+            settingsRepository.deleteAll();
+            String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+
+            if (saveSettingslogo(settingsDTO.getLogo(), settingsDTO.getHeader(), unique)) {
+                Settings settings = new Settings();
+                settings.setLogo(settingLogoUrl + settingsDTO.getHeader() + "/" + unique + settingsDTO.getLogo().getOriginalFilename());
+                settings.setHeader(settingsDTO.getHeader());
+                settings.setFooter(settingsDTO.getFooter());
+                settingsRepository.save(settings);
+                return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_SettingPost, settings);
+
+            }
+
 
         }
-        return new ApiResponse(Status.Status_ERROR,CustomConstants.Setting_IMAGEERROR,null);
+        return new ApiResponse(Status.Status_ERROR, CustomConstants.Setting_IMAGEERROR, null);
     }
-
 
     public Boolean saveSettingslogo(MultipartFile file, String header, String unique){
         try {
