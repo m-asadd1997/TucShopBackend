@@ -7,11 +7,15 @@ public class SettingsDTO {
     String header;
     MultipartFile logo;
     String footer;
+    String headerName;
 
-    public SettingsDTO(String header, MultipartFile logo, String footer) {
+
+    public SettingsDTO(String header, MultipartFile logo, String footer, String headerName) {
         this.header = header;
         this.logo = logo;
         this.footer = footer;
+        this.headerName = headerName;
+
     }
 
     public String getHeader() {
@@ -38,7 +42,16 @@ public class SettingsDTO {
         this.footer = footer;
     }
 
-    public String getHeaderWithOutSpaces() {
-        return header.replaceAll("\\s","");
+//    public String getHeaderWithOutSpaces() {
+//        return header.replaceAll("\\s","");
+//    }
+
+
+    public String getHeaderName() {
+        return headerName;
+    }
+
+    public void setHeaderName(String headerName) {
+        this.headerName = headerName;
     }
 }
