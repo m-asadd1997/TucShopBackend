@@ -79,11 +79,15 @@ public class ProductsController {
        productsDTO.setImage(image);
         return productsService.updateById(id,productsDTO);
     }
+
+    //need to be understood.
     @RequestMapping(value ="/image/{category}/{productName}/{filename:.+}", method = RequestMethod.GET)
     public ResponseEntity<InputStreamResource> getProductImage(@PathVariable("filename") String filename,  @PathVariable("category") String category)
             throws IOException {
         return productsService.getProductImage(filename,category);
     }
+
+
 
 
 }
