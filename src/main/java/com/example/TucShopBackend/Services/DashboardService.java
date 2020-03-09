@@ -53,51 +53,53 @@ public class DashboardService {
     @Autowired
     SettingsRepository settingsRepository;
 
-    public ApiResponse productsQuantity(){
-        return new ApiResponse(Status.Status_Ok,"Sucessfully fetch total products",productsRepository.productQauntity());
-    }
-    public ApiResponse  productQuantityDetails(){
-        return new ApiResponse(Status.Status_Ok,"Total products Details",productsRepository.productQauntityDetails());
+    public ApiResponse productsQuantity() {
+        return new ApiResponse(Status.Status_Ok, "Sucessfully fetch total products", productsRepository.productQauntity());
     }
 
-    public ApiResponse outOfStockProductsDetails(){
-        return  new ApiResponse(Status.Status_Ok,"Out of Stock Products", productsRepository.outOfStockProducts());
+    public ApiResponse productQuantityDetails() {
+        return new ApiResponse(Status.Status_Ok, "Total products Details", productsRepository.productQauntityDetails());
     }
-    public  ApiResponse outOfStockProducts(){
+
+    public ApiResponse outOfStockProductsDetails() {
+        return new ApiResponse(Status.Status_Ok, "Out of Stock Products", productsRepository.outOfStockProducts());
+    }
+
+    public ApiResponse outOfStockProducts() {
         return new ApiResponse(Status.Status_Ok, "Out of Stock", productsRepository.outOfStockCount());
     }
 
-    public ApiResponse totalTransaction(){
-        return new ApiResponse(Status.Status_Ok,"Successfully fetch Total Transation",transactionsRepository.getTotalTransaction());
+    public ApiResponse totalTransaction() {
+        return new ApiResponse(Status.Status_Ok, "Successfully fetch Total Transation", transactionsRepository.getTotalTransaction());
     }
 
-    public ApiResponse transactionDetails(){
-        return new ApiResponse(Status.Status_Ok,"Get Transaction Details", transactionsRepository.getTransactionDetails());
+    public ApiResponse transactionDetails() {
+        return new ApiResponse(Status.Status_Ok, "Get Transaction Details", transactionsRepository.getTransactionDetails());
     }
 
 
-    public ApiResponse requestedProductsKeyword(String keyword){
-    List<RequestForProductDTO> topRequestedProductsKeyword= requestForProductRepository.topRequestedProductsKeyword(keyword);
-     return new ApiResponse(Status.Status_Ok,"Successfully keyword Match From requested Products",topRequestedProductsKeyword);
+    public ApiResponse requestedProductsKeyword(String keyword) {
+        List<RequestForProductDTO> topRequestedProductsKeyword = requestForProductRepository.topRequestedProductsKeyword(keyword);
+        return new ApiResponse(Status.Status_Ok, "Successfully keyword Match From requested Products", topRequestedProductsKeyword);
     }
 
-    public ApiResponse requestedProductsCount(){
-        List<RequestForProductDTO> topRequestedProductsCount= requestForProductRepository.topRequestedProductsCount();
-        return new ApiResponse(Status.Status_Ok,"Successfully get top requested Products Count",topRequestedProductsCount);
+    public ApiResponse requestedProductsCount() {
+        List<RequestForProductDTO> topRequestedProductsCount = requestForProductRepository.topRequestedProductsCount();
+        return new ApiResponse(Status.Status_Ok, "Successfully get top requested Products Count", topRequestedProductsCount);
     }
-  
-  
-    public ApiResponse getMonthlySales(){
+
+
+    public ApiResponse getMonthlySales() {
 
         String monthName = "";
-        Map<String,Double> map = new HashMap<>();
+        Map<String, Double> map = new HashMap<>();
         List<Transactions> transactionsList = transactionsRepository.findAll();
-        for(Transactions transaction : transactionsList){
+        for (Transactions transaction : transactionsList) {
             monthName = transaction.getDate().getMonth().toString();
-            if(!map.containsKey(monthName)){
-                map.put(monthName,transaction.getAmount());
-            }else{
-                map.put(monthName,map.get(monthName).doubleValue() + transaction.getAmount());
+            if (!map.containsKey(monthName)) {
+                map.put(monthName, transaction.getAmount());
+            } else {
+                map.put(monthName, map.get(monthName).doubleValue() + transaction.getAmount());
             }
 
         }
@@ -112,12 +114,12 @@ public class DashboardService {
             seriesList.add(entry.getValue());
         }
 
-        if(labelList!=null && seriesList!=null){
+        if (labelList != null && seriesList != null) {
             cdt.setLabels(labelList);
             cdt.setSeries(seriesList);
         }
 
-        return new ApiResponse(Status.Status_Ok, "Get Sales per month",cdt);
+        return new ApiResponse(Status.Status_Ok, "Get Sales per month", cdt);
 
 
     }
@@ -125,102 +127,98 @@ public class DashboardService {
     @Value("${logo.image.url}")
     String settingLogoUrl;
 
-    public  ApiResponse postSettings (SettingsDTO settingsDTO) {
+    public ApiResponse postSettings(SettingsDTO settingsDTO) {
 
-        Settings settingsHeader = settingsRepository.findSettingByHeaderAndFooter(settingsDTO.getHeader(),settingsDTO.getFooter());
+        Settings settingsHeader = settingsRepository.findSettingByHeaderAndFooter(settingsDTO.getHeader(), settingsDTO.getFooter());
 
-        if (settingsHeader!= null) {
+        if (settingsHeader != null) {
 
             return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.Setting_DUPLICATE, settingsHeader);
 
-        if(saveSettingslogo(settingsDTO.getLogo(),settingsDTO.getHeader(),unique)) {
-            Settings settings = new Settings();
-            settings.setLogo(settingLogoUrl+settingsDTO.getHeaderWithOutSpaces()+"/"+unique+settingsDTO.getLogo().getOriginalFilename());
-            settings.setHeader(settingsDTO.getHeader());
-            settings.setFooter(settingsDTO.getFooter());
-            settingsRepository.save(settings);
-            return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_SettingPost, settings);
-        } else {
-            settingsRepository.deleteAll();
-            String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
-
-            if (saveSettingslogo(settingsDTO.getLogo(), settingsDTO.getHeader(), unique)) {
-                Settings settings = new Settings();
-                settings.setLogo(settingLogoUrl + settingsDTO.getHeader() + "/" + unique + settingsDTO.getLogo().getOriginalFilename());
-                settings.setHeader(settingsDTO.getHeader());
-                settings.setFooter(settingsDTO.getFooter());
-                settingsRepository.save(settings);
-                return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_SettingPost, settings);
-
-            }
-
-
         }
-        return new ApiResponse(Status.Status_ERROR, CustomConstants.Setting_IMAGEERROR, null);
-    }
 
-    public Boolean saveSettingslogo(MultipartFile file, String header, String unique){
-        try {
+            else {
+                settingsRepository.deleteAll();
+                String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
 
-            String UPLOADED_FOLDER_NEW = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//"+header+"//";
+                if (saveSettingslogo(settingsDTO.getLogo(), settingsDTO.getHeaderName(), unique)) {
+                    Settings settings = new Settings();
+                    settings.setLogo(settingLogoUrl + settingsDTO.getHeaderName() + "/" + unique + settingsDTO.getLogo().getOriginalFilename());
+                    settings.setHeaderName(settingsDTO.getHeaderName());
+                    settings.setHeader(settingsDTO.getHeader());
+                    settings.setFooter(settingsDTO.getFooter());
+                    settingsRepository.save(settings);
+                    return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_SettingPost, settings);
 
-            File dir = new File(UPLOADED_FOLDER_NEW);
-            dir.setExecutable(true);
-            dir.setReadable(true);
-            dir.setWritable(true);
+                }
 
-            if(!dir.exists()){
-                dir.mkdirs();
+
             }
-            //  file.getsl
-            BufferedImage inputImage = ImageIO.read(file.getInputStream());
+            return new ApiResponse(Status.Status_ERROR, CustomConstants.Setting_IMAGEERROR, null);
+        }
 
-            BufferedImage resized = resize(inputImage, 30, 30);
+        public Boolean saveSettingslogo (MultipartFile file, String header, String unique){
+            try {
+
+                String UPLOADED_FOLDER_NEW = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//" + header + "//";
+
+                File dir = new File(UPLOADED_FOLDER_NEW);
+                dir.setExecutable(true);
+                dir.setReadable(true);
+                dir.setWritable(true);
+
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                //  file.getsl
+                BufferedImage inputImage = ImageIO.read(file.getInputStream());
+
+                BufferedImage resized = resize(inputImage, 30, 30);
 //            BufferedImage outputImage = new BufferedImage(100,
 //                    100, inputImage.getType());
 
-            String format = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
-            ImageIO.write(resized, format, new File(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename()));
+                String format = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
+                ImageIO.write(resized, format, new File(UPLOADED_FOLDER_NEW + unique + file.getOriginalFilename()));
 //            byte[] bytes = outputImage.get//file.getBytes();
 //            Path path = Paths.get(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename());
 //            Files.write(path, bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
         }
-        catch (IOException e) {
-            e.printStackTrace();
-            return false;
+
+        private BufferedImage resize (BufferedImage img,int height, int width){
+            Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = resized.createGraphics();
+            g2d.drawImage(tmp, 0, 0, null);
+            g2d.dispose();
+            return resized;
         }
-        return true;
+
+
+        public ResponseEntity<InputStreamResource> getSettingLogo (String filename, String header) throws IOException {
+
+
+            String filepath = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//" + header + "//" + filename;
+
+            File f = new File(filepath);
+            Resource file = new UrlResource(f.toURI());
+            return ResponseEntity
+                    .ok()
+                    .contentLength(file.contentLength())
+                    .contentType(
+                            MediaType.parseMediaType("image/JPG"))
+                    .body(new InputStreamResource(file.getInputStream()));
+        }
+
+        public List<Settings> getAll () {
+            List<Settings> settingsList = settingsRepository.findAll();
+            return settingsList;
+        }
+
+
     }
 
-    private BufferedImage resize(BufferedImage img, int height, int width) {
-        Image tmp = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        BufferedImage resized = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2d = resized.createGraphics();
-        g2d.drawImage(tmp, 0, 0, null);
-        g2d.dispose();
-        return resized;
-    }
-
-
-    public ResponseEntity<InputStreamResource> getSettingLogo(String filename, String header) throws IOException{
-
-
-        String filepath = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//"+header+"//"+filename;
-
-        File f = new File(filepath);
-        Resource file = new UrlResource(f.toURI());
-        return ResponseEntity
-                .ok()
-                .contentLength(file.contentLength())
-                .contentType(
-                        MediaType.parseMediaType("image/JPG"))
-                .body(new InputStreamResource(file.getInputStream()));
-    }
-
-    public List <Settings> getAll (){
-        List <Settings> settingsList =settingsRepository.findAll();
-        return settingsList;
-    }
-
-
-}

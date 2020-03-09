@@ -15,6 +15,7 @@ public class Settings {
     String header;
     String logo;
     String footer;
+    String headerName;
 
     public Long getId() {
         return id;
@@ -46,6 +47,14 @@ public class Settings {
 
     public void setFooter(String footer) {
         this.footer = footer;
+    }
+
+    public String getHeaderName() {
+        return headerName;
+    }
+
+    public void setHeaderName(String headerName) {
+        this.headerName = headerName;
     }
 }
 
