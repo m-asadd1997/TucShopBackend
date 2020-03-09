@@ -35,5 +35,8 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
     @Query(value = "select * from transactions", nativeQuery = true)
     public List<Transactions> getTransactionDetails();
 
+
+    @Query(value = "select * from transactions order by (id) DESC LIMIT 30 ", nativeQuery = true)
+    public List<Transactions> recentTransactions();
 }
 

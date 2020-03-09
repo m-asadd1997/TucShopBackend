@@ -72,6 +72,15 @@ public class TransactionService {
 
     }
 
+    public List<Transactions> getRecentTransactions(){
+
+        List<Transactions> transactionsList=transactionsRepository.recentTransactions();
+
+        return transactionsList;
+
+
+    }
+
 
 
 }
