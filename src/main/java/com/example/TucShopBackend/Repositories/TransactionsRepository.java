@@ -36,5 +36,8 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
 //    public List<Object> getMonthlySale();
 
 
+
+    @Query(value = "select * from transactions order by (id) DESC LIMIT 30 ", nativeQuery = true)
+    public List<Transactions> recentTransactions();
 }
 
