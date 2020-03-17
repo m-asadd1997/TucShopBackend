@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -42,6 +43,16 @@ public class ProductsService {
     @Value("${product.image.url}")
     String productImageUrl;
 
+    @Value("${spring.profiles.active}")
+    String profile;
+
+    //serverfile.path
+    @Value("${serverfile.path}")
+    String serverFilePath;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
     public ApiResponse saveProducts(ProductsDTO productsDTO){
 
         Products productsName = productsRepository.findByName(productsDTO.getName());
@@ -54,20 +65,42 @@ public class ProductsService {
             if(category == null){
                 return new ApiResponse(Status.Status_ERROR, CustomConstants.CAT_GETERROR,null);
             }
+                switch (profile){
+                    case CustomConstants.DEV:
+                        if(saveProductImage(productsDTO.getImage(),category.getName(),unique)){
 
-            if(saveProductImage(productsDTO.getImage(),category.getName(),unique)){
+                            Products products = new Products();
+                            products.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+                            products.setCategory(category);
+                            products.setDescription(productsDTO.getDescription());
+                            products.setPrice(productsDTO.getPrice());
+                            products.setQty(productsDTO.getQuantity());
+                            products.setCostprice(productsDTO.getCostprice());
+                            products.setName(productsDTO.getName());
+                            productsRepository.save(products);
+                            return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
+                        }
+                        break;
 
-            Products products = new Products();
-            products.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
-            products.setCategory(category);
-            products.setDescription(productsDTO.getDescription());
-            products.setPrice(productsDTO.getPrice());
-            products.setQty(productsDTO.getQuantity());
-            products.setCostprice(productsDTO.getCostprice());
-            products.setName(productsDTO.getName());
-            productsRepository.save(products);
-            return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
-        }
+                    case CustomConstants.PROD:
+                        try {
+                            Map map =  cloudinaryService.upload(productsDTO.getImage());
+                            Products products = new Products();
+                            products.setImage(map.get("url").toString());
+                            products.setCategory(category);
+                            products.setDescription(productsDTO.getDescription());
+                            products.setPrice(productsDTO.getPrice());
+                            products.setQty(productsDTO.getQuantity());
+                            products.setCostprice(productsDTO.getCostprice());
+                            products.setName(productsDTO.getName());
+                            productsRepository.save(products);
+                            return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                }
+
             }
         else{
             return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.PROD_DUPLICATE, null);
@@ -84,7 +117,7 @@ public class ProductsService {
     public Boolean saveProductImage(MultipartFile file, String name, String unique  ){
         try{
 
-        String UPLOADED_FOLDER_NEW = "C://TuckshopBackend_Main//TucShopBackend//serverFiles//"+name+"//"+"products"+"//";
+        String UPLOADED_FOLDER_NEW = serverFilePath+"serverFiles//"+name+"//"+"products"+"//";
 
             File dir = new File(UPLOADED_FOLDER_NEW);
             dir.setExecutable(true);
@@ -107,7 +140,7 @@ public class ProductsService {
     }
 
     public ResponseEntity<InputStreamResource> getProductImage(String filename, String category) throws IOException{
-        String filepath = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//"+category+"//products//"+filename;
+        String filepath = serverFilePath+"serverFiles//"+category+"//products//"+filename;
         File f = new File(filepath);
         Resource file = new UrlResource(f.toURI());
         return  ResponseEntity
@@ -174,21 +207,42 @@ public class ProductsService {
              return populateResponse(productsDTO, category, product);
          }
          else{
+            switch (profile){
+                case CustomConstants.DEV:
+                    String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
 
-            String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+                    if (saveProductImage(productsDTO.getImage(), category.getName(), unique)) {
 
-            if (saveProductImage(productsDTO.getImage(), category.getName(), unique)) {
+                        product.setName(productsDTO.getName());
+                        product.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+                        product.setDescription(productsDTO.getDescription());
+                        product.setPrice(productsDTO.getPrice());
+                        product.setQty(productsDTO.getQuantity());
+                        product.setCostprice(productsDTO.getCostprice());
+                        product.setCategory(category);
+                        productsRepository.save(product);
+                        return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
+                    }
+                    break;
 
-                product.setName(productsDTO.getName());
-                product.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
-                product.setDescription(productsDTO.getDescription());
-                product.setPrice(productsDTO.getPrice());
-                product.setQty(productsDTO.getQuantity());
-                product.setCostprice(productsDTO.getCostprice());
-                product.setCategory(category);
-                productsRepository.save(product);
-                return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
+                case CustomConstants.PROD:
+                    try {
+                        Map map =  cloudinaryService.upload(productsDTO.getImage());
+                        product.setName(productsDTO.getName());
+                        product.setImage(map.get("url").toString());
+                        product.setDescription(productsDTO.getDescription());
+                        product.setPrice(productsDTO.getPrice());
+                        product.setQty(productsDTO.getQuantity());
+                        product.setCostprice(productsDTO.getCostprice());
+                        product.setCategory(category);
+                        productsRepository.save(product);
+                        return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
             }
+
 
         return new ApiResponse(401,CustomConstants.PRODIMAGE_ERROR,null);
 
