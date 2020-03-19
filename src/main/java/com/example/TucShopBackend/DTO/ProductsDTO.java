@@ -59,6 +59,7 @@ public class ProductsDTO {
         this.image = image;
     }
 
+
     public void setName(String name) {
         this.name = name;
     }

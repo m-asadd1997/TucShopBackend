@@ -7,6 +7,7 @@ import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.CategoryDTO;
 
 import com.example.TucShopBackend.DTO.ProductsDTO;
+import com.example.TucShopBackend.DTO.UpdateStockDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Models.Products;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
@@ -32,7 +33,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class ProductsService {
+public class    ProductsService {
 
     @Autowired
     ProductsRepository productsRepository;
@@ -168,7 +169,7 @@ public class ProductsService {
         return productsRepository.findAll();
     }
 
-    public Products getProductById(Long id){
+    public Products     getProductById(Long id){
         Optional<Products> product =  productsRepository.findById(id);
         if(product.isPresent()){
             return product.get();
@@ -259,6 +260,87 @@ public class ProductsService {
         product.setCategory(category);
         productsRepository.save(product);
         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
+
+    }
+        int count=0;
+    public ApiResponse AddQty(Long id,UpdateStockDTO pdt ){
+        Products pdt1 = getProductById(id);
+//            ProductsDTO pdt= new ProductsDTO();
+        double quantity=pdt1.getQty();
+        if(quantity-1<0){
+
+            pdt.setQuantity(0.0);
+            return this.updateStockById(id,pdt);
+        }
+        else{
+//            pdt1.setQty(quantity-1);
+                count++;
+            pdt.setQuantity(quantity-1);
+            return this.updateStockById(id,pdt);
+
+        }
+    }
+
+
+    public ApiResponse MinusQty(Long id , UpdateStockDTO pdt){
+        Products pdt1 = getProductById(id);
+
+        double quantity=pdt1.getQty();
+        if(count>0){
+
+            pdt.setQuantity(quantity+1);
+            count--;
+            return this.updateStockById(id,pdt);
+        }
+
+        else {
+            pdt.setQuantity(quantity);
+
+            return this.updateStockById(id,pdt);
+        }
+
+
+    }
+
+
+    public ApiResponse MinusAllQty(Long id , UpdateStockDTO pdt){
+        Products pdt1 = getProductById(id);
+
+        double quantity=pdt1.getQty();
+            for (int i =0;i<count;i++){
+                quantity= quantity+1;
+
+            }
+            count=0;
+            pdt.setQuantity(quantity);
+            return  this.updateStockById(id,pdt);
+
+
+    }
+
+
+
+
+    public ApiResponse updateStockById(Long id , UpdateStockDTO updateStockDTO) {
+
+//        Category category = getCategoryById(updateStockDTO.getCategory().getId());
+
+//        if(category == null){
+//            return new ApiResponse(200, CustomConstants.CAT_GETERROR,null);
+//        }
+        Optional<Products>findProduct = productsRepository.findById(id);
+        Products product = findProduct.get();
+//        product.setName(updateStockDTO.getName());
+//        product.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+//        product.setDescription(updateStockDTO.getDescription());
+//        product.setPrice(updateStockDTO.getPrice());
+        product.setQty(updateStockDTO.getQuantity());
+//        product.setCostprice(updateStockDTO.getCostprice());
+//        product.setCategory(category);
+        productsRepository.save(product);
+        return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
+
+
 
     }
 
