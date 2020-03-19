@@ -1,15 +1,24 @@
 package com.example.TucShopBackend.Models;
+import lombok.Data;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Stream;
+
 
 @Entity
 public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
+
     String name;
     String image;
     String description;
@@ -18,17 +27,29 @@ public class Products {
     double costprice;
 
 
-
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
 
-    @ManyToMany(mappedBy = "products")
-    @JsonBackReference
-    public List<Transactions> transactions;
+    @Column(name="products")
+    private String products;
+
+//    @ManyToMany(mappedBy = "products", cascade = CascadeType.ALL)
+//    @JsonBackReference
+//    public List<Transactions> transactions;
+    @OneToMany(mappedBy = "products", cascade = CascadeType.ALL)
+    private Set<ProductTransaction> productTransactions;
 
     public Products() {
     }
+
+
+    public Products(String products, ProductTransaction ... productTransactions) {
+        this.products=products;
+        for (ProductTransaction productTransaction :productTransactions) productTransaction.setProducts(this);
+        this.productTransactions = Stream.of(productTransactions).collect(Collectors.toSet());
+    }
+
 
     public Long getId() {
         return id;
@@ -94,11 +115,13 @@ public class Products {
         this.category = category;
     }
 
-    public List<Transactions> getTransactions() {
-        return transactions;
+    public Set<ProductTransaction> getProductTransactions() {
+        return productTransactions;
     }
 
-    public void setTransactions(List<Transactions> transactions) {
-        this.transactions = transactions;
+    public void setProductTransactions(Set<ProductTransaction> productTransactions) {
+        this.productTransactions = productTransactions;
     }
+
+
 }

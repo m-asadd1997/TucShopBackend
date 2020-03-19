@@ -149,6 +149,7 @@ public class ProductsService {
         return new ApiResponse(Status.Status_Ok,CustomConstants.PROD_DELETE,null  );
     }
     public ApiResponse deleteProductById(Long id){
+
         productsRepository.deleteById(id);
         return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_DELETE, null);
     }

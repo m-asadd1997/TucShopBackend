@@ -1,9 +1,14 @@
 package com.example.TucShopBackend.Models;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 public class Transactions {
@@ -17,11 +22,21 @@ public class Transactions {
     Double amount;
     String createdBy;
     String updatedBy;
+    //Double checkoutQuantity;
 
-    @ManyToMany
-    @JoinTable(name = "Product_Transaction",joinColumns = @JoinColumn(name = "transaction_id",referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "products_id",referencedColumnName = "id"))
-    public List<Products> products;
+
+
+
+
+//    @ManyToMany
+//    @JoinTable(name = "Product_Transaction",joinColumns = @JoinColumn(name = "transaction_id",referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "products_id",referencedColumnName = "id"))
+
+
+@OneToMany(mappedBy = "transactions", cascade = CascadeType.ALL)
+private Set<ProductTransaction> productTransactions = new HashSet<>();
+
+//    public List<Products> products;
 
 
 
@@ -68,12 +83,15 @@ public class Transactions {
         this.updatedBy = updatedBy;
     }
 
-    public List<Products> getProducts() {
-        return products;
+    public Set<ProductTransaction> getProductTransactions() {
+        return productTransactions;
     }
 
-    public void setProducts(List<Products> products) {
-        this.products = products;
+    public void setProductTransactions(Set<ProductTransaction> productTransactions) {
+        this.productTransactions = productTransactions;
     }
+
+
+
 }
 

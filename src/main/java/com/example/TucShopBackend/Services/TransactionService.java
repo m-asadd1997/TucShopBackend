@@ -5,6 +5,7 @@ import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.ScearchTransactionDTO;
 import com.example.TucShopBackend.DTO.TransactionsDTO;
 import com.example.TucShopBackend.Models.Category;
+import com.example.TucShopBackend.Models.ProductTransaction;
 import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.Repositories.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class TransactionService {
         transactions.setAmount(transactionsDTO.getAmount());
         transactions.setCreatedBy("ADMIN");
         transactions.setDate(LocalDate.now());
-        transactions.setProducts(transactionsDTO.getProducts());
+        //transactions.setProductTransactions();
         transactions.setUpdatedBy("ADMIN");
         transactionsRepository.save(transactions);
 
