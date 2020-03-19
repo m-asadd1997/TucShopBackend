@@ -3,6 +3,7 @@ package com.example.TucShopBackend.Controllers;
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.DTO.ProductsDTO;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;
+import com.example.TucShopBackend.DTO.UpdateStockDTO;
 import com.example.TucShopBackend.Models.Products;
 import com.example.TucShopBackend.Models.RequestForProduct;
 import com.example.TucShopBackend.Services.ProductsService;
@@ -86,4 +87,30 @@ public class ProductsController {
     }
 
 
+    @PutMapping ("/add/{id}")
+    public ApiResponse AddQuantity( @PathVariable("id") Long id,@RequestBody UpdateStockDTO pdt ){
+
+       // Products product = productsService.getProductById(id);
+       // pdt.setImage(image);
+        return  this.productsService.AddQty(id,pdt);
+
+    }
+
+
+    @PutMapping (value = "/minus/{id}")
+    public ApiResponse SubtractQuantity( @PathVariable("id") Long id, UpdateStockDTO pdt ){
+
+//        Products product = productsService.getProductById(id);
+        //pdt.setImage(image);
+        return  this.productsService.MinusQty(id,pdt);
+
+    }
+    @PutMapping (value = "/minusall/{id}")
+    public ApiResponse SubtractAllQuantity( @PathVariable("id") Long id, UpdateStockDTO pdt ){
+
+//        Products product = productsService.getProductById(id);
+        //pdt.setImage(image);
+        return  this.productsService.MinusAllQty(id,pdt);
+
+    }
 }
