@@ -98,7 +98,7 @@ public class ProductsController {
 
 
     @PutMapping (value = "/minus/{id}")
-    public ApiResponse SubtractQuantity( @PathVariable("id") Long id, UpdateStockDTO pdt ){
+    public ApiResponse SubtractQuantity( @PathVariable("id") Long id,@RequestBody UpdateStockDTO pdt ){
 
 //        Products product = productsService.getProductById(id);
         //pdt.setImage(image);
@@ -106,7 +106,7 @@ public class ProductsController {
 
     }
     @PutMapping (value = "/minusall/{id}")
-    public ApiResponse SubtractAllQuantity( @PathVariable("id") Long id, UpdateStockDTO pdt ){
+    public ApiResponse SubtractAllQuantity( @PathVariable("id") Long id, @RequestBody UpdateStockDTO pdt ){
 
 //        Products product = productsService.getProductById(id);
         //pdt.setImage(image);

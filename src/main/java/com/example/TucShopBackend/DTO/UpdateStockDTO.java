@@ -15,6 +15,16 @@ public class UpdateStockDTO {
 //    double price;
 //    Category category;
     double quantity;
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    int count;
 //    Double costprice;
 
 
