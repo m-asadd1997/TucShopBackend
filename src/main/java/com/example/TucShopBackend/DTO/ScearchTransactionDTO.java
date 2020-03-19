@@ -1,6 +1,6 @@
 package com.example.TucShopBackend.DTO;
 
-public class ScearchTransactionDTO {
+public class    ScearchTransactionDTO {
     String dateFrom;
     String dateTill;
     String user;

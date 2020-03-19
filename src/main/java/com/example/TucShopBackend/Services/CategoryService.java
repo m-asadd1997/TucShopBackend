@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.sql.Timestamp;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -39,25 +40,52 @@ public class CategoryService {
     @Value("${category.image.url}")
     String categoryImageUrl;
 
-    public ApiResponse postCategory(CategoryDTO categoryDTO){
+    @Value("${spring.profiles.active}")
+    String profile;
 
+    //serverfile.path
+    @Value("${serverfile.path}")
+    String serverFilePath;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
+
+    public ApiResponse postCategory(CategoryDTO categoryDTO){
+        System.out.println("========================"+profile+"=======================");
         Category categoryName = categoryRepository.findCategoriesByName(categoryDTO.getName());
 
         if(categoryName!= null){
             return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.CAT_DUPLICATE,null);
         }
         else{
+            switch (profile){
+                case CustomConstants.DEV:
+                    String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+                    if(saveCategoryImage(categoryDTO.getImage(),categoryDTO.getName(),unique)){
 
-            String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+                        Category category = new Category();
+                        category.setImage(categoryImageUrl+categoryDTO.getName()+"/"+unique+categoryDTO.getImage().getOriginalFilename());
+                        category.setName(categoryDTO.getName());
+                        categoryRepository.save(category);
+                        return new ApiResponse(Status.Status_Ok,CustomConstants.CAT_POSTED,category);
+                    }
+                break;
 
-            if(saveCategoryImage(categoryDTO.getImage(),categoryDTO.getName(),unique)){
-
-                Category category = new Category();
-                category.setImage(categoryImageUrl+categoryDTO.getName()+"/"+unique+categoryDTO.getImage().getOriginalFilename());
-                category.setName(categoryDTO.getName());
-                categoryRepository.save(category);
-                return new ApiResponse(Status.Status_Ok,CustomConstants.CAT_POSTED,category);
+                case CustomConstants.PROD:
+                    try {
+                        Map map =  cloudinaryService.upload(categoryDTO.getImage());
+                        Category category = new Category();
+                        category.setImage(map.get("url").toString());
+                        category.setName(categoryDTO.getName());
+                        categoryRepository.save(category);
+                        return new ApiResponse(Status.Status_Ok,CustomConstants.CAT_POSTED,category);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
             }
+
+
+
         }
 
         return new ApiResponse(Status.Status_ERROR,CustomConstants.CATIMAGE_ERROR,null);
@@ -66,7 +94,7 @@ public class CategoryService {
     public Boolean saveCategoryImage(MultipartFile file, String name, String unique){
         try {
 
-            String UPLOADED_FOLDER_NEW = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//"+name+"//";
+            String UPLOADED_FOLDER_NEW = serverFilePath+"serverFiles//"+name+"//";
 
             File dir = new File(UPLOADED_FOLDER_NEW);
             dir.setExecutable(true);
@@ -76,18 +104,14 @@ public class CategoryService {
             if(!dir.exists()){
                 dir.mkdirs();
             }
-          //  file.getsl
+
             BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
             BufferedImage resized = resize(inputImage, 30, 30);
-//            BufferedImage outputImage = new BufferedImage(100,
-//                    100, inputImage.getType());
 
             String format = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1);
             ImageIO.write(resized, format, new File(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename()));
-//            byte[] bytes = outputImage.get//file.getBytes();
-//            Path path = Paths.get(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename());
-//            Files.write(path, bytes);
+
         }
         catch (IOException e) {
             e.printStackTrace();
@@ -99,7 +123,7 @@ public class CategoryService {
     public ResponseEntity<InputStreamResource> getCategoryImage(String filename, String category) throws IOException{
 
 
-        String filepath = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//"+category+"//"+filename;
+        String filepath = serverFilePath+"serverFiles//"+category+"//"+filename;
 
         File f = new File(filepath);
         Resource file = new UrlResource(f.toURI());
@@ -139,15 +163,30 @@ public class CategoryService {
             return populateResponse(categoryDTO, category1);
         }
         else {
+            switch (profile){
+                case CustomConstants.DEV:
+                    String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
 
-            String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+                    if(saveCategoryImage(categoryDTO.getImage(), categoryDTO.getName(), unique)){
+                        category1.setName(categoryDTO.getName());
+                        category1.setImage(categoryImageUrl+categoryDTO.getName()+"/"+unique+categoryDTO.getImage().getOriginalFilename());
+                        categoryRepository.save(category1);
+                        return new ApiResponse(200, CustomConstants.CAT_UPDATE,category1);
+                    }
+                break;
 
-            if(saveCategoryImage(categoryDTO.getImage(), categoryDTO.getName(), unique)){
-                category1.setName(categoryDTO.getName());
-                category1.setImage(categoryImageUrl+categoryDTO.getName()+"/"+unique+categoryDTO.getImage().getOriginalFilename());
-                categoryRepository.save(category1);
-                return new ApiResponse(200, CustomConstants.CAT_UPDATE,category1);
+                case CustomConstants.PROD:
+                    try {
+                        Map map = cloudinaryService.upload(categoryDTO.getImage());
+                        category1.setName(categoryDTO.getName());
+                        category1.setImage(map.get("url").toString());
+                        categoryRepository.save(category1);
+                        return new ApiResponse(200, CustomConstants.CAT_UPDATE, category1);
+                    }catch (IOException e) {
+                        e.printStackTrace();
+                    }
             }
+
             return new ApiResponse(401, CustomConstants.CATIMAGE_ERROR,null);
         }
 

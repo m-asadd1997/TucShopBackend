@@ -44,9 +44,14 @@ public class TransactionsController {
         return this.transactionService.scearchTransactions(scearchTransactionDTO);
     }
 
+
     @PostMapping("/scearchAllTransaction")
     public List<Transactions> scearchAllTransactions(@RequestBody ScearchTransactionDTO scearchTransactionDTO){
         return this.transactionService.scearchAllTransactions(scearchTransactionDTO);
+    }
+    @GetMapping("/recent-transactions")
+    public List<Transactions> recentTransaction(){
+        return this.transactionService.getRecentTransactions();
     }
 
 }
