@@ -274,7 +274,7 @@ public class    ProductsService {
         }
         else{
 //            pdt1.setQty(quantity-1);
-                count++;
+               pdt.setCount((pdt.getCount()+1));
             pdt.setQuantity(quantity-1);
             return this.updateStockById(id,pdt);
 
@@ -286,10 +286,10 @@ public class    ProductsService {
         Products pdt1 = getProductById(id);
 
         double quantity=pdt1.getQty();
-        if(count>0){
+        if(pdt.getCount()>0){
 
             pdt.setQuantity(quantity+1);
-            count--;
+            pdt.setCount(pdt.getCount()-1);
             return this.updateStockById(id,pdt);
         }
 
@@ -307,11 +307,11 @@ public class    ProductsService {
         Products pdt1 = getProductById(id);
 
         double quantity=pdt1.getQty();
-            for (int i =0;i<count;i++){
+            for (int i =0;i<pdt.getCount();i++){
                 quantity= quantity+1;
 
             }
-            count=0;
+            pdt.setCount(0);
             pdt.setQuantity(quantity);
             return  this.updateStockById(id,pdt);
 
