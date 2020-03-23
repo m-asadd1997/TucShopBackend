@@ -18,11 +18,11 @@ import java.util.List;
 public interface RequestForProductRepository extends JpaRepository<RequestForProduct,Long> {
 
 
-    @Query(value = "select new com.example.TucShopBackend.DTO.RequestForProductDTO(id,name as name,count(name)as countname) from RequestForProduct  group by name order by count(name) desc")
+    @Query(value = "select new com.example.TucShopBackend.DTO.RequestForProductDTO(id,name as name,count(name)as countname,date1 )  from RequestForProduct  group by name order by count(name) desc")
     public List<RequestForProductDTO> topRequestedProductsCount();
 
 
-    @Query(value = "select new com.example.TucShopBackend.DTO.RequestForProductDTO(id, name as name,count(name)as countname) from RequestForProduct where name LIKE %:keyword% group by name order by count(name) desc")
+    @Query(value = "select new com.example.TucShopBackend.DTO.RequestForProductDTO(id, name as name,count(name)as countname,date1) from RequestForProduct where name LIKE %:keyword% group by name order by count(name) desc")
     public List<RequestForProductDTO> topRequestedProductsKeyword(@Param("keyword")String keyword);
 
 

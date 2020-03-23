@@ -78,6 +78,7 @@ public class    ProductsService {
                             products.setQty(productsDTO.getQuantity());
                             products.setCostprice(productsDTO.getCostprice());
                             products.setName(productsDTO.getName());
+                            products.setDate1(productsDTO.getDate1());
                             productsRepository.save(products);
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
                         }

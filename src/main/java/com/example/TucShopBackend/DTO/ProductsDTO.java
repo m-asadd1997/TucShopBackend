@@ -11,6 +11,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 public class ProductsDTO {
 
@@ -34,6 +36,27 @@ public class ProductsDTO {
 
     Double quantity;
     Double costprice;
+
+    public String  getDate1() {
+
+
+        SimpleDateFormat myDate = new SimpleDateFormat("yyyy-MM-dd");
+        myDate.setTimeZone(TimeZone.getTimeZone("PKT"));
+        java.util.Date datee =new java.util.Date();
+
+        date1= myDate.format(datee);
+        return date1;
+    }
+
+    public void setDate1(String  date1) {
+
+        this.date1=date1;
+    }
+
+
+
+    public String date1;
+
 
     public ProductsDTO() {
     }
