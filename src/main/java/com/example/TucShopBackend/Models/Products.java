@@ -3,6 +3,7 @@ package com.example.TucShopBackend.Models;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,6 +19,20 @@ public class Products {
     double costprice;
 
 
+    public String getDate1() {
+        return date1;
+    }
+
+    public void setDate1(String  date1) {
+//        date1= new java.util.Date();
+
+//        date1 = sdf.parse();
+
+        this.date1 = date1;
+    }
+
+    //    java.util.Date  date1;
+    String date1;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)

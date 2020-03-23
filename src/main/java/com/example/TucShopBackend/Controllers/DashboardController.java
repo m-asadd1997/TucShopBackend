@@ -63,7 +63,7 @@ public class DashboardController {
     public ApiResponse autoComplete(@PathVariable ("keyword") String keyword) { return this.dashboardService.requestedProductsKeyword(keyword);
     }
 
-    @GetMapping("/salespermonth")
+        @GetMapping("/salespermonth")
     public ApiResponse getMonthlySales(){
         return dashboardService.getMonthlySales();
     }

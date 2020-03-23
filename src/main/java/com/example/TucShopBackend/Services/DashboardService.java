@@ -32,6 +32,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.List;
 
@@ -85,12 +86,14 @@ public class DashboardService {
 
     public ApiResponse requestedProductsCount() {
         List<RequestForProductDTO> topRequestedProductsCount = requestForProductRepository.topRequestedProductsCount();
+
         return new ApiResponse(Status.Status_Ok, "Successfully get top requested Products Count", topRequestedProductsCount);
     }
 
 
     public ApiResponse getMonthlySales() {
-
+        List<LocalDate> dates = new ArrayList<>();
+        List<Double> seperateAmounts= new ArrayList<>();
         String monthName = "";
         Map<String, Double> map = new HashMap<>();
         List<Transactions> transactionsList = transactionsRepository.findAll();
@@ -98,9 +101,12 @@ public class DashboardService {
             monthName = transaction.getDate().getMonth().toString();
             if (!map.containsKey(monthName)) {
                 map.put(monthName, transaction.getAmount());
-            } else {
+            }
+            else {
                 map.put(monthName, map.get(monthName).doubleValue() + transaction.getAmount());
             }
+            dates.add(transaction.getDate());
+            seperateAmounts.add(transaction.getAmount());
 
         }
 
@@ -114,9 +120,11 @@ public class DashboardService {
             seriesList.add(entry.getValue());
         }
 
-        if (labelList != null && seriesList != null) {
+        if (labelList != null && seriesList != null&&dates!=null) {
             cdt.setLabels(labelList);
             cdt.setSeries(seriesList);
+            cdt.setDates(dates);
+            cdt.setAmounts(seperateAmounts);
         }
 
         return new ApiResponse(Status.Status_Ok, "Get Sales per month", cdt);
