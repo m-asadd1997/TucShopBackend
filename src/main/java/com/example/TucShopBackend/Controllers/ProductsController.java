@@ -32,6 +32,11 @@ public class ProductsController {
     @Autowired
     ProductsService productsService;
 
+    @GetMapping("/variants/{keyword}")
+    public ApiResponse autoComplete(@PathVariable ("keyword") String keyword) {
+        return productsService.getVariants(keyword);
+    }
+
    //Request Product
     @PostMapping("/postreqproduct")
     public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProductDTO requestForProduct){

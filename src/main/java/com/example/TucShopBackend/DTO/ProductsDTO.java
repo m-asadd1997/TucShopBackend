@@ -1,6 +1,7 @@
 package com.example.TucShopBackend.DTO;
 
 import com.example.TucShopBackend.Models.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -34,19 +35,25 @@ public class ProductsDTO {
 
     Double quantity;
     Double costprice;
+    String variants;
+
+    public ProductsDTO( @NotNull(message = "Name cannot be null") @NotBlank(message = "Name cannot be blank") @Size(min = 3) String name, @NotNull(message = "Image cannot be null") @NotBlank(message = "Image cannot be blank") MultipartFile image, @NotNull(message = "Description not found") @Size(min = 3) String description, @NotNull(message = "Price cannot be null") @Positive(message = "Price cannot be negative or 0") double price, @NotNull(message = "Category not found") Category category, Double quantity, Double costprice, String variants) {
+        this.name = name;
+        this.image = image;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.quantity = quantity;
+        this.costprice = costprice;
+        this.variants = variants;
+    }
 
     public ProductsDTO() {
     }
 
-    public ProductsDTO(String name, MultipartFile image, String description, double price, Category category, double qty, double costprice) {
-        this.name = name;
-        this.image = image;
-        this.description = description;
 
-        this.price = price;
 
-        this.category = category;
-    }
+
     public String getName() {
         return name;
     }
@@ -105,5 +112,13 @@ public class ProductsDTO {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getVariants() {
+        return variants;
+    }
+
+    public void setVariants(String variants) {
+        this.variants = variants;
     }
 }

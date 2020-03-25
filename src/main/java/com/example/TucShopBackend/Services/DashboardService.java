@@ -70,7 +70,7 @@ public class DashboardService {
     }
 
     public ApiResponse totalTransaction() {
-        return new ApiResponse(Status.Status_Ok, "Successfully fetch Total Transation", transactionsRepository.getTotalTransaction());
+        return new ApiResponse(Status.Status_Ok, "Successfully fetch Total Transaction", transactionsRepository.getTotalTransaction());
     }
 
     public ApiResponse transactionDetails() {
@@ -87,9 +87,14 @@ public class DashboardService {
         List<RequestForProductDTO> topRequestedProductsCount = requestForProductRepository.topRequestedProductsCount();
         return new ApiResponse(Status.Status_Ok, "Successfully get top requested Products Count", topRequestedProductsCount);
     }
+//    public ApiResponse profit() {
+//
+//    }
 
 
-    public ApiResponse getMonthlySales() {
+
+
+        public ApiResponse getMonthlySales() {
 
         String monthName = "";
         Map<String, Double> map = new HashMap<>();
@@ -218,6 +223,8 @@ public class DashboardService {
             List<Settings> settingsList = settingsRepository.findAll();
             return settingsList;
         }
+
+
 
 
     }

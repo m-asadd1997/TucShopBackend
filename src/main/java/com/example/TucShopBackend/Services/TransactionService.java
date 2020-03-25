@@ -29,6 +29,11 @@ public class TransactionService {
         transactions.setDate(LocalDate.now());
         transactions.setProducts(transactionsDTO.getProducts());
         transactions.setUpdatedBy("ADMIN");
+
+
+
+
+
         transactionsRepository.save(transactions);
 
         return new ApiResponse(Status.Status_Ok,"Transaction saved successfully",transactions);

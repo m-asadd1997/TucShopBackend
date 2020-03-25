@@ -7,6 +7,7 @@ import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.CategoryDTO;
 
 import com.example.TucShopBackend.DTO.ProductsDTO;
+import com.example.TucShopBackend.DTO.VariantsDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Models.Products;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -27,8 +29,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ProductsService {
@@ -42,11 +46,25 @@ public class ProductsService {
     @Value("${product.image.url}")
     String productImageUrl;
 
+    public ApiResponse getVariants(String keyword){
+        List<VariantsDTO> variantsList = productsRepository.getVariants(keyword);
+        return new ApiResponse(Status.Status_Ok,"Success",variantsList);
+    }
+
     public ApiResponse saveProducts(ProductsDTO productsDTO){
 
-        Products productsName = productsRepository.findByName(productsDTO.getName());
+        List<Products> productsName = productsRepository.findByName(productsDTO.getName());
 
-        if(productsName == null) {
+        Boolean flag = false;
+
+        for(int i=0;i<productsName.size(); i++){
+
+            if(productsName.get(i).getVariants().equals(productsDTO.getVariants()) ){
+                flag = true;
+            }
+        }
+
+        if(productsName == null || !flag) {
 
             String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
             Category category = getCategoryById(productsDTO.getCategory().getId());
@@ -55,20 +73,23 @@ public class ProductsService {
                 return new ApiResponse(Status.Status_ERROR, CustomConstants.CAT_GETERROR,null);
             }
 
-            if(saveProductImage(productsDTO.getImage(),category.getName(),unique)){
+            if(saveProductImage(productsDTO.getImage(),category.getName(),unique)) {
 
-            Products products = new Products();
-            products.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
-            products.setCategory(category);
-            products.setDescription(productsDTO.getDescription());
-            products.setPrice(productsDTO.getPrice());
-            products.setQty(productsDTO.getQuantity());
-            products.setCostprice(productsDTO.getCostprice());
-            products.setName(productsDTO.getName());
-            productsRepository.save(products);
-            return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
-        }
+                Products products = new Products();
+                products.setImage(productImageUrl + category.getName() + "/" + productsDTO.getName() + "/" + unique + productsDTO.getImage().getOriginalFilename());
+                products.setCategory(category);
+                products.setDescription(productsDTO.getDescription());
+                products.setPrice(productsDTO.getPrice());
+                products.setQty(productsDTO.getQuantity());
+                products.setCostprice(productsDTO.getCostprice());
+                products.setName(productsDTO.getName());
+                products.setVariants(productsDTO.getVariants());
+                productsRepository.save(products);
+                return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
             }
+        }
+
+
         else{
             return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.PROD_DUPLICATE, null);
         }
