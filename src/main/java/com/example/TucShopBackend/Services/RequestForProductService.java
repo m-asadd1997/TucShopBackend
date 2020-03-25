@@ -23,6 +23,7 @@ public class RequestForProductService {
 
             RequestForProduct requestForProduct = new RequestForProduct();
             requestForProduct.setName(requestForProductDTO.getName());
+            requestForProduct.setDate1(requestForProductDTO.getDate1()   );
             requestForProductRepository.save(requestForProduct);
             return new ApiResponse(Status.Status_Ok, "Success", requestForProduct);
     }

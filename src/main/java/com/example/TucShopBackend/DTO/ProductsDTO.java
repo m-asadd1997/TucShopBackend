@@ -12,6 +12,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 public class ProductsDTO {
 
@@ -35,9 +37,33 @@ public class ProductsDTO {
 
     Double quantity;
     Double costprice;
-    String variants;
 
-    public ProductsDTO( @NotNull(message = "Name cannot be null") @NotBlank(message = "Name cannot be blank") @Size(min = 3) String name, @NotNull(message = "Image cannot be null") @NotBlank(message = "Image cannot be blank") MultipartFile image, @NotNull(message = "Description not found") @Size(min = 3) String description, @NotNull(message = "Price cannot be null") @Positive(message = "Price cannot be negative or 0") double price, @NotNull(message = "Category not found") Category category, Double quantity, Double costprice, String variants) {
+    public ProductsDTO( @NotNull(message = "Name cannot be null") @NotBlank(message = "Name cannot be blank") @Size(min = 3) String name, @NotNull(message = "Image cannot be null") @NotBlank(message = "Image cannot be blank") MultipartFile image, @NotNull(message = "Description not found") @Size(min = 3) String description, @NotNull(message = "Price cannot be null") @Positive(message = "Price cannot be negative or 0") double price, @NotNull(message = "Category not found") Category category, Double quantity, Double costprice) {
+    public String  getDate1() {
+
+
+        SimpleDateFormat myDate = new SimpleDateFormat("yyyy-MM-dd");
+        myDate.setTimeZone(TimeZone.getTimeZone("PKT"));
+        java.util.Date datee =new java.util.Date();
+
+        date1= myDate.format(datee);
+        return date1;
+    }
+
+    public void setDate1(String  date1) {
+
+        this.date1=date1;
+    }
+
+
+
+    public String date1;
+
+
+    public ProductsDTO() {
+    }
+
+    public ProductsDTO(String name, MultipartFile image, String description, double price, Category category, double qty, double costprice) {
         this.name = name;
         this.image = image;
         this.description = description;
@@ -45,7 +71,7 @@ public class ProductsDTO {
         this.category = category;
         this.quantity = quantity;
         this.costprice = costprice;
-        this.variants = variants;
+        
     }
 
     public ProductsDTO() {
@@ -65,6 +91,7 @@ public class ProductsDTO {
     public void setImage(MultipartFile image) {
         this.image = image;
     }
+
 
     public void setName(String name) {
         this.name = name;
@@ -114,11 +141,4 @@ public class ProductsDTO {
         this.category = category;
     }
 
-    public String getVariants() {
-        return variants;
-    }
-
-    public void setVariants(String variants) {
-        this.variants = variants;
-    }
 }

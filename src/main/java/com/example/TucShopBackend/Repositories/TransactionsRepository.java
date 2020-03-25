@@ -26,8 +26,8 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
     @Query(value = "SELECT * FROM transactions WHERE  date BETWEEN :date1 AND :date2 and created_by=:user ", nativeQuery = true)
     public List<Transactions> scearchTransactionsOfUser(@Param("date1") String date1,@Param("date2") String date2,@Param("user") String user);
 
-    @Query(value = "select sum(amount) from transactions", nativeQuery = true)
-    public double getTotalTransaction();
+    @Query(value = "select amount,date from transactions", nativeQuery = true)
+    public List<Object> getTotalTransaction();
 
     @Query(value = "select * from transactions", nativeQuery = true)
     public List<Transactions> getTransactionDetails();

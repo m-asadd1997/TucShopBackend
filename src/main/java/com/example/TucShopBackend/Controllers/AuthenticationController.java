@@ -30,6 +30,11 @@ public class AuthenticationController {
     @Autowired
     private UserServiceImpl userService;
 
+
+    @GetMapping("/hello")
+    public String test(){
+        return "hello";
+    }
     @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
     public ApiResponse<AuthToken> register(@RequestBody LoginUser loginUser) throws AuthenticationException {
 

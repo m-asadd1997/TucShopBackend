@@ -76,6 +76,11 @@ public class TransactionService {
 
 
     }
+    public List<Transactions> scearchAllTransactions(ScearchTransactionDTO scearchTransactionDTO){
+        List<Transactions> transactionsList=transactionsRepository.getMonthTransactions(scearchTransactionDTO.getDateFrom(),scearchTransactionDTO.getDateTill());
+        return transactionsList;
+
+    }
 
     public List<Transactions> getRecentTransactions(){
 
