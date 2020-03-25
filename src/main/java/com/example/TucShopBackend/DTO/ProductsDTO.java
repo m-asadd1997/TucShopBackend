@@ -1,6 +1,7 @@
 package com.example.TucShopBackend.DTO;
 
 import com.example.TucShopBackend.Models.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -11,6 +12,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 public class ProductsDTO {
 
@@ -34,19 +37,44 @@ public class ProductsDTO {
 
     Double quantity;
     Double costprice;
+    String variants;
+
+    public String  getDate1() {
+
+
+        SimpleDateFormat myDate = new SimpleDateFormat("yyyy-MM-dd");
+        myDate.setTimeZone(TimeZone.getTimeZone("PKT"));
+        java.util.Date datee =new java.util.Date();
+
+        date1= myDate.format(datee);
+        return date1;
+    }
+
+    public void setDate1(String  date1) {
+
+        this.date1=date1;
+    }
+
+
+    public String date1;
+
 
     public ProductsDTO() {
     }
 
-    public ProductsDTO(String name, MultipartFile image, String description, double price, Category category, double qty, double costprice) {
+    public ProductsDTO(String name, MultipartFile image, String description, double price, Category category, double qty, double costprice, String variants) {
         this.name = name;
         this.image = image;
         this.description = description;
-
         this.price = price;
-
         this.category = category;
+        this.quantity = quantity;
+        this.costprice = costprice;
+        this.variants = variants;
+        
     }
+
+
     public String getName() {
         return name;
     }
@@ -106,5 +134,13 @@ public class ProductsDTO {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public String getVariants() {
+        return variants;
+    }
+
+    public void setVariants(String variants) {
+        this.variants = variants;
     }
 }
