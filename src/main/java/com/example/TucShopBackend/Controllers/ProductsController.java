@@ -124,10 +124,15 @@ public class ProductsController {
 
     }
 
+
+    @GetMapping("/search/{keyword}")
+    public ApiResponse searchProductByKeyword(@PathVariable ("keyword") String keyword) { return this.productsService.searchProductByKeyword(keyword);
+
     @GetMapping(value = "/paginatedproducts")
     public Page<Products> getAllPaginatedProducts(@RequestParam(defaultValue = "0") int page)
     {
         return productsService.joinAllProducts(PageRequest.of(page,10));
+
     }
 
 }

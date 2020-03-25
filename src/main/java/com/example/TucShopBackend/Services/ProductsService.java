@@ -379,13 +379,20 @@ public class    ProductsService {
         productsRepository.save(product);
         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
 
-
-
     }
+
+
+    public ApiResponse searchProductByKeyword(String keyword) {
+        List<Products> searchProductByKeyword = productsRepository.searchProductByKeyword(keyword);
+        return new ApiResponse(Status.Status_Ok, "Successfully keyword Match From Products", searchProductByKeyword);
+    }
+
+
 
 
     public Page<Products> joinAllProducts(Pageable pageable){
             return  productsRepository.findAll(pageable);
     }
+
 
 }
