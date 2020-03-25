@@ -72,7 +72,7 @@ public class    ProductsService {
 
         for(int i=0;i<productsName.size(); i++){
 
-            if(productsName.get(i).getVariants().equals(productsDTO.getVariants()) ){
+                if(productsName.get(i).getVariants().equals(productsDTO.getVariants()) ){
                 flag = true;
             }
         }
@@ -98,6 +98,7 @@ public class    ProductsService {
                             products.setCostprice(productsDTO.getCostprice());
                             products.setName(productsDTO.getName());
                             products.setDate1(productsDTO.getDate1());
+                            products.setVariants(productsDTO.getVariants());
                             productsRepository.save(products);
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
                         }
@@ -114,6 +115,7 @@ public class    ProductsService {
                             products.setQty(productsDTO.getQuantity());
                             products.setCostprice(productsDTO.getCostprice());
                             products.setName(productsDTO.getName());
+                            products.setVariants(productsDTO.getVariants());
                             productsRepository.save(products);
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
                         } catch (IOException e) {
@@ -257,6 +259,7 @@ public class    ProductsService {
                         product.setQty(productsDTO.getQuantity());
                         product.setCostprice(productsDTO.getCostprice());
                         product.setCategory(category);
+                        product.setVariants(productsDTO.getVariants());
                         productsRepository.save(product);
                         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
                     }
