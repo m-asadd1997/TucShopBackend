@@ -18,6 +18,7 @@ public class Transactions {
     String createdBy;
     String updatedBy;
 
+
     @ManyToMany
     @JoinTable(name = "Product_Transaction",joinColumns = @JoinColumn(name = "transaction_id",referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "products_id",referencedColumnName = "id"))
@@ -27,6 +28,8 @@ public class Transactions {
 
     public Transactions() {
     }
+
+
 
     public Long getId() {
         return id;

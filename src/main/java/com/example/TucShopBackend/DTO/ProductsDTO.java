@@ -1,6 +1,7 @@
 package com.example.TucShopBackend.DTO;
 
 import com.example.TucShopBackend.Models.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -37,6 +38,7 @@ public class ProductsDTO {
     Double quantity;
     Double costprice;
 
+    public ProductsDTO( @NotNull(message = "Name cannot be null") @NotBlank(message = "Name cannot be blank") @Size(min = 3) String name, @NotNull(message = "Image cannot be null") @NotBlank(message = "Image cannot be blank") MultipartFile image, @NotNull(message = "Description not found") @Size(min = 3) String description, @NotNull(message = "Price cannot be null") @Positive(message = "Price cannot be negative or 0") double price, @NotNull(message = "Category not found") Category category, Double quantity, Double costprice) {
     public String  getDate1() {
 
 
@@ -65,11 +67,19 @@ public class ProductsDTO {
         this.name = name;
         this.image = image;
         this.description = description;
-
         this.price = price;
-
         this.category = category;
+        this.quantity = quantity;
+        this.costprice = costprice;
+        
     }
+
+    public ProductsDTO() {
+    }
+
+
+
+
     public String getName() {
         return name;
     }
@@ -130,4 +140,5 @@ public class ProductsDTO {
     public void setCategory(Category category) {
         this.category = category;
     }
+
 }
