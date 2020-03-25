@@ -35,4 +35,7 @@ public interface ProductsRepository extends JpaRepository<Products,Long> {
     @Query(value = "select * from products where qty<10",nativeQuery = true)
     public List<Products> outOfStockProducts();
 
+    @Query(value = "SELECT * FROM products WHERE name LIKE %:keyword%", nativeQuery = true)
+    public List<Products> searchProductByKeyword(@Param("keyword")String keyword);
+
 }

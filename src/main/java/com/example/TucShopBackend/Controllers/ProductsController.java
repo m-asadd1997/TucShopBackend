@@ -113,4 +113,9 @@ public class ProductsController {
         return  this.productsService.MinusAllQty(id,pdt);
 
     }
+
+    @GetMapping("/search/{keyword}")
+    public ApiResponse searchProductByKeyword(@PathVariable ("keyword") String keyword) { return this.productsService.searchProductByKeyword(keyword);
+    }
+
 }
