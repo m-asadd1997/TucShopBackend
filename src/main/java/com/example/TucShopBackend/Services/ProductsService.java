@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -343,6 +345,11 @@ public class    ProductsService {
 
 
 
+    }
+
+
+    public Page<Products> joinAllProducts(Pageable pageable){
+            return  productsRepository.findAll(pageable);
     }
 
 }

@@ -1,7 +1,10 @@
 package com.example.TucShopBackend.Repositories;
 
+import com.example.TucShopBackend.DTO.ProductsDTO;
 import com.example.TucShopBackend.Models.Products;
 import com.example.TucShopBackend.Models.TotalProduct;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -35,5 +38,8 @@ public interface ProductsRepository extends JpaRepository<Products,Long> {
 
     @Query(value = "select * from products where qty<10",nativeQuery = true)
     public List<Products> outOfStockProducts();
+//
+//    @Query(value = "select * from products",nativeQuery = true)
+
 
 }
