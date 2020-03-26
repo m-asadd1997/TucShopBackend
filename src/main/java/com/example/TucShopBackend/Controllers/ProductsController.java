@@ -35,8 +35,7 @@ public class ProductsController {
 
     @Autowired
     ProductsService productsService;
-    @Autowired
-    ProductsRepository productsRepository;
+
 
     @GetMapping("/variants/{keyword}")
     public ApiResponse autoComplete(@PathVariable ("keyword") String keyword) {
