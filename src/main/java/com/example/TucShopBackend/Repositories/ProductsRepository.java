@@ -41,5 +41,7 @@ public interface ProductsRepository extends JpaRepository<Products,Long> {
 //
 //    @Query(value = "select * from products",nativeQuery = true)
 
+    @Query(value = "select * from products where name LIKE :name%",nativeQuery = true)
 
+    public List<Products> findByChar(@Param("name")String name);
 }

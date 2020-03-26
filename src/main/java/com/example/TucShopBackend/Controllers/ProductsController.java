@@ -35,8 +35,7 @@ public class ProductsController {
 
     @Autowired
     ProductsService productsService;
-    @Autowired
-    ProductsRepository productsRepository;
+
 
    //Request Product
     @PostMapping("/postreqproduct")

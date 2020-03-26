@@ -5,6 +5,7 @@ import com.example.TucShopBackend.Commons.CustomConstants;
 import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.ChartDataDTO;
 import com.example.TucShopBackend.DTO.SettingsDTO;
+import com.example.TucShopBackend.Models.Products;
 import com.example.TucShopBackend.Models.Settings;
 import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;
@@ -228,5 +229,8 @@ public class DashboardService {
         }
 
 
+    public List<Products> getSearchedProducts(String s) {
+    return  productsRepository.findByChar(s);
     }
+}
 
