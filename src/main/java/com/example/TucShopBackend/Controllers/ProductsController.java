@@ -37,6 +37,11 @@ public class ProductsController {
     ProductsService productsService;
 
 
+    @GetMapping("/variants/{keyword}")
+    public ApiResponse autoComplete(@PathVariable ("keyword") String keyword) {
+        return productsService.getVariants(keyword);
+    }
+
    //Request Product
     @PostMapping("/postreqproduct")
     public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProductDTO requestForProduct){
@@ -118,10 +123,16 @@ public class ProductsController {
 
     }
 
+
+    @GetMapping("/search/{keyword}")
+    public ApiResponse searchProductByKeyword(@PathVariable ("keyword") String keyword) {
+        return this.productsService.searchProductByKeyword(keyword);
+    }
     @GetMapping(value = "/paginatedproducts")
     public Page<Products> getAllPaginatedProducts(@RequestParam(defaultValue = "0") int page)
     {
         return productsService.joinAllProducts(PageRequest.of(page,10));
+
     }
 
 }

@@ -10,10 +10,13 @@ public class TransactionsDTO {
 
     Double amount;
 
+
     List<Products> products;
 
     public TransactionsDTO() {
     }
+
+
 
     public Double getAmount() {
         return amount;
