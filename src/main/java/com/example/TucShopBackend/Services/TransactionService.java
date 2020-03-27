@@ -15,6 +15,8 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Service
 public class TransactionService {
@@ -27,7 +29,7 @@ public class TransactionService {
         transactions.setAmount(transactionsDTO.getAmount());
         transactions.setCreatedBy("ADMIN");
         transactions.setDate(LocalDate.now());
-        transactions.setProducts(transactionsDTO.getProducts());
+        //transactions.setProductTransactions(transactionsDTO.getProducts().stream().collect(Collectors.toSet())); // .setProducts(transactionsDTO.getProducts());
         transactions.setUpdatedBy("ADMIN");
 
 

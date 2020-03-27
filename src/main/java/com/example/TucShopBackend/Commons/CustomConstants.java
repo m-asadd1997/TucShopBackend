@@ -12,12 +12,12 @@ public class CustomConstants {
     public static final String CAT_UPDATE = "Category updated successfully";
     public static final String CAT_DELETE = "Category deleted successfully";
 
-    public static final String PROD_DUPLICATE = "Products already exists";
-    public static final String PROD_POSTED = "Products successfully saved";
+    public static final String PROD_DUPLICATE = "Product already exists";
+    public static final String PROD_POSTED = "Product successfully saved";
     public static final String PRODIMAGE_ERROR = "Image not saved";
-    public static final String PROD_UPDATE = "Products updated successfully";
-    public static final String PROD_DELETE = "Products deleted successfully";
-    public static final String PROD_GET = "Products Get successfully";
+    public static final String PROD_UPDATE = "Product updated successfully";
+    public static final String PROD_DELETE = "Product deleted successfully";
+    public static final String PROD_GET = "Product Get successfully";
     public static final String CAT_GETERROR = "Failed to find category";
     public static final String DEV = "dev";
     public static final String PROD = "prod";

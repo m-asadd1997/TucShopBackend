@@ -1,6 +1,6 @@
 package com.example.TucShopBackend.DTO;
 
-import com.example.TucShopBackend.Models.Products;
+import com.example.TucShopBackend.Models.Product;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -12,7 +12,7 @@ public class CategoryDTO {
     String name;
     MultipartFile image;
 
-    List<Products> productsList;
+    List<Product> productList;
 
     public CategoryDTO() {
     }
@@ -33,11 +33,11 @@ public class CategoryDTO {
         this.image = image;
     }
 
-    public List<Products> getProductsList() {
-        return productsList;
+    public List<Product> getProductList() {
+        return productList;
     }
 
-    public void setProductsList(List<Products> productsList) {
-        this.productsList = productsList;
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
 }

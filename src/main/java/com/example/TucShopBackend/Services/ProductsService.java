@@ -4,13 +4,12 @@ import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.CustomConstants;
 
 import com.example.TucShopBackend.Commons.Status;
-import com.example.TucShopBackend.DTO.CategoryDTO;
 
 import com.example.TucShopBackend.DTO.ProductsDTO;
 import com.example.TucShopBackend.DTO.VariantsDTO;
 import com.example.TucShopBackend.DTO.UpdateStockDTO;
 import com.example.TucShopBackend.Models.Category;
-import com.example.TucShopBackend.Models.Products;
+import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
 import com.example.TucShopBackend.Repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -32,11 +30,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class    ProductsService {
@@ -66,18 +62,18 @@ public class    ProductsService {
 
     public ApiResponse saveProducts(ProductsDTO productsDTO){
 
-        List<Products> productsName = productsRepository.findByName(productsDTO.getName());
+        List<Product> productName = productsRepository.findByName(productsDTO.getName());
 
         Boolean flag = false;
 
-        for(int i=0;i<productsName.size(); i++){
+        for(int i = 0; i< productName.size(); i++){
 
-                if(productsName.get(i).getVariants().equals(productsDTO.getVariants()) ){
+                if(productName.get(i).getVariants().equals(productsDTO.getVariants()) ){
                 flag = true;
             }
         }
 
-        if(productsName == null || !flag) {
+        if(productName == null || !flag) {
 
             String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
             Category category = getCategoryById(productsDTO.getCategory().getId());
@@ -89,35 +85,35 @@ public class    ProductsService {
                     case CustomConstants.DEV:
                         if(saveProductImage(productsDTO.getImage(),category.getName(),unique)){
 
-                            Products products = new Products();
-                            products.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
-                            products.setCategory(category);
-                            products.setDescription(productsDTO.getDescription());
-                            products.setPrice(productsDTO.getPrice());
-                            products.setQty(productsDTO.getQuantity());
-                            products.setCostprice(productsDTO.getCostprice());
-                            products.setName(productsDTO.getName());
-                            products.setDate1(productsDTO.getDate1());
-                            products.setVariants(productsDTO.getVariants());
-                            productsRepository.save(products);
-                            return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
+                            Product product = new Product();
+                            product.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+                            product.setCategory(category);
+                            product.setDescription(productsDTO.getDescription());
+                            product.setPrice(productsDTO.getPrice());
+                            product.setQty(productsDTO.getQuantity());
+                            product.setCostprice(productsDTO.getCostprice());
+                            product.setName(productsDTO.getName());
+                            product.setDate1(productsDTO.getDate1());
+                            product.setVariants(productsDTO.getVariants());
+                            productsRepository.save(product);
+                            return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
                         }
                         break;
 
                     case CustomConstants.PROD:
                         try {
                             Map map =  cloudinaryService.upload(productsDTO.getImage());
-                            Products products = new Products();
-                            products.setImage(map.get("url").toString());
-                            products.setCategory(category);
-                            products.setDescription(productsDTO.getDescription());
-                            products.setPrice(productsDTO.getPrice());
-                            products.setQty(productsDTO.getQuantity());
-                            products.setCostprice(productsDTO.getCostprice());
-                            products.setName(productsDTO.getName());
-                            products.setVariants(productsDTO.getVariants());
-                            productsRepository.save(products);
-                            return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
+                            Product product = new Product();
+                            product.setImage(map.get("url").toString());
+                            product.setCategory(category);
+                            product.setDescription(productsDTO.getDescription());
+                            product.setPrice(productsDTO.getPrice());
+                            product.setQty(productsDTO.getQuantity());
+                            product.setCostprice(productsDTO.getCostprice());
+                            product.setName(productsDTO.getName());
+                            product.setVariants(productsDTO.getVariants());
+                            productsRepository.save(product);
+                            return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -126,17 +122,17 @@ public class    ProductsService {
 
             if(saveProductImage(productsDTO.getImage(),category.getName(),unique)) {
 
-                Products products = new Products();
-                products.setImage(productImageUrl + category.getName() + "/" + productsDTO.getName() + "/" + unique + productsDTO.getImage().getOriginalFilename());
-                products.setCategory(category);
-                products.setDescription(productsDTO.getDescription());
-                products.setPrice(productsDTO.getPrice());
-                products.setQty(productsDTO.getQuantity());
-                products.setCostprice(productsDTO.getCostprice());
-                products.setName(productsDTO.getName());
-                products.setVariants(productsDTO.getVariants());
-                productsRepository.save(products);
-                return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, products);
+                Product product = new Product();
+                product.setImage(productImageUrl + category.getName() + "/" + productsDTO.getName() + "/" + unique + productsDTO.getImage().getOriginalFilename());
+                product.setCategory(category);
+                product.setDescription(productsDTO.getDescription());
+                product.setPrice(productsDTO.getPrice());
+                product.setQty(productsDTO.getQuantity());
+                product.setCostprice(productsDTO.getCostprice());
+                product.setName(productsDTO.getName());
+                product.setVariants(productsDTO.getVariants());
+                productsRepository.save(product);
+                return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
             }
         }
 
@@ -198,22 +194,22 @@ public class    ProductsService {
     public ApiResponse getProductsByCategory(String category){
         Category category1 = categoryRepository.findCategoriesByName(category);
 
-        List<Products> products = productsRepository.getAllByCategoryId(category1.getId());
+        List<Product> products = productsRepository.getAllByCategoryId(category1.getId());
 
         return new ApiResponse(Status.Status_Ok,CustomConstants.PROD_GET,products); //products;
     }
 
-    public List<Products> getAllProducts(){
+    public List<Product> getAllProducts(){
         return productsRepository.findAll();
     }
 
-    public Products     getProductById(Long id){
-        Optional<Products> product =  productsRepository.findById(id);
+    public Product getProductById(Long id){
+        Optional<Product> product =  productsRepository.findById(id);
         if(product.isPresent()){
             return product.get();
         }
         else{
-            return new Products();
+            return new Product();
         }
     }
     public ApiResponse deleteAll(){
@@ -233,8 +229,8 @@ public class    ProductsService {
             return new ApiResponse(200, CustomConstants.CAT_GETERROR,null);
         }
 
-        Optional<Products>findProduct = productsRepository.findById(id);
-        Products product = findProduct.get();
+        Optional<Product>findProduct = productsRepository.findById(id);
+        Product product = findProduct.get();
 
         if(productsDTO.getImage().getOriginalFilename().isEmpty()) {
             product.setImage(null);
@@ -290,7 +286,7 @@ public class    ProductsService {
 
     }
 
-    private ApiResponse populateResponse(ProductsDTO productsDTO, Category category, Products product) {
+    private ApiResponse populateResponse(ProductsDTO productsDTO, Category category, Product product) {
         product.setName(productsDTO.getName());
         product.setDescription(productsDTO.getDescription());
         product.setPrice(productsDTO.getPrice());
@@ -303,7 +299,7 @@ public class    ProductsService {
     }
         int count=0;
     public ApiResponse AddQty(Long id,UpdateStockDTO pdt ){
-        Products pdt1 = getProductById(id);
+        Product pdt1 = getProductById(id);
 //            ProductsDTO pdt= new ProductsDTO();
         double quantity=pdt1.getQty();
         if(quantity-1<0){
@@ -322,7 +318,7 @@ public class    ProductsService {
 
 
     public ApiResponse MinusQty(Long id , UpdateStockDTO pdt){
-        Products pdt1 = getProductById(id);
+        Product pdt1 = getProductById(id);
 
         double quantity=pdt1.getQty();
         if(pdt.getCount()>0){
@@ -343,7 +339,7 @@ public class    ProductsService {
 
 
     public ApiResponse MinusAllQty(Long id , UpdateStockDTO pdt){
-        Products pdt1 = getProductById(id);
+        Product pdt1 = getProductById(id);
 
         double quantity=pdt1.getQty();
             for (int i =0;i<pdt.getCount();i++){
@@ -367,8 +363,8 @@ public class    ProductsService {
 //        if(category == null){
 //            return new ApiResponse(200, CustomConstants.CAT_GETERROR,null);
 //        }
-        Optional<Products>findProduct = productsRepository.findById(id);
-        Products product = findProduct.get();
+        Optional<Product>findProduct = productsRepository.findById(id);
+        Product product = findProduct.get();
 //        product.setName(updateStockDTO.getName());
 //        product.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
 //        product.setDescription(updateStockDTO.getDescription());
@@ -383,14 +379,14 @@ public class    ProductsService {
 
 
     public ApiResponse searchProductByKeyword(String keyword) {
-        List<Products> searchProductByKeyword = productsRepository.searchProductByKeyword(keyword);
-        return new ApiResponse(Status.Status_Ok, "Successfully keyword Match From Products", searchProductByKeyword);
+        List<Product> searchProductByKeyword = productsRepository.searchProductByKeyword(keyword);
+        return new ApiResponse(Status.Status_Ok, "Successfully keyword Match From Product", searchProductByKeyword);
     }
 
 
 
 
-    public Page<Products> joinAllProducts(Pageable pageable){
+    public Page<Product> joinAllProducts(Pageable pageable){
             return  productsRepository.findAll(pageable);
     }
 

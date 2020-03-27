@@ -4,9 +4,7 @@ import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.DTO.ProductsDTO;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;
 import com.example.TucShopBackend.DTO.UpdateStockDTO;
-import com.example.TucShopBackend.Models.Products;
-import com.example.TucShopBackend.Models.RequestForProduct;
-import com.example.TucShopBackend.Repositories.ProductsRepository;
+import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Services.ProductsService;
 import com.example.TucShopBackend.Services.RequestForProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,6 @@ import javax.validation.Valid;
 
 import java.io.IOException;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @CrossOrigin
@@ -55,24 +52,24 @@ public class ProductsController {
 
         return productsService.saveProducts(productsDTO);
     }
-    //Get Products according to Category
+    //Get Product according to Category
     @GetMapping("/category/{category}")
     public ApiResponse getProductsByCategory(@PathVariable("category") String category){
         return productsService.getProductsByCategory(category);
     }
-    //Get All Products
+    //Get All Product
     @GetMapping("/")
-    public List<Products> getAllProducts(){
+    public List<Product> getAllProducts(){
         return productsService.getAllProducts();
     }
 
     //Get Product on the basis of ID
     @GetMapping("/{id}")
-    public Products getProductById(@PathVariable("id") Long id){
+    public Product getProductById(@PathVariable("id") Long id){
 
         return productsService.getProductById(id);
     }
-    //Delete All Products
+    //Delete All Product
     @DeleteMapping("/")
     public ApiResponse deleteAll(){
         return productsService.deleteAll();
@@ -99,7 +96,7 @@ public class ProductsController {
     @PutMapping ("/add/{id}")
     public ApiResponse AddQuantity( @PathVariable("id") Long id,@RequestBody UpdateStockDTO pdt ){
 
-       // Products product = productsService.getProductById(id);
+       // Product product = productsService.getProductById(id);
        // pdt.setImage(image);
         return  this.productsService.AddQty(id,pdt);
 
@@ -109,7 +106,7 @@ public class ProductsController {
     @PutMapping (value = "/minus/{id}")
     public ApiResponse SubtractQuantity( @PathVariable("id") Long id,@RequestBody UpdateStockDTO pdt ){
 
-//        Products product = productsService.getProductById(id);
+//        Product product = productsService.getProductById(id);
         //pdt.setImage(image);
         return  this.productsService.MinusQty(id,pdt);
 
@@ -117,7 +114,7 @@ public class ProductsController {
     @PutMapping (value = "/minusall/{id}")
     public ApiResponse SubtractAllQuantity( @PathVariable("id") Long id, @RequestBody UpdateStockDTO pdt ){
 
-//        Products product = productsService.getProductById(id);
+//        Product product = productsService.getProductById(id);
         //pdt.setImage(image);
         return  this.productsService.MinusAllQty(id,pdt);
 
@@ -129,7 +126,7 @@ public class ProductsController {
         return this.productsService.searchProductByKeyword(keyword);
     }
     @GetMapping(value = "/paginatedproducts")
-    public Page<Products> getAllPaginatedProducts(@RequestParam(defaultValue = "0") int page)
+    public Page<Product> getAllPaginatedProducts(@RequestParam(defaultValue = "0") int page)
     {
         return productsService.joinAllProducts(PageRequest.of(page,10));
 
