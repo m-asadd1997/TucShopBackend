@@ -33,7 +33,16 @@ public class ProductsController {
     @Autowired
     ProductsService productsService;
 
-//    deleteRequestedprduct
+   //Request Product
+    @PostMapping("/postreqproduct")
+    public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProduct requestForProduct){
+        return requestForProductService.saveRequestForProduct(requestForProduct);
+
+    }
+    @GetMapping("/variants/{keyword}")
+    public ApiResponse autoComplete(@PathVariable ("keyword") String keyword) {
+        return productsService.getVariants(keyword);
+    }
     @DeleteMapping("/deletereqproduct/{productName}")
     public ApiResponse deleteRequestedProduct(@PathVariable ("productName") String productName)
     {
@@ -41,13 +50,7 @@ public class ProductsController {
         return requestForProductService.deleteRequestedProduct(productName);
     }
 
-   //Request Product
-    @PostMapping("/postreqproduct")
-    public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProduct requestForProduct){
-        return requestForProductService.saveRequestForProduct(requestForProduct);
-
-    }
-   //Post Product
+    //Post Product
     @PostMapping("/postproduct")
     public ApiResponse saveProducts(@Valid @RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
         productsDTO.setImage(image);

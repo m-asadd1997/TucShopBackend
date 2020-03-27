@@ -5,6 +5,7 @@ import com.example.TucShopBackend.Commons.CustomConstants;
 import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.ChartDataDTO;
 import com.example.TucShopBackend.DTO.SettingsDTO;
+import com.example.TucShopBackend.Models.Products;
 import com.example.TucShopBackend.Models.Settings;
 import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;
@@ -71,7 +72,7 @@ public class DashboardService {
     }
 
     public ApiResponse totalTransaction() {
-        return new ApiResponse(Status.Status_Ok, "Successfully fetch Total Transation", transactionsRepository.getTotalTransaction());
+        return new ApiResponse(Status.Status_Ok, "Successfully fetch Total Transaction", transactionsRepository.getTotalTransaction());
     }
 
     public ApiResponse transactionDetails() {
@@ -89,6 +90,12 @@ public class DashboardService {
 
         return new ApiResponse(Status.Status_Ok, "Successfully get top requested Products Count", topRequestedProductsCount);
     }
+//    public ApiResponse profit() {
+//
+//    }
+
+
+
 
 
     public ApiResponse getMonthlySales() {
@@ -228,5 +235,13 @@ public class DashboardService {
         }
 
 
+
+    public List<Products> getSearchedProducts(String s) {
+    return  productsRepository.findByChar(s);
+
+
+
+
     }
+}
 

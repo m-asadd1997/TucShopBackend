@@ -2,6 +2,7 @@ package com.example.TucShopBackend.Controllers;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.DTO.SettingsDTO;
+import com.example.TucShopBackend.Models.Products;
 import com.example.TucShopBackend.Models.Settings;
 import com.example.TucShopBackend.Services.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,12 @@ public class DashboardController {
     @GetMapping ("/settings")
     public List<Settings> getAll (SettingsDTO settingsDTO ){
         return dashboardService.getAll();
+    }
+
+    @GetMapping("/searchproducts/{name}")
+    public List<Products> getSearchedProducts(@PathVariable String name)
+    {
+        return dashboardService.getSearchedProducts(name);
     }
 
 }
