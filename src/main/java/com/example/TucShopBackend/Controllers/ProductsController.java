@@ -10,6 +10,8 @@ import com.example.TucShopBackend.Services.ProductsService;
 import com.example.TucShopBackend.Services.RequestForProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -122,6 +124,18 @@ public class ProductsController {
 //        Products product = productsService.getProductById(id);
         //pdt.setImage(image);
         return  this.productsService.MinusAllQty(id,pdt);
+
+    }
+
+
+    @GetMapping("/search/{keyword}")
+    public ApiResponse searchProductByKeyword(@PathVariable ("keyword") String keyword) {
+        return this.productsService.searchProductByKeyword(keyword);
+    }
+    @GetMapping(value = "/paginatedproducts")
+    public Page<Products> getAllPaginatedProducts(@RequestParam(defaultValue = "0") int page)
+    {
+        return productsService.joinAllProducts(PageRequest.of(page,10));
 
     }
 }
