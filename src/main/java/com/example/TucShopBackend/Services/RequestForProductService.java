@@ -16,16 +16,37 @@ import java.util.List;
 @Service
 public class RequestForProductService {
 
+    Long count=1L;
     @Autowired
     RequestForProductRepository requestForProductRepository;
 
-    public ApiResponse saveRequestForProduct(RequestForProductDTO requestForProductDTO){
+    public ApiResponse saveRequestForProduct(RequestForProduct requestForProductDTO){
+
+        RequestForProduct findProduct=requestForProductRepository.findByname(requestForProductDTO.getName());
+        if(findProduct==null) {
+
 
             RequestForProduct requestForProduct = new RequestForProduct();
             requestForProduct.setName(requestForProductDTO.getName());
-            requestForProduct.setDate1(requestForProductDTO.getDate1()   );
+            requestForProduct.setDate1(requestForProductDTO.getTodaysDate());
+            requestForProduct.setCount(1L);
             requestForProductRepository.save(requestForProduct);
             return new ApiResponse(Status.Status_Ok, "Success", requestForProduct);
+        }
+        else{
+
+
+            findProduct.setCount(findProduct.getCount()+1);
+            requestForProductRepository.save(findProduct);
+            return new ApiResponse(200,"counter incremented",findProduct);
+        }
+
+    }
+
+    public ApiResponse deleteRequestedProduct(String productName){
+        RequestForProduct product=requestForProductRepository.findByname(productName);
+        requestForProductRepository.delete(product);
+        return new ApiResponse(200,"successfully deleted",product);
     }
 
 }

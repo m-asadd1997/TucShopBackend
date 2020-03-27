@@ -33,9 +33,17 @@ public class ProductsController {
     @Autowired
     ProductsService productsService;
 
+//    deleteRequestedprduct
+    @DeleteMapping("/deletereqproduct/{productName}")
+    public ApiResponse deleteRequestedProduct(@PathVariable ("productName") String productName)
+    {
+
+        return requestForProductService.deleteRequestedProduct(productName);
+    }
+
    //Request Product
     @PostMapping("/postreqproduct")
-    public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProductDTO requestForProduct){
+    public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProduct requestForProduct){
         return requestForProductService.saveRequestForProduct(requestForProduct);
 
     }
