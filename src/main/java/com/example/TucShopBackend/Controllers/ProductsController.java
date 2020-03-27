@@ -6,13 +6,10 @@ import com.example.TucShopBackend.DTO.RequestForProductDTO;
 import com.example.TucShopBackend.DTO.UpdateStockDTO;
 import com.example.TucShopBackend.Models.Products;
 import com.example.TucShopBackend.Models.RequestForProduct;
-import com.example.TucShopBackend.Repositories.ProductsRepository;
 import com.example.TucShopBackend.Services.ProductsService;
 import com.example.TucShopBackend.Services.RequestForProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,19 +33,24 @@ public class ProductsController {
     @Autowired
     ProductsService productsService;
 
+   //Request Product
+    @PostMapping("/postreqproduct")
+    public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProduct requestForProduct){
+        return requestForProductService.saveRequestForProduct(requestForProduct);
 
+    }
     @GetMapping("/variants/{keyword}")
     public ApiResponse autoComplete(@PathVariable ("keyword") String keyword) {
         return productsService.getVariants(keyword);
     }
+    @DeleteMapping("/deletereqproduct/{productName}")
+    public ApiResponse deleteRequestedProduct(@PathVariable ("productName") String productName)
+    {
 
-   //Request Product
-    @PostMapping("/postreqproduct")
-    public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProductDTO requestForProduct){
-        return requestForProductService.saveRequestForProduct(requestForProduct);
-
+        return requestForProductService.deleteRequestedProduct(productName);
     }
-   //Post Product
+
+    //Post Product
     @PostMapping("/postproduct")
     public ApiResponse saveProducts(@Valid @RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
         productsDTO.setImage(image);
@@ -122,17 +124,4 @@ public class ProductsController {
         return  this.productsService.MinusAllQty(id,pdt);
 
     }
-
-
-    @GetMapping("/search/{keyword}")
-    public ApiResponse searchProductByKeyword(@PathVariable ("keyword") String keyword) {
-        return this.productsService.searchProductByKeyword(keyword);
-    }
-    @GetMapping(value = "/paginatedproducts")
-    public Page<Products> getAllPaginatedProducts(@RequestParam(defaultValue = "0") int page)
-    {
-        return productsService.joinAllProducts(PageRequest.of(page,10));
-
-    }
-
 }

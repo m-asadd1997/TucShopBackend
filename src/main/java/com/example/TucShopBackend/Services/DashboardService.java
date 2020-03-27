@@ -86,7 +86,7 @@ public class DashboardService {
     }
 
     public ApiResponse requestedProductsCount() {
-        List<RequestForProductDTO> topRequestedProductsCount = requestForProductRepository.topRequestedProductsCount();
+        List<RequestForProduct> topRequestedProductsCount = requestForProductRepository.topRequestedProductsCount();
 
         return new ApiResponse(Status.Status_Ok, "Successfully get top requested Products Count", topRequestedProductsCount);
     }
