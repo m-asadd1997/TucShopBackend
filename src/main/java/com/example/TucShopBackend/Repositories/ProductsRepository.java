@@ -56,7 +56,7 @@ public interface ProductsRepository extends JpaRepository<Products,Long> {
     @Query(value = "select new com.example.TucShopBackend.DTO.VariantsDTO(id, name, variants) from Products where variants LIKE %:keyword% group by variants ")
     public List<VariantsDTO> getVariants(@Param("keyword")String keyword);
 
-    @Query(value = "SELECT * FROM products WHERE name LIKE %:keyword%", nativeQuery = true)
+    @Query(value = "SELECT * FROM products WHERE name LIKE :keyword%", nativeQuery = true)
     public List<Products> searchProductByKeyword(@Param("keyword")String keyword);
 
 

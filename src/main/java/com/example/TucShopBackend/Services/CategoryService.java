@@ -192,15 +192,23 @@ public class CategoryService {
 
     }
 
-    public  ApiResponse  deleteCategory (Long id){
-     categoryRepository.deleteById(id);
-
-    return  new ApiResponse (Status.Status_Ok, CustomConstants.CAT_DELETE, null, getAll());
-
+    public  ApiResponse  deleteCategory (Long id) {
+        Optional<Category> category = categoryRepository.findById(id);
+        boolean  check=false;
+        if (category.isPresent()) {
+            String folderPath = serverFilePath+"serverFiles//"+category.get().getName();
+            File folder = new File(folderPath);
+            check =deleteDirectory(folder);
+            categoryRepository.deleteById(id);
+        }
+            if(check) {
+                return new ApiResponse(Status.Status_Ok, CustomConstants.CAT_DELETE, null, getAll());
+            }else {
+                return new ApiResponse(Status.Status_ERROR, CustomConstants.CATIMAGE_ERROR, null, getAll());
+            }
     }
 
-
-   public ApiResponse <Category> deleteAll (){
+    public ApiResponse <Category> deleteAll (){
     categoryRepository.deleteAll();
 
      return new ApiResponse  (Status.Status_Ok, CustomConstants.CAT_DELETE, null);
@@ -222,5 +230,17 @@ public class CategoryService {
         categoryRepository.save(category1);
         return new ApiResponse(200, CustomConstants.CAT_UPDATE, category1);
     }
+
+    private boolean deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
+    }
+
+
 
 }
