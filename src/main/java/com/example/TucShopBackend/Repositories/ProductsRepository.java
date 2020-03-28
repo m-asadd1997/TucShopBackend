@@ -51,7 +51,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     public List<VariantsDTO> getVariants(@Param("keyword")String keyword);
 
 
-    @Query(value = "SELECT * FROM products WHERE name LIKE :keyword%", nativeQuery = true)
+    @Query(value = "SELECT * FROM product WHERE name LIKE :keyword%", nativeQuery = true)
     public List<Product> searchProductByKeyword(@Param("keyword")String keyword);
 
 
