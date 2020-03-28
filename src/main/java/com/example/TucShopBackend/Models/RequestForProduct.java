@@ -18,10 +18,14 @@ public class RequestForProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
+    Long count;
 
-
-
-
+    public RequestForProduct(Long id, String name, Long count, String date1) {
+        this.id = id;
+        this.name = name;
+        this.count = count;
+        this.date1 = date1;
+    }
 
     public String getDate1() {
         return date1;
@@ -41,6 +45,16 @@ public class RequestForProduct {
 
 
     public RequestForProduct() {
+    }
+    public String  getTodaysDate() {
+
+
+        SimpleDateFormat myDate = new SimpleDateFormat("yyyy-MM-dd");
+        myDate.setTimeZone(TimeZone.getTimeZone("PKT"));
+        java.util.Date datee =new java.util.Date();
+//        Date newDate = myDate.parse("2010-05-23T09:01:02");
+        date1= myDate.format(datee);
+        return date1;
     }
 
     public RequestForProduct(String name) {
@@ -64,5 +78,11 @@ public class RequestForProduct {
         this.name = name;
     }
 
+    public Long getCount() {
+        return count;
+    }
 
+    public void setCount(Long count) {
+        this.count = count;
+    }
 }

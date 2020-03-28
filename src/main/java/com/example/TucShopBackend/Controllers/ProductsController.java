@@ -4,7 +4,11 @@ import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.DTO.ProductsDTO;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;
 import com.example.TucShopBackend.DTO.UpdateStockDTO;
+
 import com.example.TucShopBackend.Models.Product;
+
+import com.example.TucShopBackend.Models.RequestForProduct;
+
 import com.example.TucShopBackend.Services.ProductsService;
 import com.example.TucShopBackend.Services.RequestForProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,19 +37,24 @@ public class ProductsController {
     @Autowired
     ProductsService productsService;
 
+   //Request Product
+    @PostMapping("/postreqproduct")
+    public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProduct requestForProduct){
+        return requestForProductService.saveRequestForProduct(requestForProduct);
 
+    }
     @GetMapping("/variants/{keyword}")
     public ApiResponse autoComplete(@PathVariable ("keyword") String keyword) {
         return productsService.getVariants(keyword);
     }
+    @DeleteMapping("/deletereqproduct/{productName}")
+    public ApiResponse deleteRequestedProduct(@PathVariable ("productName") String productName)
+    {
 
-   //Request Product
-    @PostMapping("/postreqproduct")
-    public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProductDTO requestForProduct){
-        return requestForProductService.saveRequestForProduct(requestForProduct);
-
+        return requestForProductService.deleteRequestedProduct(productName);
     }
-   //Post Product
+
+    //Post Product
     @PostMapping("/postproduct")
     public ApiResponse saveProducts(@Valid @RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
         productsDTO.setImage(image);
@@ -131,5 +140,4 @@ public class ProductsController {
         return productsService.joinAllProducts(PageRequest.of(page,10));
 
     }
-
 }
