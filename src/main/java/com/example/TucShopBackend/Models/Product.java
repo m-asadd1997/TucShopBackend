@@ -1,13 +1,16 @@
 package com.example.TucShopBackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-public class Products {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
@@ -36,15 +39,19 @@ public class Products {
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
 
-    @ManyToMany(mappedBy = "products")
-    @JsonBackReference
-    public List<Transactions> transactions;
+//    @ManyToMany(mappedBy = "products")
+//    @JsonBackReference
+//    public List<Transactions> transactions;
 
-    public Products() {
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<ProductTransaction> productTransactions = new HashSet<>();
+
+
+    public Product() {
     }
 
-    public Products(Long id, String name, String image, String description, double price, double qty, double costprice, String variants, Category category, List<Transactions> transactions) {
-        this.id = id;
+    public Product(String name, String image, String description, double price, double qty, double costprice, String variants, String date1, Category category, Set<ProductTransaction> productTransactions) {
         this.name = name;
         this.image = image;
         this.description = description;
@@ -52,9 +59,23 @@ public class Products {
         this.qty = qty;
         this.costprice = costprice;
         this.variants = variants;
+        this.date1 = date1;
         this.category = category;
-        this.transactions = transactions;
+        this.productTransactions = productTransactions;
     }
+
+    //    public Product(Long id, String name, String image, String description, double price, double qty, double costprice, String variants, Category category, List<Transactions> transactions) {
+//        this.id = id;
+//        this.name = name;
+//        this.image = image;
+//        this.description = description;
+//        this.price = price;
+//        this.qty = qty;
+//        this.costprice = costprice;
+//        this.variants = variants;
+//        this.category = category;
+//        this.transactions = transactions;
+//    }
 
     public Long getId() {
         return id;
@@ -128,11 +149,19 @@ public class Products {
         this.category = category;
     }
 
-    public List<Transactions> getTransactions() {
-        return transactions;
+//    public List<Transactions> getTransactions() {
+//        return transactions;
+//    }
+//
+//    public void setTransactions(List<Transactions> transactions) {
+//        this.transactions = transactions;
+//    }
+
+    public Set<ProductTransaction> getProductTransactions() {
+        return productTransactions;
     }
 
-    public void setTransactions(List<Transactions> transactions) {
-        this.transactions = transactions;
+    public void setProductTransactions(Set<ProductTransaction> productTransactions) {
+        this.productTransactions = productTransactions;
     }
 }

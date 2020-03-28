@@ -35,6 +35,7 @@ public class AuthenticationController {
     public String test(){
         return "hello";
     }
+
     @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
     public ApiResponse<AuthToken> register(@RequestBody LoginUser loginUser) throws AuthenticationException {
 

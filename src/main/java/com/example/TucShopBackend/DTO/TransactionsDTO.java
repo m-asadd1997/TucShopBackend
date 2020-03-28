@@ -1,17 +1,16 @@
 package com.example.TucShopBackend.DTO;
 
-import com.example.TucShopBackend.Models.Products;
+import com.example.TucShopBackend.Models.Product;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 public class TransactionsDTO {
 
     Double amount;
 
 
-    List<Products> products;
+   // List<Product> products;
+    Map<Product,Long> productWithQuantity;
 
     public TransactionsDTO() {
     }
@@ -26,11 +25,11 @@ public class TransactionsDTO {
         this.amount = amount;
     }
 
-    public List<Products> getProducts() {
-        return products;
+    public Map<Product, Long> getProductWithQuantity() {
+        return productWithQuantity;
     }
 
-    public void setProducts(List<Products> products) {
-        this.products = products;
+    public void setProductWithQuantity(Map<Product, Long> productWithQuantity) {
+        this.productWithQuantity = productWithQuantity;
     }
 }
