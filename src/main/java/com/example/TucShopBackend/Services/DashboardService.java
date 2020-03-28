@@ -5,11 +5,10 @@ import com.example.TucShopBackend.Commons.CustomConstants;
 import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.ChartDataDTO;
 import com.example.TucShopBackend.DTO.SettingsDTO;
-import com.example.TucShopBackend.Models.Products;
+import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Models.Settings;
 import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;
-import com.example.TucShopBackend.Models.RequestForProduct;
 import com.example.TucShopBackend.Repositories.ProductsRepository;
 import com.example.TucShopBackend.Repositories.RequestForProductRepository;
 import com.example.TucShopBackend.Repositories.SettingsRepository;
@@ -22,12 +21,10 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.imageio.ImageIO;
-import javax.validation.Valid;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -64,7 +61,7 @@ public class DashboardService {
     }
 
     public ApiResponse outOfStockProductsDetails() {
-        return new ApiResponse(Status.Status_Ok, "Out of Stock Products", productsRepository.outOfStockProducts());
+        return new ApiResponse(Status.Status_Ok, "Out of Stock Product", productsRepository.outOfStockProducts());
     }
 
     public ApiResponse outOfStockProducts() {
@@ -82,13 +79,13 @@ public class DashboardService {
 
     public ApiResponse requestedProductsKeyword(String keyword) {
         List<RequestForProductDTO> topRequestedProductsKeyword = requestForProductRepository.topRequestedProductsKeyword(keyword);
-        return new ApiResponse(Status.Status_Ok, "Successfully keyword Match From requested Products", topRequestedProductsKeyword);
+        return new ApiResponse(Status.Status_Ok, "Successfully keyword Match From requested Product", topRequestedProductsKeyword);
     }
 
     public ApiResponse requestedProductsCount() {
         List<RequestForProduct> topRequestedProductsCount = requestForProductRepository.topRequestedProductsCount();
 
-        return new ApiResponse(Status.Status_Ok, "Successfully get top requested Products Count", topRequestedProductsCount);
+        return new ApiResponse(Status.Status_Ok, "Successfully get top requested Product Count", topRequestedProductsCount);
     }
 //    public ApiResponse profit() {
 //
@@ -236,7 +233,7 @@ public class DashboardService {
 
 
 
-    public List<Products> getSearchedProducts(String s) {
+    public List<Product> getSearchedProducts(String s) {
     return  productsRepository.findByChar(s);
 
 

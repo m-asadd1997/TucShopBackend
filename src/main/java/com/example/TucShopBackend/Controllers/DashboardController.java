@@ -2,7 +2,7 @@ package com.example.TucShopBackend.Controllers;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.DTO.SettingsDTO;
-import com.example.TucShopBackend.Models.Products;
+import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Models.Settings;
 import com.example.TucShopBackend.Services.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,7 +86,7 @@ public class DashboardController {
     }
 
     @GetMapping("/searchproducts/{name}")
-    public List<Products> getSearchedProducts(@PathVariable String name)
+    public List<Product> getSearchedProducts(@PathVariable String name)
     {
         return dashboardService.getSearchedProducts(name);
     }

@@ -4,6 +4,9 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 public class Transactions {
@@ -19,17 +22,29 @@ public class Transactions {
     String updatedBy;
 
 
-    @ManyToMany
-    @JoinTable(name = "Product_Transaction",joinColumns = @JoinColumn(name = "transaction_id",referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "products_id",referencedColumnName = "id"))
-    public List<Products> products;
+//    @ManyToMany
+//    @JoinTable(name = "Product_Transaction",joinColumns = @JoinColumn(name = "transaction_id",referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "products_id",referencedColumnName = "id"))
+//    public List<Product> products;
 
-
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL)
+    private Set<ProductTransaction> productTransactions;
 
     public Transactions() {
     }
 
-
+    public Transactions(LocalDate date, Double amount, String createdBy, String updatedBy, Set<ProductTransaction> productTransactions) {
+        this.date = date;
+        this.amount = amount;
+        this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
+        this.productTransactions = productTransactions;
+    }
+    //    public Transactions(String name, ProductTransaction... productTransactions) {
+//        this.name = name;
+//        for(ProductTransaction pt : productTransactions) pt.setTransaction(this);
+//        this.productTransactions = Stream.of(productTransactions).collect(Collectors.toSet());
+//    }
 
     public Long getId() {
         return id;
@@ -71,12 +86,20 @@ public class Transactions {
         this.updatedBy = updatedBy;
     }
 
-    public List<Products> getProducts() {
-        return products;
+//    public List<Product> getProducts() {
+//        return products;
+//    }
+//
+//    public void setProducts(List<Product> products) {
+//        this.products = products;
+//    }
+
+    public Set<ProductTransaction> getProductTransactions() {
+        return productTransactions;
     }
 
-    public void setProducts(List<Products> products) {
-        this.products = products;
+    public void setProductTransactions(Set<ProductTransaction> productTransactions) {
+        this.productTransactions = productTransactions;
     }
 }
 

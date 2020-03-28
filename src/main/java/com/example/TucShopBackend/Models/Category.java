@@ -1,7 +1,6 @@
 package com.example.TucShopBackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,16 +14,16 @@ public class Category {
     String image;
 
     @OneToMany(mappedBy = "category")
-     @JsonIgnore
-    List<Products> products;
+    @JsonIgnore
+    List<Product> product;
 
     public Category() {
     }
 
-    public Category(String name, String image, List<Products> products) {
+    public Category(String name, String image, List<Product> product) {
         this.name = name;
         this.image = image;
-        this.products = products;
+        this.product = product;
     }
 
     public Long getId() {
@@ -51,11 +50,11 @@ public class Category {
         this.image = image;
     }
 
-    public List<Products> getProducts() {
-        return products;
+    public List<Product> getProducts() {
+        return product;
     }
 
-    public void setProducts(List<Products> products) {
-        this.products = products;
+    public void setProducts(List<Product> products) {
+        this.product = products;
     }
 }
