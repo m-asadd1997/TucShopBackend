@@ -52,7 +52,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
 
 
     @Query(value = "SELECT * FROM products WHERE name LIKE :keyword%", nativeQuery = true)
-    public List<Products> searchProductByKeyword(@Param("keyword")String keyword);
+    public List<Product> searchProductByKeyword(@Param("keyword")String keyword);
 
 
 }

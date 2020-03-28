@@ -13,8 +13,8 @@ public class Category {
     String name;
     String image;
 
-    @OneToMany(mappedBy = "category")
     @JsonIgnore
+    @OneToMany(mappedBy = "category")
     List<Product> product;
 
     public Category() {
@@ -50,11 +50,11 @@ public class Category {
         this.image = image;
     }
 
-    public List<Product> getProducts() {
+    public List<Product> getProduct() {
         return product;
     }
 
-    public void setProducts(List<Product> products) {
-        this.product = products;
+    public void setProduct(List<Product> product) {
+        this.product = product;
     }
 }

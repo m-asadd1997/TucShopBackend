@@ -218,7 +218,7 @@ public class    ProductsService {
     }
     public  ApiResponse deleteProductById(Long id) {
 
-       Optional<Products> products = productsRepository.findById(id);
+       Optional<Product> products = productsRepository.findById(id);
        if(products.isPresent()){
            String imgPath = products.get().getImage();
            String[] path = imgPath.split("/");
