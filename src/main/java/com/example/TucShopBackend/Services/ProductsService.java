@@ -6,8 +6,8 @@ import com.example.TucShopBackend.Commons.CustomConstants;
 import com.example.TucShopBackend.Commons.Status;
 
 import com.example.TucShopBackend.DTO.ProductsDTO;
-import com.example.TucShopBackend.DTO.VariantsDTO;
 import com.example.TucShopBackend.DTO.UpdateStockDTO;
+import com.example.TucShopBackend.DTO.VariantsDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
@@ -216,9 +216,37 @@ public class    ProductsService {
         productsRepository.deleteAll();
         return new ApiResponse(Status.Status_Ok,CustomConstants.PROD_DELETE,null  );
     }
-    public ApiResponse deleteProductById(Long id){
-        productsRepository.deleteById(id);
-        return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_DELETE, null);
+    public  ApiResponse deleteProductById(Long id) {
+
+       Optional<Products> products = productsRepository.findById(id);
+       if(products.isPresent()){
+           String imgPath = products.get().getImage();
+           String[] path = imgPath.split("/");
+           String path1="";
+           for(Integer i = 6; i < path.length ; i++){
+               if(i == path.length-1){
+                   path1 +=  path[i];
+               }
+               else if (i==7){
+
+                   path1+= "products//";
+               }
+               else{
+                   path1 +=  path[i]+"//";
+               }
+           }
+           if (deleteProductImage(path1)){
+
+              productsRepository.deleteById(id);
+
+              return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_DELETE, null);
+
+          }
+          else{
+              return new ApiResponse(Status.Status_ERROR, CustomConstants.PRODIMAGE_ERROR, null);
+          }
+       }
+       return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_DELETE, null);
     }
 
     public ApiResponse updateById(Long id , ProductsDTO productsDTO) {
@@ -391,4 +419,24 @@ public class    ProductsService {
     }
 
 
+    public Boolean deleteProductImage(String path) {
+        String filepath = serverFilePath+"serverFiles//"+path;
+        File f = new File(filepath);
+
+        try {
+
+            if(f.delete()) {
+                System.out.println(f.getName() + " is deleted!");
+
+            } else {
+                System.out.println("Delete operation is failed.");
+            }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Failed to Delete image !!");
+        }
+
+        return  true;
+    }
 }
