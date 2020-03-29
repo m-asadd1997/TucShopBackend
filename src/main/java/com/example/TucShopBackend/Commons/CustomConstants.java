@@ -27,7 +27,7 @@ public class CustomConstants {
     public static final String Setting_IMAGEERROR = "Image not saved";
     public static final String Setting_DUPLICATE = "Header Already Exits";
 
-
+       public  static   String SERVER_PATH= "";
 
 
 

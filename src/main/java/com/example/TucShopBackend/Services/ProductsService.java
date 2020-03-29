@@ -54,8 +54,8 @@ public class    ProductsService {
     String profile;
 
     //serverfile.path
-    @Value("${serverfile.path}")
-    String serverFilePath;
+//    @Value("${serverfile.path}")
+//    String serverFilePath;
 
     @Autowired
     private CloudinaryService cloudinaryService;
@@ -152,7 +152,7 @@ public class    ProductsService {
     public Boolean saveProductImage(MultipartFile file, String name, String unique  ){
         try{
 
-        String UPLOADED_FOLDER_NEW = serverFilePath+"serverFiles//"+name+"//"+"products"+"//";
+        String UPLOADED_FOLDER_NEW = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+name+"//"+"products"+"//";
 
             File dir = new File(UPLOADED_FOLDER_NEW);
             dir.setExecutable(true);
@@ -175,7 +175,7 @@ public class    ProductsService {
     }
 
     public ResponseEntity<InputStreamResource> getProductImage(String filename, String category) throws IOException{
-        String filepath = serverFilePath+"serverFiles//"+category+"//products//"+filename;
+        String filepath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+category+"//products//"+filename;
         File f = new File(filepath);
         Resource file = new UrlResource(f.toURI());
         return  ResponseEntity
@@ -420,7 +420,7 @@ public class    ProductsService {
 
 
     public Boolean deleteProductImage(String path) {
-        String filepath = serverFilePath+"serverFiles//"+path;
+        String filepath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+path;
         File f = new File(filepath);
 
         try {

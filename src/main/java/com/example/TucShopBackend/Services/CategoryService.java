@@ -44,8 +44,8 @@ public class CategoryService {
     String profile;
 
     //serverfile.path
-    @Value("${serverfile.path}")
-    String serverFilePath;
+//    @Value("${serverfile.path}")
+//    String serverFilePath;
 
     @Autowired
     private CloudinaryService cloudinaryService;
@@ -94,7 +94,7 @@ public class CategoryService {
     public Boolean saveCategoryImage(MultipartFile file, String name, String unique){
         try {
 
-            String UPLOADED_FOLDER_NEW = serverFilePath+"serverFiles//"+name+"//";
+            String UPLOADED_FOLDER_NEW = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+name+"//";
 
             File dir = new File(UPLOADED_FOLDER_NEW);
             dir.setExecutable(true);
@@ -123,7 +123,7 @@ public class CategoryService {
     public ResponseEntity<InputStreamResource> getCategoryImage(String filename, String category) throws IOException{
 
 
-        String filepath = serverFilePath+"serverFiles//"+category+"//"+filename;
+        String filepath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+category+"//"+filename;
 
         File f = new File(filepath);
         Resource file = new UrlResource(f.toURI());
@@ -196,7 +196,7 @@ public class CategoryService {
         Optional<Category> category = categoryRepository.findById(id);
         boolean  check=false;
         if (category.isPresent()) {
-            String folderPath = serverFilePath+"serverFiles//"+category.get().getName();
+            String folderPath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+category.get().getName();
             File folder = new File(folderPath);
             check =deleteDirectory(folder);
             categoryRepository.deleteById(id);
