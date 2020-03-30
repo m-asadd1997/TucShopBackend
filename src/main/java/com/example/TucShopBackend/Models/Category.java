@@ -1,6 +1,8 @@
 package com.example.TucShopBackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,6 +14,7 @@ public class Category {
     Long id;
     String name;
     String image;
+
 
     @JsonIgnore
     @OneToMany(mappedBy = "category")

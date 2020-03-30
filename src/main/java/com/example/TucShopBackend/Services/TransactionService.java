@@ -5,6 +5,7 @@ import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.ScearchTransactionDTO;
 import com.example.TucShopBackend.DTO.TransactionsDTO;
 import com.example.TucShopBackend.Models.Category;
+import com.example.TucShopBackend.Models.ProductTransaction;
 import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.Repositories.TransactionsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transaction;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -29,6 +28,12 @@ public class TransactionService {
         transactions.setAmount(transactionsDTO.getAmount());
         transactions.setCreatedBy("ADMIN");
         transactions.setDate(LocalDate.now());
+        Set<ProductTransaction> productTransactions = new HashSet<>();
+        for(ProductTransaction productTransaction :transactionsDTO.getProductTransactions()){
+            productTransactions.add(new ProductTransaction(productTransaction.getProduct(),transactions,productTransaction.getQuantity()));
+        }
+
+        transactions.setProductTransactions(productTransactions);
         //transactions.setProductTransactions(transactionsDTO.getProducts().stream().collect(Collectors.toSet())); // .setProducts(transactionsDTO.getProducts());
         transactions.setUpdatedBy("ADMIN");
 

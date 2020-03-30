@@ -1,7 +1,9 @@
 package com.example.TucShopBackend.DTO;
 
 import com.example.TucShopBackend.Models.Product;
+import com.example.TucShopBackend.Models.ProductTransaction;
 
+import java.util.List;
 import java.util.Map;
 
 public class TransactionsDTO {
@@ -9,8 +11,7 @@ public class TransactionsDTO {
     Double amount;
 
 
-   // List<Product> products;
-    Map<Product,Long> productWithQuantity;
+   List<ProductTransaction> productTransactions;
 
     public TransactionsDTO() {
     }
@@ -25,11 +26,11 @@ public class TransactionsDTO {
         this.amount = amount;
     }
 
-    public Map<Product, Long> getProductWithQuantity() {
-        return productWithQuantity;
+    public List<ProductTransaction> getProductTransactions() {
+        return productTransactions;
     }
 
-    public void setProductWithQuantity(Map<Product, Long> productWithQuantity) {
-        this.productWithQuantity = productWithQuantity;
+    public void setProductTransactions(List<ProductTransaction> productTransactions) {
+        this.productTransactions = productTransactions;
     }
 }
