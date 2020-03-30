@@ -16,7 +16,7 @@ public class RequestForProductDTO {
     @NotBlank(message = "Name cannot be blank" )
     @NotNull(message = "Name cannot be null")
     public String name;
-    public Long countName;
+    public Long count;
 //    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
     public String  getDate1() {
 
@@ -44,10 +44,10 @@ public class RequestForProductDTO {
 
     }
 
-    public RequestForProductDTO(Long id, @NotBlank(message = "Name cannot be blank") @NotNull(message = "Name cannot be null") String name, Long countName,String  date1) {
+    public RequestForProductDTO(Long id, @NotBlank(message = "Name cannot be blank") @NotNull(message = "Name cannot be null") String name, Long count,String  date1) {
         this.id = id;
         this.name = name;
-        this.countName = countName;
+        this.count = count;
         this.date1=date1;
 
 
@@ -73,11 +73,11 @@ public class RequestForProductDTO {
         this.name = name;
     }
 
-    public Long getCountName() {
-        return countName;
+    public Long getCount() {
+        return count;
     }
 
-    public void setCountName(Long countName) {
-        this.countName = countName;
+    public void setCount(Long count) {
+        this.count = count;
     }
 }
