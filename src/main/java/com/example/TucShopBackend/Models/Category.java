@@ -1,6 +1,8 @@
 package com.example.TucShopBackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.List;
@@ -13,8 +15,9 @@ public class Category {
     String name;
     String image;
 
-    @OneToMany(mappedBy = "category")
+   // @JsonManagedReference
     @JsonIgnore
+    @OneToMany(mappedBy = "category")
     List<Product> product;
 
     public Category() {
@@ -50,11 +53,11 @@ public class Category {
         this.image = image;
     }
 
-    public List<Product> getProducts() {
+    public List<Product> getProduct() {
         return product;
     }
 
-    public void setProducts(List<Product> products) {
-        this.product = products;
+    public void setProduct(List<Product> product) {
+        this.product = product;
     }
 }

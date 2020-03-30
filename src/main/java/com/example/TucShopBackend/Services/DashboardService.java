@@ -6,6 +6,7 @@ import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.ChartDataDTO;
 import com.example.TucShopBackend.DTO.SettingsDTO;
 import com.example.TucShopBackend.Models.Product;
+import com.example.TucShopBackend.Models.RequestForProduct;
 import com.example.TucShopBackend.Models.Settings;
 import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;

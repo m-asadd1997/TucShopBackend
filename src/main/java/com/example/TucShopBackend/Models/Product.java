@@ -2,6 +2,7 @@ package com.example.TucShopBackend.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -35,6 +36,7 @@ public class Product {
    
     String date1;
 
+   // @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
@@ -42,9 +44,8 @@ public class Product {
 //    @ManyToMany(mappedBy = "products")
 //    @JsonBackReference
 //    public List<Transactions> transactions;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<ProductTransaction> productTransactions = new HashSet<>();
 
 
@@ -77,36 +78,13 @@ public class Product {
 //        this.transactions = transactions;
 //    }
 
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getVariants() {
-        return variants;
-    }
-
-    public void setVariants(String variants) {
-        this.variants = variants;
-    }
-
-    public double getQty() {
-        return qty;
-    }
-
-    public void setQty(double qty) {
-        this.qty = qty;
-    }
-
-    public double getCostprice() {
-        return costprice;
-    }
-
-    public void setCostprice(double costprice) {
-        this.costprice = costprice;
     }
 
     public String getName() {
@@ -141,6 +119,30 @@ public class Product {
         this.price = price;
     }
 
+    public double getQty() {
+        return qty;
+    }
+
+    public void setQty(double qty) {
+        this.qty = qty;
+    }
+
+    public double getCostprice() {
+        return costprice;
+    }
+
+    public void setCostprice(double costprice) {
+        this.costprice = costprice;
+    }
+
+    public String getVariants() {
+        return variants;
+    }
+
+    public void setVariants(String variants) {
+        this.variants = variants;
+    }
+
     public Category getCategory() {
         return category;
     }
@@ -148,14 +150,6 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
-
-//    public List<Transactions> getTransactions() {
-//        return transactions;
-//    }
-//
-//    public void setTransactions(List<Transactions> transactions) {
-//        this.transactions = transactions;
-//    }
 
     public Set<ProductTransaction> getProductTransactions() {
         return productTransactions;
