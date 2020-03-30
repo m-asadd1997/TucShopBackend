@@ -79,7 +79,7 @@ public class DashboardService {
 
 
     public ApiResponse requestedProductsKeyword(String keyword) {
-        List<RequestForProductDTO> topRequestedProductsKeyword = requestForProductRepository.topRequestedProductsKeyword(keyword);
+        List<RequestForProduct> topRequestedProductsKeyword = requestForProductRepository.topRequestedProductsKeyword(keyword);
         return new ApiResponse(Status.Status_Ok, "Successfully keyword Match From requested Product", topRequestedProductsKeyword);
     }
 

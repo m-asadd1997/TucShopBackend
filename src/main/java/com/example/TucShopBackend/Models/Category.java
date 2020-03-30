@@ -15,7 +15,7 @@ public class Category {
     String name;
     String image;
 
-   // @JsonManagedReference
+
     @JsonIgnore
     @OneToMany(mappedBy = "category")
     List<Product> product;
