@@ -1,5 +1,6 @@
 package com.example.TucShopBackend.Repositories;
 
+import com.example.TucShopBackend.DTO.ProfitDTO;
 import com.example.TucShopBackend.DTO.VariantsDTO;
 
 import com.example.TucShopBackend.Models.Product;
@@ -54,5 +55,10 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     @Query(value = "SELECT * FROM product WHERE name LIKE :keyword%", nativeQuery = true)
     public List<Product> searchProductByKeyword(@Param("keyword")String keyword);
 
+
+    @Query(value = "Select new com.example.TucShopBackend.DTO.ProfitDTO (t.date,(sum((p.price-p.costprice)*pt.quantity)) as profit) " +
+            "from ProductTransaction pt, Transactions t, Product p " +
+            "where pt.product.id = p.id AND pt.transaction.id = t.id AND t.date  BETWEEN  cast(:startDate as date) AND cast(:endDate as date)")
+    public List<ProfitDTO> getProfit(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
 }

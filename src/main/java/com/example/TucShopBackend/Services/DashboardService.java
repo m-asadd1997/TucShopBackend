@@ -4,16 +4,14 @@ import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.CustomConstants;
 import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.ChartDataDTO;
+import com.example.TucShopBackend.DTO.ProfitDTO;
 import com.example.TucShopBackend.DTO.SettingsDTO;
 import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Models.RequestForProduct;
 import com.example.TucShopBackend.Models.Settings;
 import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;
-import com.example.TucShopBackend.Repositories.ProductsRepository;
-import com.example.TucShopBackend.Repositories.RequestForProductRepository;
-import com.example.TucShopBackend.Repositories.SettingsRepository;
-import com.example.TucShopBackend.Repositories.TransactionsRepository;
+import com.example.TucShopBackend.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -52,6 +50,7 @@ public class DashboardService {
     RequestForProductRepository requestForProductRepository;
     @Autowired
     SettingsRepository settingsRepository;
+
 
     public ApiResponse productsQuantity() {
         return new ApiResponse(Status.Status_Ok, "Sucessfully fetch total products", productsRepository.productQauntity());
@@ -92,6 +91,12 @@ public class DashboardService {
 //
 //    }
 
+    public ApiResponse getProfit(String startDate, String endDate){
+        List<ProfitDTO> getProfit = productsRepository.getProfit(startDate, endDate);
+
+
+        return new ApiResponse(Status.Status_Ok, "Get Profit",getProfit );
+    }
 
 
 
