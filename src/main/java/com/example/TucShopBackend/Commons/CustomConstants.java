@@ -23,14 +23,9 @@ public class CustomConstants {
     public static final String PROD = "prod";
 
 
-    public static final String Setting_SettingPost = "Setting Successfully saved";
-    public static final String Setting_IMAGEERROR = "Image not saved";
-    public static final String Setting_UPDATED = "Setting Updated";
-
-       public  static   String SERVER_PATH= "";
-
-
-
-
+    public static final String SETTING_POSTED = "Setting Successfully saved";
+    public static final String SETTINGIMAGE_ERROR = "Image not saved";
+    public static final String SETTING_UPDATED = "Setting Updated";
+    public  static   String SERVER_PATH= "";
 
 }

@@ -161,7 +161,7 @@ public class DashboardService {
             settings.setHeader(settingsDTO.getHeader());
             settings.setFooter(settingsDTO.getFooter());
             settingsRepository.save(settings);
-            return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_UPDATED, settings);
+            return new ApiResponse(Status.Status_Ok, CustomConstants.SETTING_UPDATED, settings);
 
         }
 
@@ -177,11 +177,11 @@ public class DashboardService {
                     settings.setHeader(settingsDTO.getHeader());
                     settings.setFooter(settingsDTO.getFooter());
                     settingsRepository.save(settings);
-                    return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_SettingPost, settings);
+                    return new ApiResponse(Status.Status_Ok, CustomConstants.SETTING_POSTED, settings);
 
                 }
             }
-            return new ApiResponse(Status.Status_ERROR, CustomConstants.Setting_IMAGEERROR, null);
+            return new ApiResponse(Status.Status_ERROR, CustomConstants.SETTINGIMAGE_ERROR, null);
         }
 
         public Boolean saveSettingslogo (MultipartFile file, String unique){
