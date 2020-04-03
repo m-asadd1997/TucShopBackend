@@ -199,7 +199,7 @@ public class DashboardService {
                 //  file.getsl
                 BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
-                BufferedImage resized = resize(inputImage, 30, 30);
+                BufferedImage resized = resize(inputImage, 100, 100);
 //            BufferedImage outputImage = new BufferedImage(100,
 //                    100, inputImage.getType());
 
