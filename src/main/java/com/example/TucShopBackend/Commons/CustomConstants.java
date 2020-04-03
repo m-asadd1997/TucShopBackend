@@ -25,7 +25,7 @@ public class CustomConstants {
 
     public static final String Setting_SettingPost = "Setting Successfully saved";
     public static final String Setting_IMAGEERROR = "Image not saved";
-    public static final String Setting_DUPLICATE = "Header Already Exits";
+    public static final String Setting_UPDATED = "Setting Updated";
 
        public  static   String SERVER_PATH= "";
 
