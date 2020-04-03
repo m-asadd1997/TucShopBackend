@@ -145,36 +145,44 @@ public class DashboardService {
         Settings settingsHeader = settingsRepository.findSettingByHeaderAndFooter(settingsDTO.getHeader(), settingsDTO.getFooter());
 
         if (settingsHeader != null) {
-
-            return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.Setting_DUPLICATE, settingsHeader);
+            String folderPath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+"settings";
+            File folder = new File(folderPath);
+            settingsRepository.deleteAll();
+            deleteDirectory(folder);
+            String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+            saveSettingslogo (settingsDTO.getLogo(),unique);
+            Settings settings = new Settings();
+            settings.setLogo(settingLogoUrl + unique + settingsDTO.getLogo().getOriginalFilename());
+            settings.setHeader(settingsDTO.getHeader());
+            settings.setFooter(settingsDTO.getFooter());
+            settingsRepository.save(settings);
+            return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_UPDATED, settings);
 
         }
 
             else {
+                String folderPath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+"settings";
+                File folder = new File(folderPath);
                 settingsRepository.deleteAll();
+                deleteDirectory(folder);
                 String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
-
-                if (saveSettingslogo(settingsDTO.getLogo(), settingsDTO.getHeaderName(), unique)) {
+                if (saveSettingslogo(settingsDTO.getLogo(), unique)) {
                     Settings settings = new Settings();
-                    settings.setLogo(settingLogoUrl + settingsDTO.getHeaderName() + "/" + unique + settingsDTO.getLogo().getOriginalFilename());
-                    settings.setHeaderName(settingsDTO.getHeaderName());
+                    settings.setLogo(settingLogoUrl + unique + settingsDTO.getLogo().getOriginalFilename());
                     settings.setHeader(settingsDTO.getHeader());
                     settings.setFooter(settingsDTO.getFooter());
                     settingsRepository.save(settings);
                     return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_SettingPost, settings);
 
                 }
-
-
             }
             return new ApiResponse(Status.Status_ERROR, CustomConstants.Setting_IMAGEERROR, null);
         }
 
-        public Boolean saveSettingslogo (MultipartFile file, String header, String unique){
+        public Boolean saveSettingslogo (MultipartFile file, String unique){
             try {
 
-                String UPLOADED_FOLDER_NEW = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//" + header + "//";
-
+                String UPLOADED_FOLDER_NEW = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+"settings"+"//";
                 File dir = new File(UPLOADED_FOLDER_NEW);
                 dir.setExecutable(true);
                 dir.setReadable(true);
@@ -212,10 +220,10 @@ public class DashboardService {
         }
 
 
-        public ResponseEntity<InputStreamResource> getSettingLogo (String filename, String header) throws IOException {
+        public ResponseEntity<InputStreamResource> getSettingLogo (String filename) throws IOException {
 
 
-            String filepath = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//" + header + "//" + filename;
+            String filepath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+"settings"+"//"+filename;
 
             File f = new File(filepath);
             Resource file = new UrlResource(f.toURI());
@@ -238,8 +246,17 @@ public class DashboardService {
     return  productsRepository.findByChar(s);
 
 
-
-
     }
+
+    private boolean deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
+    }
+
 }
 

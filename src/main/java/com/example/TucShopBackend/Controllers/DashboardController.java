@@ -74,10 +74,10 @@ public class DashboardController {
       return  dashboardService.postSettings(settingsDTO);
     }
 
-    @RequestMapping(value = "/image/{header}/{filename:.+}", method = RequestMethod.GET)
-    public ResponseEntity<InputStreamResource> getImage(@PathVariable("filename") String filename, @PathVariable("header") String header)
+    @RequestMapping(value = "/image/settings/{filename:.+}", method = RequestMethod.GET)
+    public ResponseEntity<InputStreamResource> getImage(@PathVariable("filename") String filename)
             throws IOException {
-        return dashboardService.getSettingLogo(filename,header);
+        return dashboardService.getSettingLogo(filename);
     }
 
     @GetMapping ("/settings")
