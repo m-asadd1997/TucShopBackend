@@ -1,6 +1,8 @@
 package com.example.TucShopBackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -28,7 +30,9 @@ public class Transactions {
 //    @JoinTable(name = "Product_Transaction",joinColumns = @JoinColumn(name = "transaction_id",referencedColumnName = "id"),
 //            inverseJoinColumns = @JoinColumn(name = "products_id",referencedColumnName = "id"))
 //    public List<Product> products;
-    @JsonIgnore
+
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL)
     private Set<ProductTransaction> productTransactions;
 
