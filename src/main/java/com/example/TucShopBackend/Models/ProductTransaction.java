@@ -1,5 +1,8 @@
 package com.example.TucShopBackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -8,6 +11,7 @@ import java.io.Serializable;
 
 public class ProductTransaction implements Serializable {
 
+    @JsonBackReference
     @Id
     @ManyToOne
     @JoinColumn()
