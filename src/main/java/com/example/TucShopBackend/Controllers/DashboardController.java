@@ -1,6 +1,7 @@
 package com.example.TucShopBackend.Controllers;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
+import com.example.TucShopBackend.DTO.ProfitDTO;
 import com.example.TucShopBackend.DTO.SettingsDTO;
 import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Models.Settings;
@@ -13,6 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,10 +77,10 @@ public class DashboardController {
       return  dashboardService.postSettings(settingsDTO);
     }
 
-    @RequestMapping(value = "/image/{header}/{filename:.+}", method = RequestMethod.GET)
-    public ResponseEntity<InputStreamResource> getImage(@PathVariable("filename") String filename, @PathVariable("header") String header)
+    @RequestMapping(value = "/image/settings/{filename:.+}", method = RequestMethod.GET)
+    public ResponseEntity<InputStreamResource> getImage(@PathVariable("filename") String filename)
             throws IOException {
-        return dashboardService.getSettingLogo(filename,header);
+        return dashboardService.getSettingLogo(filename);
     }
 
     @GetMapping ("/settings")
@@ -89,6 +92,12 @@ public class DashboardController {
     public List<Product> getSearchedProducts(@PathVariable String name)
     {
         return dashboardService.getSearchedProducts(name);
+    }
+
+    @GetMapping("/profit/{startDate}/{endDate}")
+    public  ApiResponse getProfit(@PathVariable ("startDate") String startDate, @PathVariable ("endDate") String endDate){
+        return dashboardService.getProfit(startDate, endDate);
+
     }
 
 }

@@ -4,16 +4,14 @@ import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.CustomConstants;
 import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.ChartDataDTO;
+import com.example.TucShopBackend.DTO.ProfitDTO;
 import com.example.TucShopBackend.DTO.SettingsDTO;
 import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Models.RequestForProduct;
 import com.example.TucShopBackend.Models.Settings;
 import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;
-import com.example.TucShopBackend.Repositories.ProductsRepository;
-import com.example.TucShopBackend.Repositories.RequestForProductRepository;
-import com.example.TucShopBackend.Repositories.SettingsRepository;
-import com.example.TucShopBackend.Repositories.TransactionsRepository;
+import com.example.TucShopBackend.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -52,6 +50,7 @@ public class DashboardService {
     RequestForProductRepository requestForProductRepository;
     @Autowired
     SettingsRepository settingsRepository;
+
 
     public ApiResponse productsQuantity() {
         return new ApiResponse(Status.Status_Ok, "Sucessfully fetch total products", productsRepository.productQauntity());
@@ -92,6 +91,12 @@ public class DashboardService {
 //
 //    }
 
+    public ApiResponse getProfit(String startDate, String endDate){
+        List<ProfitDTO> getProfit = productsRepository.getProfit(startDate, endDate);
+
+
+        return new ApiResponse(Status.Status_Ok, "Get Profit",getProfit );
+    }
 
 
 
@@ -145,36 +150,44 @@ public class DashboardService {
         Settings settingsHeader = settingsRepository.findSettingByHeaderAndFooter(settingsDTO.getHeader(), settingsDTO.getFooter());
 
         if (settingsHeader != null) {
-
-            return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.Setting_DUPLICATE, settingsHeader);
+            String folderPath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+"settings";
+            File folder = new File(folderPath);
+            settingsRepository.deleteAll();
+            deleteDirectory(folder);
+            String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+            saveSettingslogo (settingsDTO.getLogo(),unique);
+            Settings settings = new Settings();
+            settings.setLogo(settingLogoUrl + unique + settingsDTO.getLogo().getOriginalFilename());
+            settings.setHeader(settingsDTO.getHeader());
+            settings.setFooter(settingsDTO.getFooter());
+            settingsRepository.save(settings);
+            return new ApiResponse(Status.Status_Ok, CustomConstants.SETTING_UPDATED, settings);
 
         }
 
             else {
+                String folderPath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+"settings";
+                File folder = new File(folderPath);
                 settingsRepository.deleteAll();
+                deleteDirectory(folder);
                 String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
-
-                if (saveSettingslogo(settingsDTO.getLogo(), settingsDTO.getHeaderName(), unique)) {
+                if (saveSettingslogo(settingsDTO.getLogo(), unique)) {
                     Settings settings = new Settings();
-                    settings.setLogo(settingLogoUrl + settingsDTO.getHeaderName() + "/" + unique + settingsDTO.getLogo().getOriginalFilename());
-                    settings.setHeaderName(settingsDTO.getHeaderName());
+                    settings.setLogo(settingLogoUrl + unique + settingsDTO.getLogo().getOriginalFilename());
                     settings.setHeader(settingsDTO.getHeader());
                     settings.setFooter(settingsDTO.getFooter());
                     settingsRepository.save(settings);
-                    return new ApiResponse(Status.Status_Ok, CustomConstants.Setting_SettingPost, settings);
+                    return new ApiResponse(Status.Status_Ok, CustomConstants.SETTING_POSTED, settings);
 
                 }
-
-
             }
-            return new ApiResponse(Status.Status_ERROR, CustomConstants.Setting_IMAGEERROR, null);
+            return new ApiResponse(Status.Status_ERROR, CustomConstants.SETTINGIMAGE_ERROR, null);
         }
 
-        public Boolean saveSettingslogo (MultipartFile file, String header, String unique){
+        public Boolean saveSettingslogo (MultipartFile file, String unique){
             try {
 
-                String UPLOADED_FOLDER_NEW = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//" + header + "//";
-
+                String UPLOADED_FOLDER_NEW = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+"settings"+"//";
                 File dir = new File(UPLOADED_FOLDER_NEW);
                 dir.setExecutable(true);
                 dir.setReadable(true);
@@ -186,7 +199,7 @@ public class DashboardService {
                 //  file.getsl
                 BufferedImage inputImage = ImageIO.read(file.getInputStream());
 
-                BufferedImage resized = resize(inputImage, 30, 30);
+                BufferedImage resized = resize(inputImage, 100, 100);
 //            BufferedImage outputImage = new BufferedImage(100,
 //                    100, inputImage.getType());
 
@@ -212,10 +225,10 @@ public class DashboardService {
         }
 
 
-        public ResponseEntity<InputStreamResource> getSettingLogo (String filename, String header) throws IOException {
+        public ResponseEntity<InputStreamResource> getSettingLogo (String filename) throws IOException {
 
 
-            String filepath = "C://TuckshopBackend_Main/TucShopBackend//serverFiles//" + header + "//" + filename;
+            String filepath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+"settings"+"//"+filename;
 
             File f = new File(filepath);
             Resource file = new UrlResource(f.toURI());
@@ -238,8 +251,17 @@ public class DashboardService {
     return  productsRepository.findByChar(s);
 
 
-
-
     }
+
+    private boolean deleteDirectory(File directoryToBeDeleted) {
+        File[] allContents = directoryToBeDeleted.listFiles();
+        if (allContents != null) {
+            for (File file : allContents) {
+                deleteDirectory(file);
+            }
+        }
+        return directoryToBeDeleted.delete();
+    }
+
 }
 

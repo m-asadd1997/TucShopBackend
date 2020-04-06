@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 @Entity()
 @Table(name="product_transaction")
+
 public class ProductTransaction implements Serializable {
 
     @JsonBackReference
