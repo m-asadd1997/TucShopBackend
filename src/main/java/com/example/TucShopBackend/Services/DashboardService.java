@@ -92,11 +92,17 @@ public class DashboardService {
 //    }
 
     public ApiResponse getProfit(String startDate, String endDate){
-        List<ProfitDTO> getProfit = productsRepository.getProfit(startDate, endDate);
 
+        List<ProfitDTO> getProfit;
+        try{
+           getProfit = productsRepository.getProfit(startDate, endDate);
+        }catch(Exception e){
+            return new ApiResponse(Status.Status_Ok, "Get Profit By Months", null);
+        }
 
-        return new ApiResponse(Status.Status_Ok, "Get Profit",getProfit );
-    }
+        return new ApiResponse(Status.Status_Ok, "Get Profit By Months", getProfit);
+
+        }
 
 
 
@@ -263,5 +269,18 @@ public class DashboardService {
         return directoryToBeDeleted.delete();
     }
 
+
+    public ApiResponse getTotalProfit(){
+        List<Object> getTotalProfit ;
+        try {
+            getTotalProfit =productsRepository.getTotalprofit();
+
+        } catch(Exception e){
+            return new ApiResponse(Status.Status_Ok, "Get Total Profit", null);
+        }
+
+        return new ApiResponse(Status.Status_Ok, "Get Total Profit",getTotalProfit );
+
+    }
 }
 
