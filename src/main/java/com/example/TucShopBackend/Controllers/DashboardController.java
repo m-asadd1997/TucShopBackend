@@ -100,4 +100,10 @@ public class DashboardController {
 
     }
 
+    @GetMapping("/totalprofit")
+    public ApiResponse getTotalProfit(){
+
+        return dashboardService.getTotalProfit();
+    }
+
 }
