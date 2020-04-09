@@ -4,10 +4,12 @@ import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.DTO.ScearchTransactionDTO;
 import com.example.TucShopBackend.DTO.TransactionsDTO;
 import com.example.TucShopBackend.Models.Transactions;
+import com.example.TucShopBackend.Models.User;
 import com.example.TucShopBackend.Services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transaction;
 import java.util.List;
 
@@ -20,8 +22,11 @@ public class TransactionsController {
     TransactionService transactionService;
 
     @PostMapping("/post")
-    public ApiResponse postTransaction(@RequestBody TransactionsDTO transactionsDTO){
-        return transactionService.saveTransactions(transactionsDTO);
+    public ApiResponse postTransaction(@RequestBody TransactionsDTO transactionsDTO, HttpServletRequest  request){
+        request.getAttribute("loggedinUser");
+        User user = (User) request.getAttribute("loggedinUser");
+
+        return transactionService.saveTransactions(transactionsDTO,user);
     }
 
     @GetMapping("/")
