@@ -282,5 +282,28 @@ public class DashboardService {
         return new ApiResponse(Status.Status_Ok, "Get Total Profit",getTotalProfit );
 
     }
+
+    public ApiResponse getTotalInventory(){
+        Long getTotalInventory;
+        try{
+            getTotalInventory = productsRepository.getTotalInventory();
+        }
+        catch (Exception e){
+            return new ApiResponse(Status.Status_Ok,"Null",null);
+        }
+        return new ApiResponse(Status.Status_Ok,"Success",getTotalInventory);
+    }
+
+    public ApiResponse getFilteredTotalInventory( String startDate, String endDate){
+         Long getFilteredTotalInventory;
+         try{
+             getFilteredTotalInventory =productsRepository.getFilteredTotalInventory(startDate,endDate);
+         }
+         catch (Exception e){
+             return  new ApiResponse(Status.Status_Ok,"Null",null);
+         }
+
+        return new ApiResponse(Status.Status_Ok,"Success",getFilteredTotalInventory);
+    }
 }
 

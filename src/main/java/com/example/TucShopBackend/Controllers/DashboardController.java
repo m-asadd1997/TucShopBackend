@@ -106,4 +106,14 @@ public class DashboardController {
         return dashboardService.getTotalProfit();
     }
 
+    @GetMapping("/totalinventory")
+    public ApiResponse getTotalInvestment(){
+        return dashboardService.getTotalInventory();
+    }
+
+    @GetMapping("/totalinventory/{startDate}/{endDate}")
+    public ApiResponse getFilteredTotalInventory(@PathVariable ("startDate") String startDate, @PathVariable ("endDate") String endDate){
+        return dashboardService.getFilteredTotalInventory(startDate,endDate);
+    }
+
 }
