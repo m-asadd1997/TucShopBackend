@@ -75,5 +75,11 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
             "where pt.product.id = p.id AND pt.transaction.id = t.id ")
     public  List<Object>  getTotalprofit();
 
+    @Query(value = "Select Sum(costprice*qty) from tucshop.product;",nativeQuery = true)
+    public Long getTotalInventory();
+
+
+    @Query(value = "Select Sum(costprice*qty)from tucshop.product p where p.date1 BETWEEN cast(:startDate as date)AND cast(:endDate as date)",nativeQuery = true)
+    public Long getFilteredTotalInventory(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
 }
