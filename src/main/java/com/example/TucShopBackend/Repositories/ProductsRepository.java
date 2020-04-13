@@ -62,11 +62,18 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     public List<ProfitDTO> getProfit(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
 
+
     @Query(value="Select COUNT(id) from product d where d.date1 BETWEEN cast(:startDate as date)AND cast(:endDate as date)",nativeQuery = true)
     public Double filteredQuantity(String startDate,String endDate);
 
     @Query(value="Select * from product d where d.date1 BETWEEN cast(:startDate as date)AND cast(:endDate as date) AND d.qty<10",nativeQuery = true)
     public List<Product> outOfStockFiltered(String startDate, String endDate);
+
+
+    @Query(value = "Select new com.example.TucShopBackend.DTO.ProfitDTO (t.date,(sum((p.price-p.costprice)*pt.quantity)) as profit) " +
+            "from ProductTransaction pt, Transactions t, Product p " +
+            "where pt.product.id = p.id AND pt.transaction.id = t.id ")
+    public  List<Object>  getTotalprofit();
 
 
 }

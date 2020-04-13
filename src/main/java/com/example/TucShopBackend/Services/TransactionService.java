@@ -7,8 +7,13 @@ import com.example.TucShopBackend.DTO.TransactionsDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Models.ProductTransaction;
 import com.example.TucShopBackend.Models.Transactions;
+import com.example.TucShopBackend.Models.User;
 import com.example.TucShopBackend.Repositories.TransactionsRepository;
+import com.example.TucShopBackend.Repositories.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transaction;
@@ -21,12 +26,16 @@ import java.util.stream.Collectors;
 public class TransactionService {
 
     @Autowired
+    UserDao userDao;
+    @Autowired
     TransactionsRepository transactionsRepository;
 
-    public ApiResponse saveTransactions(TransactionsDTO transactionsDTO){
+    public ApiResponse saveTransactions(TransactionsDTO transactionsDTO,User user){
+
+
         Transactions transactions = new Transactions();
         transactions.setAmount(transactionsDTO.getAmount());
-        transactions.setCreatedBy("ADMIN");
+        transactions.setCreatedBy(user.getName());
         transactions.setDate(LocalDate.now());
         Set<ProductTransaction> productTransactions = new HashSet<>();
         for(ProductTransaction productTransaction :transactionsDTO.getProductTransactions()){
@@ -35,7 +44,7 @@ public class TransactionService {
 
         transactions.setProductTransactions(productTransactions);
         //transactions.setProductTransactions(transactionsDTO.getProducts().stream().collect(Collectors.toSet())); // .setProducts(transactionsDTO.getProducts());
-        transactions.setUpdatedBy("ADMIN");
+        transactions.setUpdatedBy(user.getName());
 
 
 
@@ -97,6 +106,7 @@ public class TransactionService {
 
 
     }
+
 
 
 

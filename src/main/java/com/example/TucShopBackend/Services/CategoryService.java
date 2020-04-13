@@ -52,8 +52,15 @@ public class CategoryService {
 
     public ApiResponse postCategory(CategoryDTO categoryDTO){
         System.out.println("========================"+profile+"=======================");
-        Category categoryName = categoryRepository.findCategoriesByName(categoryDTO.getName());
 
+        List<Category> allCategory= categoryRepository.findAll();
+        if(allCategory.isEmpty()){
+            String folderPath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+"//";
+            File folder = new File(folderPath);
+            deleteDirectory(folder);
+
+        }
+        Category categoryName = categoryRepository.findCategoriesByName(categoryDTO.getName());
         if(categoryName!= null){
             return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.CAT_DUPLICATE,null);
         }
@@ -240,7 +247,6 @@ public class CategoryService {
         }
         return directoryToBeDeleted.delete();
     }
-
 
 
 }
