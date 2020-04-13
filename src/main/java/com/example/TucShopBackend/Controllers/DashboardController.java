@@ -34,6 +34,13 @@ public class DashboardController {
         return dashboardService.productsQuantity();
     }
 
+    @GetMapping("/filteredtotalproducts/{startDate}/{endDate}")
+        public ApiResponse filteredProducts(@PathVariable("startDate") String startDate,@PathVariable("endDate") String endDate)
+        {
+                return dashboardService.filteredQuantity(startDate,endDate);
+        }
+
+
     @GetMapping("/outofstockdetails")
     public ApiResponse outOfStockProductsDetails(){
         return dashboardService.outOfStockProductsDetails();
@@ -44,14 +51,24 @@ public class DashboardController {
         return  dashboardService.outOfStockProducts();
     }
 
-    @GetMapping("/totalproductdetails")
-    public ApiResponse productQuantityDetails(){
-        return dashboardService.productQuantityDetails();
+    @GetMapping("/outofstockfiltered/{startDate}/{endDate}")
+    public ApiResponse outofStockFilteredProducts(@PathVariable("startDate") String startDate,@PathVariable("endDate") String endDate){
+        return  dashboardService.outOfStockFilteredProducts(startDate,endDate);
+    }
+
+    @GetMapping("/totalproductdetails/{startDate}/{endDate}")
+    public ApiResponse productQuantityDetails(@PathVariable("startDate") String startDate,@PathVariable("endDate") String endDate){
+        return dashboardService.productQuantityDetails(startDate,endDate);
     }
 
     @GetMapping("/totaltransaction")
     public ApiResponse totalTransaction(){
         return dashboardService.totalTransaction();
+    }
+
+    @GetMapping("/filteredtransaction/{startDate}/{endDate}")
+    public ApiResponse transactionsFiltered(@PathVariable("startDate") String startDate,@PathVariable("endDate") String endDate){
+        return  dashboardService.filteredTransaction(startDate,endDate);
     }
 
     @GetMapping("/transactiondetails")
@@ -86,6 +103,11 @@ public class DashboardController {
     @GetMapping ("/settings")
     public List<Settings> getAll (SettingsDTO settingsDTO ){
         return dashboardService.getAll();
+    }
+
+    @GetMapping("/detailedfilteretransactions/{startDate}/{endDate}")
+    public ApiResponse detailedFilteredTransactions(@PathVariable("startDate") String startDate,@PathVariable("endDate") String endDate){
+        return dashboardService.detailedFilteredTransaction(startDate,endDate);
     }
 
     @GetMapping("/searchproducts/{name}")
