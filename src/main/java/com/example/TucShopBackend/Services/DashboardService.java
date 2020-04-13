@@ -288,8 +288,8 @@ public class DashboardService {
     }
 
     public ApiResponse detailedFilteredTransaction(String startDate, String endDate) {
-        return  new ApiResponse(Status.Status_Ok,"Succesfully Fetched",transactionsRepository.getFilteredDetailedTransaction(startDate,endDate));
-
+        return new ApiResponse(Status.Status_Ok, "Succesfully Fetched", transactionsRepository.getFilteredDetailedTransaction(startDate, endDate));
+    }
 
     public ApiResponse getTotalProfit(){
         List<Object> getTotalProfit ;
