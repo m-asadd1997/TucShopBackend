@@ -26,8 +26,8 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
     @Query(value = "SELECT * FROM transactions WHERE  date BETWEEN :date1 AND :date2 and created_by=:user ", nativeQuery = true)
     public List<Transactions> scearchTransactionsOfUser(@Param("date1") String date1,@Param("date2") String date2,@Param("user") String user);
 
-    @Query(value = "select amount,date from transactions", nativeQuery = true)
-    public List<Object> getTotalTransaction();
+    @Query(value = "select SUM(amount) from transactions", nativeQuery = true)
+    public Double getTotalTransaction();
 
     @Query(value = "select * from transactions", nativeQuery = true)
     public List<Transactions> getTransactionDetails();
@@ -39,5 +39,12 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
 
     @Query(value = "select * from transactions order by (id) DESC LIMIT 30 ", nativeQuery = true)
     public List<Transactions> recentTransactions();
+
+    @Query(value="select SUM(amount) from transactions t where t.date BETWEEN cast(:startDate as date)AND cast(:endDate as date)",nativeQuery = true)
+    Double filteredTransaction(String startDate, String endDate);
+
+
+    @Query(value = "select * from transactions t where t.date BETWEEN cast(:startDate as date)AND cast(:endDate as date)",nativeQuery = true)
+    List<Transactions> getFilteredDetailedTransaction(String startDate,String endDate);
 }
 
