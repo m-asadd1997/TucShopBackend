@@ -53,11 +53,12 @@ public class DashboardService {
 
 
     public ApiResponse productsQuantity() {
+
         return new ApiResponse(Status.Status_Ok, "Sucessfully fetch total products", productsRepository.productQauntity());
     }
 
-    public ApiResponse productQuantityDetails() {
-        return new ApiResponse(Status.Status_Ok, "Total products Details", productsRepository.productQauntityDetails());
+    public ApiResponse productQuantityDetails(String startDate,String endDate) {
+        return new ApiResponse(Status.Status_Ok, "Total products Details", productsRepository.productQauntityDetails(startDate,endDate));
     }
 
     public ApiResponse outOfStockProductsDetails() {
@@ -270,6 +271,26 @@ public class DashboardService {
     }
 
 
+    public ApiResponse filteredQuantity(String startDate,String endDate) {
+        return new ApiResponse(Status.Status_Ok,"Succesfully Fetched",productsRepository.filteredQuantity(startDate,endDate));
+    }
+
+    public ApiResponse outOfStockFilteredProducts(String startDate,String endDate) {
+        return  new ApiResponse(Status.Status_Ok,"Succesfully Fetched",productsRepository.outOfStockFiltered(startDate,endDate));
+    }
+
+    public ApiResponse filteredTransaction(String startDate, String endDate) {
+        Double transaction=transactionsRepository.filteredTransaction(startDate,endDate);
+        if(transaction==null){
+            transaction=0.0;
+        }
+        return  new ApiResponse(Status.Status_Ok,"Succesfully Fetched",transaction);
+    }
+
+    public ApiResponse detailedFilteredTransaction(String startDate, String endDate) {
+        return new ApiResponse(Status.Status_Ok, "Succesfully Fetched", transactionsRepository.getFilteredDetailedTransaction(startDate, endDate));
+    }
+
     public ApiResponse getTotalProfit(){
         List<Object> getTotalProfit ;
         try {
@@ -280,6 +301,7 @@ public class DashboardService {
         }
 
         return new ApiResponse(Status.Status_Ok, "Get Total Profit",getTotalProfit );
+
 
     }
 
