@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 12, 2020 at 04:34 PM
+-- Generation Time: Apr 14, 2020 at 05:44 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.2
 
@@ -29,7 +29,9 @@ SET time_zone = "+00:00";
 INSERT INTO `category` (`id`, `image`, `name`) VALUES
 (1, 'http://localhost:8080/api/category/image/Chips/1586648317505chips icon.png', 'Chips'),
 (2, 'http://localhost:8080/api/category/image/Drinks/1586648329752drinks.jpg', 'Drinks'),
-(3, 'http://localhost:8080/api/category/image/Biscuits/1586648349943biscuitsIcon.jpg', 'Biscuits');
+(3, 'http://localhost:8080/api/category/image/Biscuits/1586648349943biscuitsIcon.jpg', 'Biscuits'),
+(4, 'http://localhost:8080/api/category/image/Cakes/1586875744871icons8-cake-48.png', 'Cakes'),
+(5, 'http://localhost:8080/api/category/image/Candies/1586875828791icons8-halloween-candy-64.png', 'Candies');
 
 --
 -- Dumping data for table `product`
@@ -47,7 +49,13 @@ INSERT INTO `product` (`id`, `costprice`, `date1`, `description`, `image`, `name
 (9, 5, '2020-04-11', NULL, 'http://localhost:8080/api/products/image/Biscuits/Candy/1586648754425Candy.png', 'Candy', 8, 500, 'TICKY PACK', 3),
 (10, 15, '2020-04-11', NULL, 'http://localhost:8080/api/products/image/Biscuits/Candy/1586648834492Candy.png', 'Candy', 20, 350, 'HALF ROLL', 3),
 (11, 8, '2020-04-11', NULL, 'http://localhost:8080/api/products/image/Biscuits/Prince/1586648859244Prince.png', 'Prince', 10, 400, 'TICKY PACK', 3),
-(12, 20, '2020-04-11', NULL, 'http://localhost:8080/api/products/image/Biscuits/Prince/1586648894412Prince.png', 'Prince', 25, 180, 'HALF ROLL', 3);
+(12, 20, '2020-04-11', NULL, 'http://localhost:8080/api/products/image/Biscuits/Prince/1586648894412Prince.png', 'Prince', 25, 180, 'HALF ROLL', 3),
+(13, 1, '2020-04-14', NULL, 'http://localhost:8080/api/products/image/Candies/Eclairs/1586876111382Eclairs.png', 'Eclairs', 2, 500, 'SINGLE', 5),
+(14, 80, '2020-04-14', NULL, 'http://localhost:8080/api/products/image/Candies/Eclairs/1586876518633Eclairs.png', 'Eclairs', 100, 50, 'FAMILY PACK', 5),
+(15, 1, '2020-04-14', NULL, 'http://localhost:8080/api/products/image/Candies/Fanta/1586876595758Fanta.png', 'Fanta', 2, 600, 'SINGLE', 5),
+(16, 40, '2020-04-14', NULL, 'http://localhost:8080/api/products/image/Candies/Fanta/1586876649018Fanta.png', 'Fanta', 60, 80, 'FAMILY PACK', 5),
+(17, 450, '2020-04-14', NULL, 'http://localhost:8080/api/products/image/Cakes/Chocolate Cake/1586877070311Chocolate Cake.png', 'Chocolate Cake', 600, 5, '1 POUND', 4),
+(18, 450, '2020-04-14', NULL, 'http://localhost:8080/api/products/image/Cakes/Coffee Cake/1586877243350Coffee Cake.png', 'Coffee Cake', 600, 15, '1 POUND', 4);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
