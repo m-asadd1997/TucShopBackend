@@ -24,7 +24,13 @@ public class Transactions {
     Double amount;
     String createdBy;
     String updatedBy;
+    String requestedUser;
+    String status;
+    String action;
 
+                       //request user
+                       //status pending complete
+                        //action rod, sc
 
 //    @ManyToMany
 //    @JoinTable(name = "Product_Transaction",joinColumns = @JoinColumn(name = "transaction_id",referencedColumnName = "id"),
@@ -39,11 +45,14 @@ public class Transactions {
     public Transactions() {
     }
 
-    public Transactions(LocalDate date, Double amount, String createdBy, String updatedBy, Set<ProductTransaction> productTransactions) {
+    public Transactions(LocalDate date, String requestedUser, String status, String action, Double amount, String createdBy, String updatedBy, Set<ProductTransaction> productTransactions) {
         this.date = date;
         this.amount = amount;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
+        this.action=action;
+        this.status=status;
+        this.requestedUser=requestedUser;
         this.productTransactions = productTransactions;
     }
     //    public Transactions(String name, ProductTransaction... productTransactions) {
@@ -99,6 +108,31 @@ public class Transactions {
 //    public void setProducts(List<Product> products) {
 //        this.products = products;
 //    }
+
+
+    public String getRequestedUser() {
+        return requestedUser;
+    }
+
+    public void setRequestedUser(String requestedUser) {
+        this.requestedUser = requestedUser;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
 
     public Set<ProductTransaction> getProductTransactions() {
         return productTransactions;

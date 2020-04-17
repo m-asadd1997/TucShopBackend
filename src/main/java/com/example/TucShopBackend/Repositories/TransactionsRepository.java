@@ -15,9 +15,9 @@ import java.util.List;
 @Repository
 public interface TransactionsRepository extends JpaRepository<Transactions,Long> {
 
+                   //id,created_by,updated_by,date
 
-
-    @Query(value = "select id,created_by,updated_by,date,sum(amount)amount from transactions  WHERE date BETWEEN :date1 AND :date2 group by created_by", nativeQuery = true)
+    @Query(value = "select *, sum(amount)amount from transactions  WHERE date BETWEEN :date1 AND :date2 group by created_by", nativeQuery = true)
     public List<Transactions> getMonthTransactions(@Param("date1") String date1,@Param("date2") String date2);
 
 
@@ -46,5 +46,13 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
 
     @Query(value = "select * from transactions t where t.date BETWEEN cast(:startDate as date)AND cast(:endDate as date)",nativeQuery = true)
     List<Transactions> getFilteredDetailedTransaction(String startDate,String endDate);
+
+
+    @Query(value = "Select * from transactions t where t.status = 'pending' ",nativeQuery = true)
+    List<Transactions>getAllPending();
+
+
+
+
 }
 

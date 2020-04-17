@@ -9,6 +9,8 @@ import java.util.Map;
 public class TransactionsDTO {
 
     Double amount;
+    String action;
+    String requestedUser;
 
 
    List<ProductTransaction> productTransactions;
@@ -24,6 +26,22 @@ public class TransactionsDTO {
 
     public void setAmount(Double amount) {
         this.amount = amount;
+    }
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+
+    public String getRequestedUser() {
+        return requestedUser;
+    }
+
+    public void setRequestedUser(String requestedUser) {
+        this.requestedUser = requestedUser;
     }
 
     public List<ProductTransaction> getProductTransactions() {
