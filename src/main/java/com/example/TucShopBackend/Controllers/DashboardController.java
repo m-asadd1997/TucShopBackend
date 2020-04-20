@@ -138,4 +138,9 @@ public class DashboardController {
         return dashboardService.getFilteredTotalInventory(startDate,endDate);
     }
 
+    @GetMapping("/frequencybycategory")
+    public ApiResponse getCategoryFrequency(){
+        return dashboardService.getCategoryFrequency();
+    }
+
 }

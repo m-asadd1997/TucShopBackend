@@ -1,5 +1,6 @@
 package com.example.TucShopBackend.Repositories;
 
+import com.example.TucShopBackend.DTO.CategoryQuantityDTO;
 import com.example.TucShopBackend.DTO.ChartDataDTO;
 import com.example.TucShopBackend.Models.Transactions;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -46,5 +47,8 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
 
     @Query(value = "select * from transactions t where t.date BETWEEN cast(:startDate as date)AND cast(:endDate as date)",nativeQuery = true)
     List<Transactions> getFilteredDetailedTransaction(String startDate,String endDate);
+
+    @Query(value="select new com.example.TucShopBackend.DTO.CategoryQuantityDTO (c.name,Sum(pt.quantity)) from ProductTransaction pt join Transactions t on pt.transaction.id=t.id join Product p on pt.product.id=p.id join Category c on p.category.id= c.id group by c.name")
+    List<CategoryQuantityDTO> getFrequency();
 }
 
