@@ -55,6 +55,9 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
     @Query(value = "Select * from transactions t where t.status = 'pending' ",nativeQuery = true)
     List<Transactions>getAllPending();
 
+    @Query(value = "select new com.example.TucShopBackend.DTO.CategoryQuantityDTO (t.action , count(t.action) ) from Transactions t group by t.action ")
+    List<CategoryQuantityDTO> getTransactionMethod();
+
 
 }
 

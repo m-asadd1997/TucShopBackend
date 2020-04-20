@@ -143,4 +143,9 @@ public class DashboardController {
         return dashboardService.getCategoryFrequency();
     }
 
+    @GetMapping("/gettransactionmethod")
+    public ApiResponse getTransactionMethod(){
+        return dashboardService.getTransactionMethod();
+    }
+
 }
