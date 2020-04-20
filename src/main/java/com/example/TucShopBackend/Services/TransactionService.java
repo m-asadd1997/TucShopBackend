@@ -37,6 +37,16 @@ public class TransactionService {
         transactions.setAmount(transactionsDTO.getAmount());
         transactions.setCreatedBy(user.getName());
         transactions.setDate(LocalDate.now());
+        transactions.setAction(transactionsDTO.getAction());
+        if( transactionsDTO.getAction().equals("SC") ){
+            transactions.setStatus("complete");
+            transactions.setRequestedUser(user.getName());
+        }else if(transactionsDTO.getAction().equals("ROD")){
+            transactions.setStatus("pending");
+            transactions.setRequestedUser(transactionsDTO.getRequestedUser());
+        }
+
+
         Set<ProductTransaction> productTransactions = new HashSet<>();
         for(ProductTransaction productTransaction :transactionsDTO.getProductTransactions()){
             productTransactions.add(new ProductTransaction(productTransaction.getProduct(),transactions,productTransaction.getQuantity()));
@@ -107,6 +117,13 @@ public class TransactionService {
 
     }
 
+    public List<Transactions>getAllPending(){
+
+     List <Transactions> transactionsList=transactionsRepository.getAllPending();
+
+     return transactionsList;
+
+    }
 
 
 

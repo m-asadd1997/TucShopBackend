@@ -59,4 +59,12 @@ public class TransactionsController {
         return this.transactionService.getRecentTransactions();
     }
 
+
+
+    @GetMapping("/pending")
+    public  List<Transactions> getAllPending (){
+      return  this.transactionService.getAllPending();
+
+    }
+
 }
