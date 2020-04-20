@@ -115,6 +115,8 @@ public class DashboardService {
         Map<String, Double> map = new HashMap<>();
         List<Transactions> transactionsList = transactionsRepository.findAll();
         for (Transactions transaction : transactionsList) {
+            if(transaction.getStatus().equals("complete"))
+            {
             monthName = transaction.getDate().getMonth().toString();
             if (!map.containsKey(monthName)) {
                 map.put(monthName, transaction.getAmount());
@@ -123,7 +125,7 @@ public class DashboardService {
                 map.put(monthName, map.get(monthName).doubleValue() + transaction.getAmount());
             }
             dates.add(transaction.getDate());
-            seperateAmounts.add(transaction.getAmount());
+            seperateAmounts.add(transaction.getAmount());}
 
         }
 

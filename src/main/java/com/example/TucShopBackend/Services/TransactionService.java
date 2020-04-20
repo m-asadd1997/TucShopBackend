@@ -41,9 +41,9 @@ public class TransactionService {
         if( transactionsDTO.getAction().equals("SC") ){
             transactions.setStatus("complete");
             transactions.setRequestedUser(user.getName());
-        }else{
+        }else if(transactionsDTO.getAction().equals("ROD")){
             transactions.setStatus("pending");
-            transactions.setRequestedUser(user.getName());
+            transactions.setRequestedUser(transactionsDTO.getRequestedUser());
         }
 
 

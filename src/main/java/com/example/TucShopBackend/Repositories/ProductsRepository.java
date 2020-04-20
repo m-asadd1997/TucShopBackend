@@ -58,7 +58,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
 
     @Query(value = "Select new com.example.TucShopBackend.DTO.ProfitDTO (t.date,(sum((p.price-p.costprice)*pt.quantity)) as profit) " +
             "from ProductTransaction pt, Transactions t, Product p " +
-            "where pt.product.id = p.id AND pt.transaction.id = t.id AND t.date  BETWEEN  cast(:startDate as date) AND cast(:endDate as date)")
+            "where pt.product.id = p.id AND pt.transaction.id = t.id AND t.date  BETWEEN  cast(:startDate as date) AND cast(:endDate as date) AND  t.status='complete'")
     public List<ProfitDTO> getProfit(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
 
@@ -72,7 +72,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
 
     @Query(value = "Select new com.example.TucShopBackend.DTO.ProfitDTO (t.date,(sum((p.price-p.costprice)*pt.quantity)) as profit) " +
             "from ProductTransaction pt, Transactions t, Product p " +
-            "where pt.product.id = p.id AND pt.transaction.id = t.id ")
+            "where pt.product.id = p.id AND pt.transaction.id = t.id AND t.status='complete' ")
     public  List<Object>  getTotalprofit();
 
     @Query(value = "Select Sum(costprice*qty) from tucshop.product;",nativeQuery = true)
