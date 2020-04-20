@@ -3,14 +3,8 @@ package com.example.TucShopBackend.Services;
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.CustomConstants;
 import com.example.TucShopBackend.Commons.Status;
-import com.example.TucShopBackend.DTO.ChartDataDTO;
-import com.example.TucShopBackend.DTO.ProfitDTO;
-import com.example.TucShopBackend.DTO.SettingsDTO;
-import com.example.TucShopBackend.Models.Product;
-import com.example.TucShopBackend.Models.RequestForProduct;
-import com.example.TucShopBackend.Models.Settings;
-import com.example.TucShopBackend.Models.Transactions;
-import com.example.TucShopBackend.DTO.RequestForProductDTO;
+import com.example.TucShopBackend.DTO.*;
+import com.example.TucShopBackend.Models.*;
 import com.example.TucShopBackend.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -105,6 +99,10 @@ public class DashboardService {
 
         }
 
+    public ApiResponse getCategoryFrequency() {
+        List<CategoryQuantityDTO> categoryQuantityDTOList= transactionsRepository.getFrequency();
+        return new ApiResponse(Status.Status_Ok, "Success", categoryQuantityDTOList);
+    }
 
 
 
@@ -139,7 +137,7 @@ public class DashboardService {
             seriesList.add(entry.getValue());
         }
 
-        if (labelList != null && seriesList != null&&dates!=null) {
+        if (labelList != null && seriesList != null && dates!=null) {
             cdt.setLabels(labelList);
             cdt.setSeries(seriesList);
             cdt.setDates(dates);
