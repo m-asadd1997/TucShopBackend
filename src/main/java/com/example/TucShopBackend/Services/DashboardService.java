@@ -104,6 +104,11 @@ public class DashboardService {
         return new ApiResponse(Status.Status_Ok, "Success", categoryQuantityDTOList);
     }
 
+    public ApiResponse getTransactionMethod(){
+        List<CategoryQuantityDTO> transactionMethodList = transactionsRepository.getTransactionMethod();
+        return new ApiResponse(Status.Status_Ok, "Success", transactionMethodList);
+    }
+
 
 
     public ApiResponse getMonthlySales() {
