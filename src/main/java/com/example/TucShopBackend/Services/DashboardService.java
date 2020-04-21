@@ -104,11 +104,34 @@ public class DashboardService {
         return new ApiResponse(Status.Status_Ok, "Success", categoryQuantityDTOList);
     }
 
+    public ApiResponse getFilteredCategoryFrequency(String startDate, String endDate) {
+
+        List<CategoryQuantityDTO> categoryQuantityDTOFilteredList;
+        try {
+           categoryQuantityDTOFilteredList = transactionsRepository.getFilteredFrequency(startDate,endDate);
+        }
+        catch (Exception e) {
+            return new ApiResponse(Status.Status_Ok,"Null",null);
+        }
+        return new ApiResponse(Status.Status_Ok, "Success", categoryQuantityDTOFilteredList);
+    }
+
     public ApiResponse getTransactionMethod(){
         List<CategoryQuantityDTO> transactionMethodList = transactionsRepository.getTransactionMethod();
         return new ApiResponse(Status.Status_Ok, "Success", transactionMethodList);
     }
 
+    public ApiResponse getFilteredTransactionMethod(String startDate, String endDate){
+
+        List<CategoryQuantityDTO> filteredTransactionMethodList;
+        try {
+            filteredTransactionMethodList = transactionsRepository.getFilteredTransactionMethod(startDate,endDate);
+        }
+        catch (Exception e){
+            return new ApiResponse(Status.Status_Ok,"Null",null);
+        }
+        return new ApiResponse(Status.Status_Ok,"Success",filteredTransactionMethodList);
+    }
 
 
     public ApiResponse getMonthlySales() {

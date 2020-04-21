@@ -42,7 +42,7 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
     public List<Transactions> recentTransactions();
 
     @Query(value="select SUM(amount) from transactions t where t.date BETWEEN cast(:startDate as date)AND cast(:endDate as date) AND  t.status='complete'",nativeQuery = true)
-    Double filteredTransaction(String startDate, String endDate);
+    public Double filteredTransaction(String startDate, String endDate);
 
 
     @Query(value = "select * from transactions t where t.date BETWEEN cast(:startDate as date)AND cast(:endDate as date) AND  t.status='complete'",nativeQuery = true)
@@ -51,12 +51,20 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
     @Query(value="select new com.example.TucShopBackend.DTO.CategoryQuantityDTO (c.name,Sum(pt.quantity)) from ProductTransaction pt join Transactions t on pt.transaction.id=t.id join Product p on pt.product.id=p.id join Category c on p.category.id= c.id group by c.name")
     List<CategoryQuantityDTO> getFrequency();
 
+    @Query(value="select new com.example.TucShopBackend.DTO.CategoryQuantityDTO (c.name,Sum(pt.quantity)) from ProductTransaction pt join Transactions t on pt.transaction.id=t.id join Product p on pt.product.id=p.id join Category c on p.category.id= c.id where t.date BETWEEN cast(:startDate as date) AND cast(:endDate as date) group by c.name")
+    List<CategoryQuantityDTO> getFilteredFrequency(String startDate, String endDate);
+
 
     @Query(value = "Select * from transactions t where t.status = 'pending' ",nativeQuery = true)
     List<Transactions>getAllPending();
 
-    @Query(value = "select new com.example.TucShopBackend.DTO.CategoryQuantityDTO (t.action , count(t.action) ) from Transactions t group by t.action ")
+    @Query(value = "select new com.example.TucShopBackend.DTO.CategoryQuantityDTO (t.action , count(t.action) ) from Transactions t  group by t.action ")
     List<CategoryQuantityDTO> getTransactionMethod();
+
+
+    @Query(value = "select new com.example.TucShopBackend.DTO.CategoryQuantityDTO (t.action , count(t.action) ) from Transactions t where t.date BETWEEN cast(:startDate as date) AND cast(:endDate as date) group by t.action ")
+    List<CategoryQuantityDTO> getFilteredTransactionMethod(String startDate, String endDate);
+
 
 
 }
