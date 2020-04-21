@@ -148,4 +148,14 @@ public class DashboardController {
         return dashboardService.getTransactionMethod();
     }
 
+    @GetMapping("/frequencybycategory/{startDate}/{endDate}")
+    public ApiResponse getFilteredCategoryFrequency(@PathVariable ("startDate") String startDate, @PathVariable ("endDate") String endDate){
+        return dashboardService.getFilteredCategoryFrequency(startDate,endDate);
+    }
+
+    @GetMapping("/gettransactionmethod/{startDate}/{endDate}")
+    public ApiResponse getFilteredTransactionMethod(@PathVariable ("startDate") String startDate, @PathVariable ("endDate") String endDate){
+        return dashboardService.getFilteredTransactionMethod(startDate,endDate);
+    }
+
 }

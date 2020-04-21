@@ -45,6 +45,7 @@ public class ChartDataDTO {
     public void setSeries(List<Double> series) {
         this.series = series;
     }
+
     public List<LocalDate> getDates() {
         return dates;
     }
