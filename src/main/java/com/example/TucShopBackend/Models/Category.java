@@ -14,6 +14,7 @@ public class Category {
     Long id;
     String name;
     String image;
+    boolean active;
 
 
     @JsonIgnore
@@ -59,5 +60,13 @@ public class Category {
 
     public void setProduct(List<Product> product) {
         this.product = product;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

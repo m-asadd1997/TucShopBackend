@@ -1,6 +1,7 @@
 package com.example.TucShopBackend.Services;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
+import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.UserDto;
 import com.example.TucShopBackend.Models.User;
 import com.example.TucShopBackend.Repositories.UserDao;
@@ -85,4 +86,55 @@ public class UserServiceImpl implements UserDetailsService {
 		}
 
     }
+
+    public ApiResponse deleteUser(Long id) {
+		Optional<User> user= userDao.findById(id);
+		if(user.isPresent())
+		{
+//			userDao.deleteById(id);
+			user.get().setActive(false);
+			userDao.save(user.get());
+			return new ApiResponse(200,"Deleted Successfully",user);
+		}
+		else{
+			return new ApiResponse(Status.Status_ERROR,"User Not Found",null);
+
+		}
+
+
+    }
+
+	public ApiResponse getAll() {
+		List<User> userList= userDao.getAllUsers();
+		return new ApiResponse(200,"Fetch Successfully",userList);
+	}
+
+	public ApiResponse getUserById(Long id) {
+
+		return new ApiResponse(200,"Fetch Successfully",userDao.findById(id));
+
+	}
+
+	public ApiResponse updateUser(Long id, UserDto userDTO) {
+		User user =userDao.findById(id).get();
+
+		User updatedUser = new User();
+		updatedUser.setId(id);
+		updatedUser.setName(userDTO.getName());
+		updatedUser.setEmail(userDTO.getEmail());
+		updatedUser.setActive(userDTO.getActive());
+		if(userDTO.getPassword().equals(""))
+		{
+			updatedUser.setPassword(user.getPassword());
+		}
+		else{
+			updatedUser.setPassword(userDTO.getPassword());
+		}
+
+		updatedUser.setUserType(user.getUserType());
+		updatedUser.setClientId(user.getClientId());
+		userDao.save(updatedUser);
+		return new ApiResponse(200,"Updated Successfully",updatedUser);
+
+	}
 }

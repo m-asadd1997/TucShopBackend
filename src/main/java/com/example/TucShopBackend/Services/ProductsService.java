@@ -95,6 +95,7 @@ public class    ProductsService {
                             product.setName(productsDTO.getName());
                             product.setDate1(productsDTO.getDate1());
                             product.setVariants(productsDTO.getVariants());
+                            product.setActive(true);
                             productsRepository.save(product);
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
                         }
@@ -200,12 +201,14 @@ public class    ProductsService {
     }
 
     public List<Product> getAllProducts(){
-        return productsRepository.findAll();
+//        return productsRepository.findAll();
+
+        return productsRepository.getAll();
     }
 
     public Product getProductById(Long id){
         Optional<Product> product =  productsRepository.findById(id);
-        if(product.isPresent()){
+        if(product.isPresent()&&product.get().getActive()){
             return product.get();
         }
         else{
@@ -213,38 +216,48 @@ public class    ProductsService {
         }
     }
     public ApiResponse deleteAll(){
-        productsRepository.deleteAll();
+//        productsRepository.deleteAll();
+        List<Product> products= productsRepository.findAll();
+        if(products.size()>0) {
+            for (Product pdt : products) {
+                pdt.setActive(false);
+                productsRepository.save(pdt);
+
+            }
+        }
         return new ApiResponse(Status.Status_Ok,CustomConstants.PROD_DELETE,null  );
     }
     public  ApiResponse deleteProductById(Long id) {
 
        Optional<Product> products = productsRepository.findById(id);
        if(products.isPresent()){
-           String imgPath = products.get().getImage();
-           String[] path = imgPath.split("/");
-           String path1="";
-           for(Integer i = 6; i < path.length ; i++){
-               if(i == path.length-1){
-                   path1 +=  path[i];
-               }
-               else if (i==7){
+//           String imgPath = products.get().getImage();
+//           String[] path = imgPath.split("/");
+//           String path1="";
+//           for(Integer i = 6; i < path.length ; i++){
+//               if(i == path.length-1){
+//                   path1 +=  path[i];
+//               }
+//               else if (i==7){
+//
+//                   path1+= "products//";
+//               }
+//               else{
+//                   path1 +=  path[i]+"//";
+//               }
+//           }
+//           if (deleteProductImage(path1)){
 
-                   path1+= "products//";
-               }
-               else{
-                   path1 +=  path[i]+"//";
-               }
-           }
-           if (deleteProductImage(path1)){
+//              productsRepository.deleteById(id);
 
-              productsRepository.deleteById(id);
-
+               products.get().setActive(false);
+               productsRepository.save(products.get());
               return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_DELETE, null);
 
-          }
-          else{
-              return new ApiResponse(Status.Status_ERROR, CustomConstants.PRODIMAGE_ERROR, null);
-          }
+//          }
+//          else{
+//              return new ApiResponse(Status.Status_ERROR, CustomConstants.PRODIMAGE_ERROR, null);
+//          }
        }
        return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_DELETE, null);
     }

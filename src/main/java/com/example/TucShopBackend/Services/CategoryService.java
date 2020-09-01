@@ -5,7 +5,9 @@ import com.example.TucShopBackend.Commons.CustomConstants;
 import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.CategoryDTO;
 import com.example.TucShopBackend.Models.Category;
+import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
+import com.example.TucShopBackend.Repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -37,6 +39,12 @@ public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    ProductsService productsService;
+
+    @Autowired
+    ProductsRepository productsRepository;
+
     @Value("${category.image.url}")
     String categoryImageUrl;
 
@@ -50,7 +58,7 @@ public class CategoryService {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    public ApiResponse postCategory(CategoryDTO categoryDTO){
+    public ApiResponse  postCategory(CategoryDTO categoryDTO){
         System.out.println("========================"+profile+"=======================");
 
         List<Category> allCategory= categoryRepository.findAll();
@@ -73,6 +81,7 @@ public class CategoryService {
                         Category category = new Category();
                         category.setImage(categoryImageUrl+categoryDTO.getName()+"/"+unique+categoryDTO.getImage().getOriginalFilename());
                         category.setName(categoryDTO.getName());
+                        category.setActive(true);
                         categoryRepository.save(category);
                         return new ApiResponse(Status.Status_Ok,CustomConstants.CAT_POSTED,category);
                     }
@@ -84,6 +93,7 @@ public class CategoryService {
                         Category category = new Category();
                         category.setImage(map.get("url").toString());
                         category.setName(categoryDTO.getName());
+                        category.setActive(true);
                         categoryRepository.save(category);
                         return new ApiResponse(Status.Status_Ok,CustomConstants.CAT_POSTED,category);
                     } catch (IOException e) {
@@ -144,7 +154,7 @@ public class CategoryService {
 
     public Category getById(Long id){
         Optional<Category> category = categoryRepository.findById(id);
-        if(category.isPresent()) {
+        if(category.isPresent()&&category.get().getActive()) {
            return category.get();
        }
        else {
@@ -153,7 +163,7 @@ public class CategoryService {
     }
 
     public List <Category> getAll (){
-        List <Category> categoryList =categoryRepository.findAll();
+        List <Category> categoryList =categoryRepository.getAll();
         return categoryList;
     }
 
@@ -203,10 +213,20 @@ public class CategoryService {
         Optional<Category> category = categoryRepository.findById(id);
         boolean  check=false;
         if (category.isPresent()) {
-            String folderPath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+category.get().getName();
-            File folder = new File(folderPath);
-            check =deleteDirectory(folder);
-            categoryRepository.deleteById(id);
+            check=true;
+//            String folderPath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+category.get().getName();
+//            File folder = new File(folderPath);
+//            check =deleteDirectory(folder);
+            List<Product> products = productsRepository.getAllByCategoryId(category.get().getId());
+            for(Product pdt :products)
+            {
+                pdt.setActive(false);
+                productsRepository.save(pdt);
+            }
+
+            category.get().setActive(false);
+             categoryRepository.save(category.get());
+//            categoryRepository.deleteById(id);
         }
             if(check) {
                 return new ApiResponse(Status.Status_Ok, CustomConstants.CAT_DELETE, null, getAll());
@@ -216,8 +236,15 @@ public class CategoryService {
     }
 
     public ApiResponse <Category> deleteAll (){
-    categoryRepository.deleteAll();
+//    categoryRepository.deleteAll();
 
+        List<Category> categories = categoryRepository.findAll();
+        if(categories.size()>0){
+            productsService.deleteAll();
+        for(Category cat:categories)
+        {
+          cat.setActive(false);
+        }}
      return new ApiResponse  (Status.Status_Ok, CustomConstants.CAT_DELETE, null);
 
     }

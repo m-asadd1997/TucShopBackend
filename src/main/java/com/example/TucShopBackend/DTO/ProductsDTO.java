@@ -38,7 +38,7 @@ public class ProductsDTO {
     Double quantity;
     Double costprice;
     String variants;
-
+    boolean active;
     public String  getDate1() {
 
 
@@ -62,7 +62,7 @@ public class ProductsDTO {
     public ProductsDTO() {
     }
 
-    public ProductsDTO(String name, MultipartFile image, String description, double price, Category category, double qty, double costprice, String variants) {
+    public ProductsDTO(String name, MultipartFile image, String description, double price, Category category, double qty, double costprice, String variants,boolean active) {
         this.name = name;
         this.image = image;
         this.description = description;
@@ -71,6 +71,7 @@ public class ProductsDTO {
         this.quantity = quantity;
         this.costprice = costprice;
         this.variants = variants;
+        this.active=active;
         
     }
 
@@ -142,5 +143,13 @@ public class ProductsDTO {
 
     public void setVariants(String variants) {
         this.variants = variants;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

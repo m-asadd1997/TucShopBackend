@@ -15,7 +15,7 @@ import java.util.List;
 public interface ProductsRepository extends JpaRepository<Product,Long> {
 
 
-    @Query(value = "select * from product where category_id =:id ",nativeQuery = true)
+    @Query(value = "select * from product where category_id =:id AND active=1 ",nativeQuery = true)
     public List<Product> getAllByCategoryId(@Param("id") Long id);
 
     public List<Product> findByName(String name);
@@ -26,7 +26,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     @Query(value = "select * from product where name =:name",nativeQuery = true)
     public String getAllByCategoryName(@Param("name") String name);
 
-    @Query(value = "select COUNT(id) from product",nativeQuery = true)
+    @Query(value = "select COUNT(id) from product where active =1",nativeQuery = true)
         public Double  productQauntity();
 
     @Query(value = "select * from product p where p.date1 BETWEEN cast(:startDate as date)AND cast(:endDate as date)", nativeQuery = true)
@@ -35,24 +35,24 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
 //    @Query(value = "select * from products ",nativeQuery = true)
 //    public List<Product> getAllProductPriceSumDetails();
 
-    @Query(value = "select COUNT(id) from product p where p.qty<10",nativeQuery = true)
+    @Query(value = "select COUNT(id) from product p where p.qty<10 AND active=1",nativeQuery = true)
     public List<Object> outOfStockCount();
 
-    @Query(value = "select * from product where qty<10",nativeQuery = true)
+    @Query(value = "select * from product where qty<10 AND active=1",nativeQuery = true)
     public List<Product> outOfStockProducts();
 //
 //    @Query(value = "select * from products",nativeQuery = true)
 
-    @Query(value = "select * from product where name LIKE :name%",nativeQuery = true)
+    @Query(value = "select * from product where name LIKE :name% AND active=1",nativeQuery = true)
 
 
     public List<Product> findByChar(@Param("name")String name);
 
-    @Query(value = "select new com.example.TucShopBackend.DTO.VariantsDTO(id, name, variants) from Product where variants LIKE %:keyword% group by variants ")
+    @Query(value = "select new com.example.TucShopBackend.DTO.VariantsDTO(id, name, variants) from Product where variants LIKE %:keyword% AND active=1 group by variants ")
     public List<VariantsDTO> getVariants(@Param("keyword")String keyword);
 
 
-    @Query(value = "SELECT * FROM product WHERE name LIKE :keyword%", nativeQuery = true)
+    @Query(value = "SELECT * FROM product WHERE name LIKE :keyword% AND active =1 " , nativeQuery = true)
     public List<Product> searchProductByKeyword(@Param("keyword")String keyword);
 
 
@@ -75,11 +75,14 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
             "where pt.product.id = p.id AND pt.transaction.id = t.id AND t.status='complete' ")
     public  List<Object>  getTotalprofit();
 
-    @Query(value = "Select Sum(costprice*qty) from tucshop.product;",nativeQuery = true)
+    @Query(value = "Select Sum(costprice*qty) from tucshop.product where active =1;",nativeQuery = true)
     public Long getTotalInventory();
 
 
     @Query(value = "Select Sum(costprice*qty)from tucshop.product p where p.date1 BETWEEN cast(:startDate as date)AND cast(:endDate as date)",nativeQuery = true)
     public Long getFilteredTotalInventory(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
+
+    @Query(value = "select * from tucshop.product where active = 1",nativeQuery = true)
+    List<Product> getAll();
 }
