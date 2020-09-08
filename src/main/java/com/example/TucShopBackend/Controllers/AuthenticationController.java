@@ -6,7 +6,9 @@ import com.example.TucShopBackend.Config.JwtTokenUtil;
 import com.example.TucShopBackend.DTO.LoginUser;
 import com.example.TucShopBackend.DTO.UserDto;
 import com.example.TucShopBackend.Models.User;
+import com.example.TucShopBackend.Repositories.UserDao;
 import com.example.TucShopBackend.Services.UserServiceImpl;
+import org.hibernate.query.criteria.internal.expression.function.AggregationFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,6 +16,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -30,6 +35,9 @@ public class AuthenticationController {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    UserDao userDaoRepo;
+
 
     @GetMapping("/hello")
     public String test(){
@@ -42,8 +50,35 @@ public class AuthenticationController {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword()));
         final User user = userService.findOne(loginUser.getUsername());
         final String token = jwtTokenUtil.generateToken(user);
+        LocalDateTime loginTime = LocalDateTime.now();
+        String date = loginTime.toLocalDate().toString();
+        String time = loginTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+        if (user.getDate()==null && user.getTime()==null) {
+            user.setTime(time);
+            user.setDate(date);
+            userDaoRepo.save(user);
+            return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
 
-        return new ApiResponse<>(200, "success",new AuthToken(token,user.getName(),user.getUserType(),user.getEmail()));
+        } else {
+
+            if (user.getDate().equals(date) ) {
+                return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+
+            }
+
+
+            else if (user.getDate()!=date && user.getTime()!=time ){
+
+                user.setTime(time);
+                user.setDate(date);
+                userDaoRepo.save(user);
+                return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+
+            }
+
+            return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+
+        }
     }
 
 

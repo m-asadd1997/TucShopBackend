@@ -8,15 +8,20 @@ public class UserDto {
     private Boolean active ;
     private String userType;
     private Long clientId;
+    private String date;
+    private String time;
 
-	public UserDto(String name, String email, String password, Boolean active, String userType, Long clientId) {
+	public UserDto(String name, String date, String time, String email, String password, Boolean active, String userType, Long clientId) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
 		this.active = active;
 		this.userType = userType;
 		this.clientId = clientId;
+		this.date = date;
+		this.time = time;
 	}
+
 
 	public UserDto() {
 	}
@@ -68,5 +73,22 @@ public class UserDto {
 
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
+	}
+
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
 	}
 }

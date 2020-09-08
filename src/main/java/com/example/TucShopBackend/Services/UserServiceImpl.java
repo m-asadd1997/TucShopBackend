@@ -27,6 +27,7 @@ public class UserServiceImpl implements UserDetailsService {
 	@Autowired
 	private UserDao userDao;
 
+
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
 
@@ -137,4 +138,11 @@ public class UserServiceImpl implements UserDetailsService {
 		return new ApiResponse(200,"Updated Successfully",updatedUser);
 
 	}
+
+	public ApiResponse getUserByLogin (String user){
+		return new ApiResponse (Status.Status_Ok, "Successfully get User Date and time", userDao.getUserByLogin(user));
+	}
+
+
+
 }
