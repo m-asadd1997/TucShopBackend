@@ -41,4 +41,11 @@ public class UserController {
     {
         return userService.updateUser(id,userDTO);
     }
+
+    @GetMapping ("/getUserTimeDate/{user}")
+    public  ApiResponse getUserByLogin (@PathVariable("user") String user){
+        return userService.getUserByLogin(user);
+    }
+
+
 }
