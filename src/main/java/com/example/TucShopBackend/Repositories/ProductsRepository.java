@@ -4,6 +4,8 @@ import com.example.TucShopBackend.DTO.ProfitDTO;
 import com.example.TucShopBackend.DTO.VariantsDTO;
 
 import com.example.TucShopBackend.Models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,7 +20,8 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     @Query(value = "select * from product where category_id =:id AND active=1 ",nativeQuery = true)
     public List<Product> getAllByCategoryId(@Param("id") Long id);
 
-    public List<Product> findByName(String name);
+    @Query(value="select * from product where name = :name and variants= :variant", nativeQuery = true)
+    public List<Product> findByName(String name, String variant);
 
 //    @Query(value = "select variants from products",nativeQuery = true)
 //    public List<String> findByVariants();
@@ -85,4 +88,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
 
     @Query(value = "select * from tucshop.product where active = 1",nativeQuery = true)
     List<Product> getAll();
+
+    @Query(value = "select * from tucshop.product where active = 1", nativeQuery = true)
+    Page<Product> findByCondition(Pageable pageable);
 }
