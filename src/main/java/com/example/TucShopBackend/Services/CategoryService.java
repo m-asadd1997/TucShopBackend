@@ -70,6 +70,12 @@ public class CategoryService {
         }
         Category categoryName = categoryRepository.findCategoriesByName(categoryDTO.getName());
         if(categoryName!= null){
+            if(!categoryName.getActive())
+            {
+                categoryName.setActive(true);
+                categoryRepository.save(categoryName);
+                return new ApiResponse(Status.Status_Ok,CustomConstants.CAT_POSTED,categoryName);
+            }
             return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.CAT_DUPLICATE,null);
         }
         else{
@@ -85,6 +91,7 @@ public class CategoryService {
                         categoryRepository.save(category);
                         return new ApiResponse(Status.Status_Ok,CustomConstants.CAT_POSTED,category);
                     }
+
                 break;
 
                 case CustomConstants.PROD:

@@ -5,6 +5,7 @@ import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.UserDto;
 import com.example.TucShopBackend.Models.User;
 import com.example.TucShopBackend.Repositories.UserDao;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -115,26 +116,24 @@ public class UserServiceImpl implements UserDetailsService {
 
 	}
 
-	public ApiResponse updateUser(Long id, UserDto userDTO) {
+	public ApiResponse updateUser(Long id, @NotNull UserDto userDTO) {
 		User user =userDao.findById(id).get();
 
-		User updatedUser = new User();
-		updatedUser.setId(id);
-		updatedUser.setName(userDTO.getName());
-		updatedUser.setEmail(userDTO.getEmail());
-		updatedUser.setActive(userDTO.getActive());
-		if(userDTO.getPassword().equals(""))
+
+//		updatedUser.setId(id);
+		user.setName(userDTO.getName());
+		user.setEmail(userDTO.getEmail());
+		user.setActive(userDTO.getActive());
+		if(!userDTO.getPassword().equals(""))
 		{
-			updatedUser.setPassword(user.getPassword());
-		}
-		else{
-			updatedUser.setPassword(userDTO.getPassword());
+			user.setPassword(userDTO.getPassword());
 		}
 
-		updatedUser.setUserType(user.getUserType());
-		updatedUser.setClientId(user.getClientId());
-		userDao.save(updatedUser);
-		return new ApiResponse(200,"Updated Successfully",updatedUser);
+
+		user.setUserType(user.getUserType());
+		user.setClientId(user.getClientId());
+		userDao.save(user);
+		return new ApiResponse(200,"Updated Successfully",user);
 
 	}
 }

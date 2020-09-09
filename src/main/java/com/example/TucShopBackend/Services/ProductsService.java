@@ -62,21 +62,24 @@ public class    ProductsService {
 
     public ApiResponse saveProducts(ProductsDTO productsDTO){
 
-        List<Product> productName = productsRepository.findByName(productsDTO.getName());
+       List< Product> productName = productsRepository.findByName(productsDTO.getName(), productsDTO.getVariants());
 
         Boolean flag = false;
+        Boolean duplicateCheck = false;
 
         for(int i = 0; i< productName.size(); i++){
 
                 if(productName.get(i).getVariants().equals(productsDTO.getVariants()) ){
                 flag = true;
             }
+                if(productName.get(i).getActive()){
+                    duplicateCheck=true;
+                }
         }
+        String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+        Category category = getCategoryById(productsDTO.getCategory().getId());
 
-        if(productName == null || !flag) {
-
-            String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
-            Category category = getCategoryById(productsDTO.getCategory().getId());
+        if(productName == null ||!flag) {
 
             if(category == null){
                 return new ApiResponse(Status.Status_ERROR, CustomConstants.CAT_GETERROR,null);
@@ -139,6 +142,22 @@ public class    ProductsService {
 
 
         else{
+            if(!duplicateCheck)
+            {
+                Product product = new Product();
+                product.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+                product.setCategory(category);
+                product.setDescription(productsDTO.getDescription());
+                product.setPrice(productsDTO.getPrice());
+                product.setQty(productsDTO.getQuantity());
+                product.setCostprice(productsDTO.getCostprice());
+                product.setName(productsDTO.getName());
+                product.setDate1(productsDTO.getDate1());
+                product.setVariants(productsDTO.getVariants());
+                product.setActive(true);
+                productsRepository.save(product);
+                return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
+            }
             return new ApiResponse(Status.Status_DUPLICATE, CustomConstants.PROD_DUPLICATE, null);
         }
 
@@ -428,9 +447,8 @@ public class    ProductsService {
 
 
     public Page<Product> joinAllProducts(Pageable pageable){
-            return  productsRepository.findAll(pageable);
+            return  productsRepository.findByCondition(pageable);
     }
-
 
     public Boolean deleteProductImage(String path) {
         String filepath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+path;

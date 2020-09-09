@@ -39,6 +39,6 @@ public class UserController {
     @PutMapping ("/{id}")
     public ApiResponse updateUser(@PathVariable("id")Long id ,@RequestBody UserDto userDTO)
     {
-        return userService.updateUser(id,userDTO);
+         return userService.updateUser(id,userDTO);
     }
 }
