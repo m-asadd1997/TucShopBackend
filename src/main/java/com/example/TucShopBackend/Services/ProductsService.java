@@ -11,6 +11,7 @@ import com.example.TucShopBackend.DTO.VariantsDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
+//import org.springframework.mock.web.MockMultipartFile;
 import com.example.TucShopBackend.Repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+//import sun.misc.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +48,9 @@ public class    ProductsService {
     @Value("${product.image.url}")
     String productImageUrl;
 
+    @Value("${product.defaultImage.url}")
+    String productDeafultImageUrl;
+
     public ApiResponse getVariants(String keyword){
         List<VariantsDTO> variantsList = productsRepository.getVariants(keyword);
         return new ApiResponse(Status.Status_Ok,"Success",variantsList);
@@ -62,12 +67,13 @@ public class    ProductsService {
 
     public ApiResponse saveProducts(ProductsDTO productsDTO){
 
-       List< Product> productName = productsRepository.findByName(productsDTO.getName(), productsDTO.getVariants());
 
+       List< Product> productName = productsRepository.findByName(productsDTO.getName(), productsDTO.getVariants());
+//
         Boolean flag = false;
         Boolean duplicateCheck = false;
 
-        for(int i = 0; i< productName.size(); i++){
+        for(int i = 0; i< productName.size();   i++){
 
                 if(productName.get(i).getVariants().equals(productsDTO.getVariants()) ){
                 flag = true;
@@ -86,7 +92,25 @@ public class    ProductsService {
             }
                 switch (profile){
                     case CustomConstants.DEV:
-                        if(saveProductImage(productsDTO.getImage(),category.getName(),unique)){
+
+                        if(productsDTO.getImage()==null){
+                            Product product = new Product();
+                            product.setImage(productDeafultImageUrl);
+                            product.setCategory(category);
+                            product.setDescription(productsDTO.getDescription());
+                            product.setPrice(productsDTO.getPrice());
+                            product.setQty(productsDTO.getQuantity());
+                            product.setCostprice(productsDTO.getCostprice());
+                            product.setName(productsDTO.getName());
+                            product.setDate1(productsDTO.getDate1());
+                            product.setVariants(productsDTO.getVariants());
+                            product.setActive(true);
+                            productsRepository.save(product);
+                            return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
+
+
+                        }else if(saveProductImage(productsDTO.getImage(),category.getName(),unique)){
+
 
                             Product product = new Product();
                             product.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
@@ -101,8 +125,11 @@ public class    ProductsService {
                             product.setActive(true);
                             productsRepository.save(product);
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
+
                         }
                         break;
+
+
 
                     case CustomConstants.PROD:
                         try {
