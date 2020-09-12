@@ -19,6 +19,11 @@ public class ApiResponse<T> {
 
     }
 
+    public ApiResponse(int status, String message) {
+        this.status = status;
+        this.message = message;
+    }
+
     public List<T> getObjectList() {
         return objectList;
     }

@@ -22,8 +22,8 @@ public class ProductsDTO {
     @NotBlank(message = "Name cannot be blank" )
   @Size(min = 3)
     String name;
-    @NotNull(message = "Image cannot be null")
-    @NotBlank(message = "Image cannot be blank" )
+    //    @NotNull(message = "Image cannot be null")
+    //    @NotBlank(message = "Image cannot be blank" )
     MultipartFile image;
   @NotNull(message = "Description not found")
     @Size(min = 3)
@@ -87,7 +87,6 @@ public class ProductsDTO {
     public void setImage(MultipartFile image) {
         this.image = image;
     }
-
 
     public void setName(String name) {
         this.name = name;
