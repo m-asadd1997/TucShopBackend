@@ -6,11 +6,13 @@ import com.example.TucShopBackend.DTO.TransactionsDTO;
 import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.Models.User;
 import com.example.TucShopBackend.Services.TransactionService;
+import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transaction;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 @RestController
@@ -22,7 +24,7 @@ public class TransactionsController {
     TransactionService transactionService;
 
     @PostMapping("/post")
-    public ApiResponse postTransaction(@RequestBody TransactionsDTO transactionsDTO, HttpServletRequest  request){
+    public ApiResponse postTransaction(@RequestBody TransactionsDTO transactionsDTO, HttpServletRequest  request) throws FileNotFoundException, DocumentException {
         request.getAttribute("loggedinUser");
         User user = (User) request.getAttribute("loggedinUser");
 
@@ -66,5 +68,11 @@ public class TransactionsController {
       return  this.transactionService.getAllPending();
 
     }
+
+    @GetMapping("/closing/{user}")
+    public ApiResponse onClosing(@PathVariable("user") String user){
+        return transactionService.onClosing(user);
+    }
+
 
 }
