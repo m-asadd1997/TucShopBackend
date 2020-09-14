@@ -71,7 +71,7 @@ public class TransactionService {
         LocalDate date1=LocalDate.now();
         String endDate=date1.toString();
         LocalDate date=LocalDate.now();
-        String startDate= "1-"+  date.getMonth() + "-"+date.getYear();
+        String startDate= date.getYear()+"-"+date.getMonth()+"-1";
         List<Transactions> transactionList =transactionsRepository.getMonthTransactions(startDate,endDate);
         return transactionList;
     }
@@ -122,6 +122,21 @@ public class TransactionService {
      List <Transactions> transactionsList=transactionsRepository.getAllPending();
 
      return transactionsList;
+
+    }
+    public ApiResponse deleteTransaction(Long id){
+        Optional<Transactions> transactions=transactionsRepository.findById(id);
+
+
+        if (transactions.isPresent()){
+            transactions.get().setStatus("deleted");
+            transactionsRepository.save(transactions.get());
+            return new ApiResponse(200,"Successfully deleted",transactions.get());
+
+        }
+        else{
+            return new ApiResponse(200,"not found",transactions.get());
+        }
 
     }
 

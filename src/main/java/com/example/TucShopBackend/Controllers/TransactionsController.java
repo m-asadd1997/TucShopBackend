@@ -66,5 +66,10 @@ public class TransactionsController {
       return  this.transactionService.getAllPending();
 
     }
+    @GetMapping("/deleteTransaction/{id}")
+    public ApiResponse deleteTransaction(@PathVariable("id") Long id){
+        return this.transactionService.deleteTransaction((id));
+
+    }
 
 }
