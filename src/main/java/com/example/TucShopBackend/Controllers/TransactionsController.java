@@ -75,4 +75,16 @@ public class TransactionsController {
     }
 
 
+    @GetMapping("/getRecentTransactionByUser/{user}")
+    public List<Transactions> getRecentTransactionsByUser(@PathVariable("user")String user ){
+        return transactionService.getRecentTransactionsByUser(user);
+    }
+
+
+    @GetMapping("/getTotalTransactionByUser/{user}")
+    public ApiResponse totalTransaction(@PathVariable("user")String user ){
+        return transactionService.getTotalTransactionByUser(user);
+    }
+
+
 }

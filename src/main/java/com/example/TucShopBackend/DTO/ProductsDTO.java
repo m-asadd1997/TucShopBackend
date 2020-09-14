@@ -22,8 +22,8 @@ public class ProductsDTO {
     @NotBlank(message = "Name cannot be blank" )
   @Size(min = 3)
     String name;
-    @NotNull(message = "Image cannot be null")
-    @NotBlank(message = "Image cannot be blank" )
+    //    @NotNull(message = "Image cannot be null")
+    //    @NotBlank(message = "Image cannot be blank" )
     MultipartFile image;
   @NotNull(message = "Description not found")
     @Size(min = 3)
@@ -38,7 +38,7 @@ public class ProductsDTO {
     Double quantity;
     Double costprice;
     String variants;
-
+    boolean active;
     public String  getDate1() {
 
 
@@ -62,7 +62,7 @@ public class ProductsDTO {
     public ProductsDTO() {
     }
 
-    public ProductsDTO(String name, MultipartFile image, String description, double price, Category category, double qty, double costprice, String variants) {
+    public ProductsDTO(String name, MultipartFile image, String description, double price, Category category, double qty, double costprice, String variants,boolean active) {
         this.name = name;
         this.image = image;
         this.description = description;
@@ -71,6 +71,7 @@ public class ProductsDTO {
         this.quantity = quantity;
         this.costprice = costprice;
         this.variants = variants;
+        this.active=active;
         
     }
 
@@ -86,7 +87,6 @@ public class ProductsDTO {
     public void setImage(MultipartFile image) {
         this.image = image;
     }
-
 
     public void setName(String name) {
         this.name = name;
@@ -142,5 +142,13 @@ public class ProductsDTO {
 
     public void setVariants(String variants) {
         this.variants = variants;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

@@ -129,6 +129,20 @@ public class TransactionService {
 
     }
 
+    public List<Transactions>getRecentTransactionsByUser(String user){
+
+      List<Transactions>transactionsListByUser=transactionsRepository.recentTransactionsOfUser(user);
+
+      return  transactionsListByUser;
+
+    }
+
+    public ApiResponse getTotalTransactionByUser(String user) {
+        return new ApiResponse(Status.Status_Ok, "Successfully fetch Total Transaction", transactionsRepository.totalTransactionsOfUser(user));
+    }
+
+
+
     public List<Transactions>getAllPending(){
 
      List <Transactions> transactionsList=transactionsRepository.getAllPending();

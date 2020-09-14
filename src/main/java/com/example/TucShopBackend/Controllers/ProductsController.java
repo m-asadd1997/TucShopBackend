@@ -61,8 +61,8 @@ public class ProductsController {
 
     //Post Product
     @PostMapping("/postproduct")
-    public ApiResponse saveProducts(@Valid @RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
-        productsDTO.setImage(image);
+    public ApiResponse saveProducts(@Valid @RequestParam(value = "image",required = false) MultipartFile image, ProductsDTO productsDTO){
+//        productsDTO.setImage(image);
 
         return productsService.saveProducts(productsDTO);
     }
