@@ -15,6 +15,7 @@ import com.example.TucShopBackend.Repositories.CategoryRepository;
 import com.example.TucShopBackend.Repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -238,10 +239,12 @@ public class    ProductsService {
 //
 //    }
 
+
     public ApiResponse getProductsByCategory(String category){
         Category category1 = categoryRepository.findCategoriesByName(category);
 
         List<Product> products = productsRepository.getAllByCategoryId(category1.getId());
+
 
         return new ApiResponse(Status.Status_Ok,CustomConstants.PROD_GET,products); //products;
     }

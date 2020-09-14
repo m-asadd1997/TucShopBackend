@@ -10,17 +10,29 @@ import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.Models.User;
 import com.example.TucShopBackend.Repositories.TransactionsRepository;
 import com.example.TucShopBackend.Repositories.UserDao;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transaction;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+import java.util.List;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 
 @Service
 public class TransactionService {
@@ -30,7 +42,10 @@ public class TransactionService {
     @Autowired
     TransactionsRepository transactionsRepository;
 
-    public ApiResponse saveTransactions(TransactionsDTO transactionsDTO,User user){
+    @Autowired
+    JavaMailSender javaMailSender;
+
+    public ApiResponse saveTransactions(TransactionsDTO transactionsDTO,User user) throws FileNotFoundException, DocumentException {
 
 
         Transactions transactions = new Transactions();
@@ -55,9 +70,6 @@ public class TransactionService {
         transactions.setProductTransactions(productTransactions);
         //transactions.setProductTransactions(transactionsDTO.getProducts().stream().collect(Collectors.toSet())); // .setProducts(transactionsDTO.getProducts());
         transactions.setUpdatedBy(user.getName());
-
-
-
 
 
         transactionsRepository.save(transactions);
@@ -137,6 +149,90 @@ public class TransactionService {
 
      return transactionsList;
 
+    }
+
+    void sendMail(File file1) {
+
+//        SimpleMailMessage msg = new SimpleMailMessage();
+//        msg.setTo(recevierEmail);
+//
+//        msg.setSubject("Transaction Report");
+//        msg.setText("Daily transaction report from tucshop application");
+        try {
+            MimeMessage message = javaMailSender.createMimeMessage();
+
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+//            helper.setFrom(from);
+            helper.setTo("qureshiasad1000@gmail.com");
+            helper.setSubject("Transaction Report");
+            helper.setText("Daily transaction report from tucshop application");
+
+            FileSystemResource file = new FileSystemResource(file1);
+            helper.addAttachment("transactionReport.pdf", file);
+
+            javaMailSender.send(message);
+        }catch(MessagingException e){e.printStackTrace();}
+    }
+
+    public ApiResponse onClosing(String user){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println(dtf.format(now));
+        String productsName = "";
+        List<Transactions> transactions = transactionsRepository.getTransactionsOnClosing(dtf.format(now),user);
+        try {
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream("TransactionReport.pdf"));
+            PdfPTable table = new PdfPTable(5);
+//            document.open();
+
+            PdfPCell c1 = new PdfPCell(new Phrase("Transaction By"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+
+            c1 = new PdfPCell(new Phrase("Transaction Date"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+
+            c1 = new PdfPCell(new Phrase("Transaction Time"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+
+            c1 = new PdfPCell(new Phrase("Products"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+
+            c1 = new PdfPCell(new Phrase("Transaction Amount"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+
+            table.setHeaderRows(1);
+
+            document.open();
+            document.addTitle("Transaction Report");
+            Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+            for(Transactions transaction : transactions) {
+                for (ProductTransaction products : transaction.getProductTransactions()) {
+                    productsName += products.getProduct().getName() + "(" + products.getQuantity() + ")" + ", ";
+                }
+//                Chunk chunk = new Chunk("Transaction by " + transaction.getCreatedBy() + "of products " + productsName + " of amount " + transaction.getAmount(), font);
+                table.addCell(transaction.getCreatedBy());
+                table.addCell(transaction.getDate().toString());
+                table.addCell(transaction.getDate().toString());
+                table.addCell(productsName);
+                table.addCell(transaction.getAmount().toString());
+
+
+            }
+            document.add(table);
+            document.close();
+            sendMail(new File("TransactionReport.pdf"));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return new ApiResponse(200,"closing successful",transactions);
     }
 
 
