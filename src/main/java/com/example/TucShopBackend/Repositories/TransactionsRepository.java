@@ -41,6 +41,13 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
     @Query(value = "select * from transactions t where t.status='complete' order by (id) DESC LIMIT 30 ", nativeQuery = true)
     public List<Transactions> recentTransactions();
 
+    @Query(value = "select * from transactions t where t.status='complete' and created_by=:userName order by (id) DESC LIMIT 30", nativeQuery = true)
+    public List<Transactions> recentTransactionsOfUser(String userName);
+
+    @Query(value = "select SUM(amount) from transactions t where t.status='complete' and created_by=:userName", nativeQuery = true)
+    public Double totalTransactionsOfUser(String userName);
+
+
     @Query(value="select SUM(amount) from transactions t where t.date BETWEEN cast(:startDate as date)AND cast(:endDate as date) AND  t.status='complete'",nativeQuery = true)
     public Double filteredTransaction(String startDate, String endDate);
 
@@ -66,6 +73,8 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
     List<CategoryQuantityDTO> getFilteredTransactionMethod(String startDate, String endDate);
 
 
+    @Query(value = "select * from transactions where date=:date and created_by=:user",nativeQuery = true)
+    List<Transactions> getTransactionsOnClosing(@Param("date") String date,@Param("user") String user);
 
 }
 

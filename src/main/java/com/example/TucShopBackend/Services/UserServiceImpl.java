@@ -1,9 +1,11 @@
 package com.example.TucShopBackend.Services;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
+import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.UserDto;
 import com.example.TucShopBackend.Models.User;
 import com.example.TucShopBackend.Repositories.UserDao;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,7 @@ public class UserServiceImpl implements UserDetailsService {
 	
 	@Autowired
 	private UserDao userDao;
+
 
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
@@ -85,4 +88,60 @@ public class UserServiceImpl implements UserDetailsService {
 		}
 
     }
+
+    public ApiResponse deleteUser(Long id) {
+		Optional<User> user= userDao.findById(id);
+		if(user.isPresent())
+		{
+//			userDao.deleteById(id);
+			user.get().setActive(false);
+			userDao.save(user.get());
+			return new ApiResponse(200,"Deleted Successfully",user);
+		}
+		else{
+			return new ApiResponse(Status.Status_ERROR,"User Not Found",null);
+
+		}
+
+
+    }
+
+	public ApiResponse getAll() {
+		List<User> userList= userDao.getAllUsers();
+		return new ApiResponse(200,"Fetch Successfully",userList);
+	}
+
+	public ApiResponse getUserById(Long id) {
+
+		return new ApiResponse(200,"Fetch Successfully",userDao.findById(id));
+
+	}
+
+	public ApiResponse updateUser(Long id, @NotNull UserDto userDTO) {
+		User user =userDao.findById(id).get();
+
+
+//		updatedUser.setId(id);
+		user.setName(userDTO.getName());
+		user.setEmail(userDTO.getEmail());
+		user.setActive(userDTO.getActive());
+		if(!userDTO.getPassword().equals(""))
+		{
+			user.setPassword(userDTO.getPassword());
+		}
+
+
+		user.setUserType(user.getUserType());
+		user.setClientId(user.getClientId());
+		userDao.save(user);
+		return new ApiResponse(200,"Updated Successfully",user);
+
+	}
+
+	public ApiResponse getUserByLogin (String user){
+		return new ApiResponse (Status.Status_Ok, "Successfully get User Date and time", userDao.getUserByLogin(user));
+	}
+
+
+
 }
