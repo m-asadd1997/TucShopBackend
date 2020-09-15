@@ -48,6 +48,17 @@ public class User {
 	public User() {
 	}
 
+	public User( String email, String name, String password, Boolean active, String userType, Long clientId, String date, String time) {
+		this.email = email;
+		this.name = name;
+		this.password = password;
+		this.active = active;
+		this.userType = userType;
+		this.clientId = clientId;
+		this.date = date;
+		this.time = time;
+	}
+
 	public User(String date) {
 		this.date = date;
 

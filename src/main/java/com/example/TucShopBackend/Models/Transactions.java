@@ -27,6 +27,7 @@ public class Transactions {
     String requestedUser;
     String status;
     String action;
+    Double Discount;
 
                        //request user
                        //status pending complete
@@ -45,21 +46,32 @@ public class Transactions {
     public Transactions() {
     }
 
-    public Transactions(LocalDate date, String requestedUser, String status, String action, Double amount, String createdBy, String updatedBy, Set<ProductTransaction> productTransactions) {
+    public Transactions(Long id, LocalDate date, Double amount, String createdBy, String updatedBy, String requestedUser, String status, String action, Double discount, Set<ProductTransaction> productTransactions) {
+        this.id = id;
         this.date = date;
         this.amount = amount;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
-        this.action=action;
-        this.status=status;
-        this.requestedUser=requestedUser;
+        this.requestedUser = requestedUser;
+        this.status = status;
+        this.action = action;
+        Discount = discount;
         this.productTransactions = productTransactions;
     }
-    //    public Transactions(String name, ProductTransaction... productTransactions) {
+
+//    public Transactions(String name, ProductTransaction... productTransactions) {
 //        this.name = name;
 //        for(ProductTransaction pt : productTransactions) pt.setTransaction(this);
 //        this.productTransactions = Stream.of(productTransactions).collect(Collectors.toSet());
 //    }
+
+    public Double getDiscount() {
+        return Discount;
+    }
+
+    public void setDiscount(Double discount) {
+        Discount = discount;
+    }
 
     public Long getId() {
         return id;
