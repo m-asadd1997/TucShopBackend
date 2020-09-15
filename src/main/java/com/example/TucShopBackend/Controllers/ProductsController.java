@@ -5,10 +5,12 @@ import com.example.TucShopBackend.DTO.ProductsDTO;
 import com.example.TucShopBackend.DTO.RequestForProductDTO;
 import com.example.TucShopBackend.DTO.UpdateStockDTO;
 
+import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Models.Product;
 
 import com.example.TucShopBackend.Models.RequestForProduct;
 
+import com.example.TucShopBackend.Repositories.CategoryRepository;
 import com.example.TucShopBackend.Services.ProductsService;
 import com.example.TucShopBackend.Services.RequestForProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class ProductsController {
     @Autowired
     ProductsService productsService;
 
+//    @Autowired
+//    CategoryRepository categoryRepository;
+
    //Request Product
     @PostMapping("/postreqproduct")
     public ApiResponse saveRequestForProduct(@Valid @RequestBody RequestForProduct requestForProduct){
@@ -56,14 +61,15 @@ public class ProductsController {
 
     //Post Product
     @PostMapping("/postproduct")
-    public ApiResponse saveProducts(@Valid @RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
-        productsDTO.setImage(image);
+    public ApiResponse saveProducts(@Valid @RequestParam(value = "image",required = false) MultipartFile image, ProductsDTO productsDTO){
+//        productsDTO.setImage(image);
 
         return productsService.saveProducts(productsDTO);
     }
     //Get Product according to Category
     @GetMapping("/category/{category}")
     public ApiResponse getProductsByCategory(@PathVariable("category") String category){
+//        Category category1 = categoryRepository.findCategoriesByName(category);
         return productsService.getProductsByCategory(category);
     }
     //Get All Product

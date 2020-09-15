@@ -22,7 +22,7 @@ public class Product {
     double qty;
     double costprice;
     String variants;
-
+    boolean active;
 
     public String getDate1() {
         return date1;
@@ -37,6 +37,7 @@ public class Product {
     String date1;
 
    // @JsonBackReference
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     Category category;
@@ -52,7 +53,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String image, String description, double price, double qty, double costprice, String variants, String date1, Category category, Set<ProductTransaction> productTransactions) {
+    public Product(String name, String image, String description, double price, double qty, double costprice, String variants, String date1, Category category, Set<ProductTransaction> productTransactions,boolean active) {
         this.name = name;
         this.image = image;
         this.description = description;
@@ -63,6 +64,7 @@ public class Product {
         this.date1 = date1;
         this.category = category;
         this.productTransactions = productTransactions;
+        this.active=active;
     }
 
     //    public Product(Long id, String name, String image, String description, double price, double qty, double costprice, String variants, Category category, List<Transactions> transactions) {
@@ -149,6 +151,14 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public Set<ProductTransaction> getProductTransactions() {

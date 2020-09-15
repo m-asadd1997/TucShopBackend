@@ -1,6 +1,8 @@
 package com.example.TucShopBackend.Models;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.TimeZone;
 
 @Entity
 @Table(name = "user")
@@ -25,6 +27,7 @@ public class User {
     @Column
     private Long clientId;
 
+
 	public User() {
 	}
 
@@ -35,6 +38,19 @@ public class User {
 		this.active = active;
 		this.userType = userType;
 		this.clientId = clientId;
+
+    @Column
+	private String date;
+
+    @Column
+	private String time;
+
+	public User() {
+	}
+
+	public User(String date) {
+		this.date = date;
+
 	}
 
 	public Long getId() {
@@ -95,6 +111,22 @@ public class User {
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
 	}
-	
-    
+
+	public String getDate() {
+		return date;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+
 }
