@@ -23,6 +23,7 @@ public class Product {
     double costprice;
     String variants;
     boolean active;
+    boolean infiniteQuantity;
 
     public String getDate1() {
         return date1;
@@ -53,7 +54,8 @@ public class Product {
     public Product() {
     }
 
-    public Product(String name, String image, String description, double price, double qty, double costprice, String variants, String date1, Category category, Set<ProductTransaction> productTransactions,boolean active) {
+    public Product(Long id, String name, String image, String description, double price, double qty, double costprice, String variants, boolean active, boolean infiniteQuantity, String date1, Category category, Set<ProductTransaction> productTransactions) {
+        this.id = id;
         this.name = name;
         this.image = image;
         this.description = description;
@@ -61,10 +63,11 @@ public class Product {
         this.qty = qty;
         this.costprice = costprice;
         this.variants = variants;
+        this.active = active;
+        this.infiniteQuantity = infiniteQuantity;
         this.date1 = date1;
         this.category = category;
         this.productTransactions = productTransactions;
-        this.active=active;
     }
 
     //    public Product(Long id, String name, String image, String description, double price, double qty, double costprice, String variants, Category category, List<Transactions> transactions) {
@@ -80,6 +83,18 @@ public class Product {
 //        this.transactions = transactions;
 //    }
 
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public boolean isInfiniteQuantity() {
+        return infiniteQuantity;
+    }
+
+    public void setInfiniteQuantity(boolean infiniteQuantity) {
+        this.infiniteQuantity = infiniteQuantity;
+    }
 
     public Long getId() {
         return id;
