@@ -27,6 +27,18 @@ public class User {
     @Column
     private Long clientId;
 
+
+	public User() {
+	}
+
+	public User(String email, String name, String password, Boolean active, String userType, Long clientId) {
+		this.email = email;
+		this.name = name;
+		this.password = password;
+		this.active = active;
+		this.userType = userType;
+		this.clientId = clientId;
+
     @Column
 	private String date;
 
@@ -38,6 +50,7 @@ public class User {
 
 	public User(String date) {
 		this.date = date;
+
 	}
 
 	public Long getId() {
