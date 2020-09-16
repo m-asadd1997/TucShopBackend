@@ -11,6 +11,7 @@ public class TransactionsDTO {
     Double amount;
     String action;
     String requestedUser;
+    Double discount;
 
 
    List<ProductTransaction> productTransactions;
@@ -50,5 +51,13 @@ public class TransactionsDTO {
 
     public void setProductTransactions(List<ProductTransaction> productTransactions) {
         this.productTransactions = productTransactions;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 }
