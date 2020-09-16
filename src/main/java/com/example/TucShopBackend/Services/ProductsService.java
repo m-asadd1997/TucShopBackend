@@ -100,7 +100,17 @@ public class    ProductsService {
                             product.setCategory(category);
                             product.setDescription(productsDTO.getDescription());
                             product.setPrice(productsDTO.getPrice());
-                            product.setQty(productsDTO.getQuantity());
+                            if(productsDTO.getQuantity()==0)
+                            {
+                                product.setInfiniteQuantity(true);
+                                product.setQty(1000000);
+
+                            }
+                            else
+                            {
+                                product.setInfiniteQuantity(false);
+                                product.setQty(productsDTO.getQuantity());
+                            }
                             product.setCostprice(productsDTO.getCostprice());
                             product.setName(productsDTO.getName());
                             product.setDate1(productsDTO.getDate1());
@@ -118,7 +128,17 @@ public class    ProductsService {
                             product.setCategory(category);
                             product.setDescription(productsDTO.getDescription());
                             product.setPrice(productsDTO.getPrice());
-                            product.setQty(productsDTO.getQuantity());
+                            if(productsDTO.getQuantity()==0)
+                            {
+                                product.setInfiniteQuantity(true);
+                                product.setQty(1000000);
+
+                            }
+                            else
+                            {
+                                product.setInfiniteQuantity(false);
+                                product.setQty(productsDTO.getQuantity());
+                            }
                             product.setCostprice(productsDTO.getCostprice());
                             product.setName(productsDTO.getName());
                             product.setDate1(productsDTO.getDate1());
@@ -140,7 +160,17 @@ public class    ProductsService {
                             product.setCategory(category);
                             product.setDescription(productsDTO.getDescription());
                             product.setPrice(productsDTO.getPrice());
-                            product.setQty(productsDTO.getQuantity());
+                            if(productsDTO.getQuantity()==0)
+                            {
+                                product.setInfiniteQuantity(true);
+                                product.setQty(1000000);
+
+                            }
+                            else
+                            {
+                                product.setInfiniteQuantity(false);
+                                product.setQty(productsDTO.getQuantity());
+                            }
                             product.setCostprice(productsDTO.getCostprice());
                             product.setName(productsDTO.getName());
                             product.setVariants(productsDTO.getVariants());
@@ -159,7 +189,17 @@ public class    ProductsService {
                 product.setCategory(category);
                 product.setDescription(productsDTO.getDescription());
                 product.setPrice(productsDTO.getPrice());
-                product.setQty(productsDTO.getQuantity());
+                if(productsDTO.getQuantity()==0)
+                {
+                    product.setInfiniteQuantity(true);
+                    product.setQty(1000000);
+
+                }
+                else
+                {
+                    product.setInfiniteQuantity(false);
+                    product.setQty(productsDTO.getQuantity());
+                }
                 product.setCostprice(productsDTO.getCostprice());
                 product.setName(productsDTO.getName());
                 product.setVariants(productsDTO.getVariants());
@@ -177,7 +217,17 @@ public class    ProductsService {
                 product.setCategory(category);
                 product.setDescription(productsDTO.getDescription());
                 product.setPrice(productsDTO.getPrice());
-                product.setQty(productsDTO.getQuantity());
+                if(productsDTO.getQuantity()==0)
+                {
+                    product.setInfiniteQuantity(true);
+                    product.setQty(1000000);
+
+                }
+                else
+                {
+                    product.setInfiniteQuantity(false);
+                    product.setQty(productsDTO.getQuantity());
+                }
                 product.setCostprice(productsDTO.getCostprice());
                 product.setName(productsDTO.getName());
                 product.setDate1(productsDTO.getDate1());
@@ -390,20 +440,22 @@ public class    ProductsService {
         int count=0;
     public ApiResponse AddQty(Long id,UpdateStockDTO pdt ){
         Product pdt1 = getProductById(id);
-//            ProductsDTO pdt= new ProductsDTO();
-        double quantity=pdt1.getQty();
-        if(quantity-1<0){
+       boolean isInfinite= pdt1.isInfiniteQuantity();
+       if(!isInfinite) {
+           double quantity = pdt1.getQty();
+           if (quantity - 1 < 0) {
 
-            pdt.setQuantity(0.0);
-            return this.updateStockById(id,pdt);
-        }
-        else{
+               pdt.setQuantity(0.0);
+               return this.updateStockById(id, pdt);
+           } else {
 //            pdt1.setQty(quantity-1);
-               pdt.setCount((pdt.getCount()+1));
-            pdt.setQuantity(quantity-1);
-            return this.updateStockById(id,pdt);
+               pdt.setCount((pdt.getCount() + 1));
+               pdt.setQuantity(quantity - 1);
+               return this.updateStockById(id, pdt);
 
-        }
+           }
+       }
+       else return new ApiResponse(Status.Status_Ok,"Updated",pdt1);
     }
 
 
@@ -411,21 +463,21 @@ public class    ProductsService {
         Product pdt1 = getProductById(id);
 
         double quantity=pdt1.getQty();
-        if(pdt.getCount()>0){
+        boolean isInfinite= pdt1.isInfiniteQuantity();
+        if(!isInfinite) {
+            if (pdt.getCount() > 0) {
 
-            pdt.setQuantity(quantity+1);
-            pdt.setCount(pdt.getCount()-1);
-            return this.updateStockById(id,pdt);
+                pdt.setQuantity(quantity + 1);
+                pdt.setCount(pdt.getCount() - 1);
+                return this.updateStockById(id, pdt);
+            } else {
+                pdt.setQuantity(quantity);
+
+                return this.updateStockById(id, pdt);
+            }
         }
-
-        else {
-            pdt.setQuantity(quantity);
-
-            return this.updateStockById(id,pdt);
+        else return new ApiResponse(Status.Status_Ok,"Updated",pdt1);
         }
-
-
-    }
 
 
     public ApiResponse MinusAllQty(Long id , UpdateStockDTO pdt){

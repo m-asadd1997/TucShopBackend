@@ -72,7 +72,7 @@ public class ProductsDTO {
         this.costprice = costprice;
         this.variants = variants;
         this.active=active;
-        
+
     }
 
 
