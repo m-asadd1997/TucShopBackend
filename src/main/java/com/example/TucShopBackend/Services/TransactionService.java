@@ -4,10 +4,8 @@ import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.ScearchTransactionDTO;
 import com.example.TucShopBackend.DTO.TransactionsDTO;
-import com.example.TucShopBackend.Models.Category;
-import com.example.TucShopBackend.Models.ProductTransaction;
-import com.example.TucShopBackend.Models.Transactions;
-import com.example.TucShopBackend.Models.User;
+import com.example.TucShopBackend.Models.*;
+import com.example.TucShopBackend.Repositories.SettingsRepository;
 import com.example.TucShopBackend.Repositories.TransactionsRepository;
 import com.example.TucShopBackend.Repositories.UserDao;
 import com.itextpdf.text.*;
@@ -16,6 +14,11 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -25,8 +28,10 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.List;
@@ -45,6 +50,9 @@ public class TransactionService {
     @Autowired
     JavaMailSender javaMailSender;
 
+    @Autowired
+    SettingsRepository settingsRepository;
+
     public ApiResponse saveTransactions(TransactionsDTO transactionsDTO,User user) throws FileNotFoundException, DocumentException {
 
 
@@ -52,7 +60,11 @@ public class TransactionService {
         transactions.setAmount(transactionsDTO.getAmount());
         transactions.setCreatedBy(user.getName());
         transactions.setDate(LocalDate.now());
+        transactions.setDiscount(transactionsDTO.getDiscount());
+        transactions.setTransactionTime(LocalTime.now());
         transactions.setAction(transactionsDTO.getAction());
+        transactions.setClosingStatus("OPEN");
+        transactions.setDiscount(transactionsDTO.getDiscount());
         if( transactionsDTO.getAction().equals("SC") ){
             transactions.setStatus("complete");
             transactions.setRequestedUser(user.getName());
@@ -189,19 +201,47 @@ public class TransactionService {
         }catch(MessagingException e){e.printStackTrace();}
     }
 
-    public ApiResponse onClosing(String user){
+    public ResponseEntity<InputStreamResource> onClosing(String user) throws IOException {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        List<Settings> settings = settingsRepository.findAll();
+        String header;
+        Integer srno = 1;
+        if(!settings.isEmpty()){
+            header = settings.get(0).getHeader();
+        }
+        else{
+            header = "Daily Report";
+        }
+
         LocalDateTime now = LocalDateTime.now();
         System.out.println(dtf.format(now));
-        String productsName = "";
-        List<Transactions> transactions = transactionsRepository.getTransactionsOnClosing(dtf.format(now),user);
+         StringBuilder productsName = null;
+         Double total = 0D;
+         Double discount = 0D;
+         Double totalAfterDiscount = 0D;
+
+        List<Transactions> transactions = transactionsRepository.getTransactionsOnClosing(user);
         try {
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream("TransactionReport.pdf"));
-            PdfPTable table = new PdfPTable(5);
+
+            Font fontHeader = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+            Paragraph headingPara,totalPara,discountPara,totalDiscountPara;
+            headingPara = new Paragraph(header + "\n" + "\n");
+            headingPara.setAlignment(Element.ALIGN_CENTER);
+
+//            Chunk chunk = new Chunk(header, fontHeader);
+
+//            Chunk newLine = new Chunk("\n");
+
+            PdfPTable table = new PdfPTable(7);
 //            document.open();
 
-            PdfPCell c1 = new PdfPCell(new Phrase("Transaction By"));
+            PdfPCell c1 = new PdfPCell(new Phrase("SR#"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+
+            c1 = new PdfPCell(new Phrase("Transaction By"));
             c1.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(c1);
 
@@ -221,33 +261,86 @@ public class TransactionService {
             c1.setHorizontalAlignment(Element.ALIGN_CENTER);
             table.addCell(c1);
 
+            c1 = new PdfPCell(new Phrase("Discount"));
+            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            table.addCell(c1);
+
+
             table.setHeaderRows(1);
+//            table.setFooterRows(1);
 
             document.open();
             document.addTitle("Transaction Report");
+            document.add(headingPara);
+
             Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
             for(Transactions transaction : transactions) {
+
+                transaction.setClosingStatus("CLOSED");
+                total += transaction.getAmount();
+                discount += transaction.getDiscount();
+                totalAfterDiscount = total - discount;
+                transactionsRepository.save(transaction);
                 for (ProductTransaction products : transaction.getProductTransactions()) {
-                    productsName += products.getProduct().getName() + "(" + products.getQuantity() + ")" + ", ";
+                    productsName = new StringBuilder();
+                    productsName.append(products.getProduct().getName());
+                    productsName.append("(");
+                    productsName.append(products.getQuantity());
+                    productsName.append(")");
+                    productsName.append(",");
+
                 }
 //                Chunk chunk = new Chunk("Transaction by " + transaction.getCreatedBy() + "of products " + productsName + " of amount " + transaction.getAmount(), font);
+                table.addCell(srno.toString());
                 table.addCell(transaction.getCreatedBy());
                 table.addCell(transaction.getDate().toString());
-                table.addCell(transaction.getDate().toString());
-                table.addCell(productsName);
+                table.addCell(transaction.getTransactionTime().toString());
+                table.addCell(productsName.toString());
                 table.addCell(transaction.getAmount().toString());
+                table.addCell(transaction.getDiscount().toString());
+               // table.
+                srno++;
 
 
             }
+            totalPara = new Paragraph("\n" + "Total Amount : " + total);
+            totalPara.setAlignment(Element.ALIGN_RIGHT);
+            discountPara = new Paragraph("\n"+ "Discount Amount : " + discount);
+            discountPara.setAlignment(Element.ALIGN_RIGHT);
+            totalDiscountPara = new Paragraph("\n"+ "Total Amount after Discount : " + totalAfterDiscount);
+            totalDiscountPara.setAlignment(Element.ALIGN_RIGHT);
             document.add(table);
+            document.add(totalPara);
+            document.add(discountPara);
+            document.add(totalDiscountPara);
+
+//            document.add
             document.close();
-            sendMail(new File("TransactionReport.pdf"));
+            try{
+                sendMail(new File("TransactionReport.pdf"));
+            }
+            catch (Exception mail){
+                mail.printStackTrace();
+            }
+
         }
         catch (Exception e) {
             e.printStackTrace();
         }
 
-        return new ApiResponse(200,"closing successful",transactions);
+        File f = new File("TransactionReport.pdf");
+        Resource file = new UrlResource(f.toURI());
+        return  ResponseEntity
+                .ok()
+                .contentLength(file.contentLength())
+                .contentType(
+                        MediaType.parseMediaType("application/pdf"))
+                .body(new InputStreamResource(file.getInputStream()));
+
+//        return new ApiResponse(200,"closing successful",transactions);
+
+
+
     }
 
 

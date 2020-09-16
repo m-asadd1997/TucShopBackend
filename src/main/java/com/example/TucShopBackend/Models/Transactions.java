@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +28,10 @@ public class Transactions {
     String requestedUser;
     String status;
     String action;
-    Double Discount;
+    String closingStatus;
+    LocalTime transactionTime;
+    Double discount;
+
 
                        //request user
                        //status pending complete
@@ -152,6 +156,30 @@ public class Transactions {
 
     public void setProductTransactions(Set<ProductTransaction> productTransactions) {
         this.productTransactions = productTransactions;
+    }
+
+    public String getClosingStatus() {
+        return closingStatus;
+    }
+
+    public void setClosingStatus(String closingStatus) {
+        this.closingStatus = closingStatus;
+    }
+
+    public LocalTime getTransactionTime() {
+        return transactionTime;
+    }
+
+    public void setTransactionTime(LocalTime transactionTime) {
+        this.transactionTime = transactionTime;
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 }
 
