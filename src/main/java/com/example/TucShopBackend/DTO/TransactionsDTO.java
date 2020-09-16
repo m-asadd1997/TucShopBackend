@@ -29,13 +29,6 @@ public class TransactionsDTO {
     }
 
 
-    public Double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Double discount) {
-        this.discount = discount;
-    }
 
     public Double getAmount() {
         return amount;

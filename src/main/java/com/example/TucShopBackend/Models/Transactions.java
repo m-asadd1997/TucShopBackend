@@ -59,7 +59,6 @@ public class Transactions {
         this.requestedUser = requestedUser;
         this.status = status;
         this.action = action;
-        Discount = discount;
         this.productTransactions = productTransactions;
     }
 
@@ -69,13 +68,7 @@ public class Transactions {
 //        this.productTransactions = Stream.of(productTransactions).collect(Collectors.toSet());
 //    }
 
-    public Double getDiscount() {
-        return Discount;
-    }
 
-    public void setDiscount(Double discount) {
-        Discount = discount;
-    }
 
     public Long getId() {
         return id;

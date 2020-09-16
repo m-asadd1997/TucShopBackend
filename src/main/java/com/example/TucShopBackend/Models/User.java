@@ -26,6 +26,11 @@ public class User {
     
     @Column
     private Long clientId;
+	@Column
+	private String date;
+
+	@Column
+	private String time;
 
 
 	public User() {
@@ -38,30 +43,6 @@ public class User {
 		this.active = active;
 		this.userType = userType;
 		this.clientId = clientId;
-
-    @Column
-	private String date;
-
-    @Column
-	private String time;
-
-	public User() {
-	}
-
-	public User( String email, String name, String password, Boolean active, String userType, Long clientId, String date, String time) {
-		this.email = email;
-		this.name = name;
-		this.password = password;
-		this.active = active;
-		this.userType = userType;
-		this.clientId = clientId;
-		this.date = date;
-		this.time = time;
-	}
-
-	public User(String date) {
-		this.date = date;
-
 	}
 
 	public Long getId() {
@@ -70,25 +51,6 @@ public class User {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-
-
-	public String getUserType() {
-		return userType;
-	}
-
-	public void setUserType(String userType) {
-		this.userType = userType;
 	}
 
 	public String getEmail() {
@@ -107,12 +69,28 @@ public class User {
 		this.name = name;
 	}
 
-	public Boolean isActive() {
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Boolean getActive() {
 		return active;
 	}
 
-	public void setActive(Boolean isActive) {
-		this.active = isActive;
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 
 	public Long getClientId() {
@@ -138,6 +116,4 @@ public class User {
 	public void setTime(String time) {
 		this.time = time;
 	}
-
-
 }
