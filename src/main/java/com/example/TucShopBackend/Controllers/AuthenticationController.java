@@ -78,9 +78,14 @@ public class AuthenticationController {
         } else {
 
             if (accessDate.isBefore(user.getAccountAccessDate()) || accessDate.isAfter(user.getAccountExpire())) {
-                final User userr = userService.findOne(loginUser.getUsername());
-                userr.setActive(false);
-                userDaoRepo.save(user);
+
+                if (accessDate.isAfter(user.getAccountExpire())) {
+
+                    final User userr = userService.findOne(loginUser.getUsername());
+                    userr.setActive(false);
+                    userDaoRepo.save(user);
+                    return new ApiResponse<>(200, "Trial Version has Expired", null);
+                }
                 return new ApiResponse<>(200, "Trial Version has Expired", null);
             }
         }
