@@ -90,8 +90,13 @@ public class TransactionService {
     }
 
 
-    public List<Transactions>getAll (){
+    public List<TransactionsDTO>getAll (String startDate, String endDate){
 
+//        LocalDate date1=LocalDate.now();
+//        String endDate=date1.toString();
+//        LocalDate date=LocalDate.now();
+//        String startDate= "1-"+  date.getMonth() + "-"+date.getYear();
+        List<TransactionsDTO> transactionList =transactionsRepository.getTotalTransactionByDate(startDate,endDate);
         LocalDate date1=LocalDate.now();
         String endDate=date1.toString();
         LocalDate date=LocalDate.now();
@@ -160,6 +165,8 @@ public class TransactionService {
      List <Transactions> transactionsList=transactionsRepository.getAllPending();
 
      return transactionsList;
+
+
 
     }
     public ApiResponse deleteTransaction(Long id){
@@ -343,6 +350,11 @@ public class TransactionService {
 
     }
 
+    public ApiResponse getTotalTransactionByDate (String startDate, String endDate){
+
+    return new ApiResponse(Status.Status_Ok, "Successfully fetch Total Transaction", transactionsRepository.getTotalTransactionByDate(startDate, endDate)) ;
+
+    }
 
 
 }

@@ -2,6 +2,7 @@ package com.example.TucShopBackend.Controllers;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.AuthToken;
+import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.Config.JwtTokenUtil;
 import com.example.TucShopBackend.DTO.LoginUser;
 import com.example.TucShopBackend.DTO.UserDto;
@@ -16,10 +17,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.xml.crypto.Data;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -46,39 +51,40 @@ public class AuthenticationController {
 
     @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
     public ApiResponse<AuthToken> register(@RequestBody LoginUser loginUser) throws AuthenticationException {
-
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword()));
         final User user = userService.findOne(loginUser.getUsername());
         final String token = jwtTokenUtil.generateToken(user);
-        LocalDateTime loginTime = LocalDateTime.now();
-        String date = loginTime.toLocalDate().toString();
-        String time = loginTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
-        if (user.getDate()==null && user.getTime()==null) {
-            user.setTime(time);
-            user.setDate(date);
-            userDaoRepo.save(user);
-            return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
-
-        } else {
-
-            if (user.getDate().equals(date) ) {
-                return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
-
-            }
-
-
-            else if (user.getDate()!=date && user.getTime()!=time ){
-
+        LocalDate accessDate = LocalDate.now();
+        if(user.getAccountAccessDate()==null && user.getAccountExpire()==null){
+            LocalDateTime loginTime = LocalDateTime.now();
+            String date = loginTime.toLocalDate().toString();
+            String time = loginTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            if (user.getDate() == null && user.getTime() == null) {
                 user.setTime(time);
                 user.setDate(date);
                 userDaoRepo.save(user);
                 return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
-
+            } else {
+                if (user.getDate().equals(date)) {
+                    return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+                } else if (user.getDate() != date && user.getTime() != time) {
+                    user.setTime(time);
+                    user.setDate(date);
+                    userDaoRepo.save(user);
+                    return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+                }
             }
 
-            return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+        } else {
 
+            if (accessDate.isBefore(user.getAccountAccessDate()) || accessDate.isAfter(user.getAccountExpire())) {
+                final User userr = userService.findOne(loginUser.getUsername());
+                userr.setActive(false);
+                userDaoRepo.save(user);
+                return new ApiResponse<>(200, "Trial Version has Expired", null);
+            }
         }
+        return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
     }
 
 
