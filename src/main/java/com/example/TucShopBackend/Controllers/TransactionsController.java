@@ -29,9 +29,9 @@ public class TransactionsController {
         return transactionService.saveTransactions(transactionsDTO,user);
     }
 
-    @GetMapping("/")
-    public List<Transactions> getAll (TransactionsDTO transactionsDTO){
-     return transactionService.getAll();
+    @GetMapping("/{startDate}/{endDate}")
+    public List<TransactionsDTO> getAll (@PathVariable("startDate")String startDate, @PathVariable ("endDate") String endDate){
+     return transactionService.getAll(startDate, endDate);
     }
 
     @GetMapping("/{id}")
@@ -77,5 +77,12 @@ public class TransactionsController {
     public ApiResponse totalTransaction(@PathVariable("user")String user ){
         return transactionService.getTotalTransactionByUser(user);
     }
+
+    @GetMapping("/getTotalTransaction/{startDate}/{endDate}")
+    public ApiResponse getTotalTransactionByDate(@PathVariable("startDate")String startDate, @PathVariable ("endDate") String endDate ){
+     return transactionService.getTotalTransactionByDate(startDate,endDate);
+
+    }
+
 
 }

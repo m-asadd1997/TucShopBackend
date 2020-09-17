@@ -33,6 +33,15 @@ public class User {
     @Column
 	private String time;
 
+    @Column
+	private String accountAccessKey;
+
+    @Column
+	LocalDate accountExpire;
+
+    @Column
+	LocalDate accountAccessDate;
+
 	public User() {
 	}
 
@@ -115,5 +124,27 @@ public class User {
 		this.time = time;
 	}
 
+	public String getAccountAccessKey() {
+		return accountAccessKey;
+	}
 
+	public void setAccountAccessKey(String accountAccessKey) {
+		this.accountAccessKey = accountAccessKey;
+	}
+
+	public LocalDate getAccountExpire() {
+		return accountExpire;
+	}
+
+	public void setAccountExpire(LocalDate accountExpire) {
+		this.accountExpire = accountExpire;
+	}
+
+	public LocalDate getAccountAccessDate() {
+		return accountAccessDate;
+	}
+
+	public void setAccountAccessDate(LocalDate accountAccessDate) {
+		this.accountAccessDate = accountAccessDate;
+	}
 }

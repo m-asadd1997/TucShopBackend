@@ -66,13 +66,13 @@ public class TransactionService {
     }
 
 
-    public List<Transactions>getAll (){
+    public List<TransactionsDTO>getAll (String startDate, String endDate){
 
-        LocalDate date1=LocalDate.now();
-        String endDate=date1.toString();
-        LocalDate date=LocalDate.now();
-        String startDate= "1-"+  date.getMonth() + "-"+date.getYear();
-        List<Transactions> transactionList =transactionsRepository.getMonthTransactions(startDate,endDate);
+//        LocalDate date1=LocalDate.now();
+//        String endDate=date1.toString();
+//        LocalDate date=LocalDate.now();
+//        String startDate= "1-"+  date.getMonth() + "-"+date.getYear();
+        List<TransactionsDTO> transactionList =transactionsRepository.getTotalTransactionByDate(startDate,endDate);
         return transactionList;
     }
 
@@ -137,8 +137,15 @@ public class TransactionService {
 
      return transactionsList;
 
+
+
     }
 
+    public ApiResponse getTotalTransactionByDate (String startDate, String endDate){
+
+    return new ApiResponse(Status.Status_Ok, "Successfully fetch Total Transaction", transactionsRepository.getTotalTransactionByDate(startDate, endDate)) ;
+
+    }
 
 
 }

@@ -5,6 +5,7 @@ import com.example.TucShopBackend.Commons.Status;
 import com.example.TucShopBackend.DTO.UserDto;
 import com.example.TucShopBackend.Models.User;
 import com.example.TucShopBackend.Repositories.UserDao;
+import org.apache.tomcat.jni.Local;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 
 @Service(value = "userService")
@@ -82,6 +81,18 @@ public class UserServiceImpl implements UserDetailsService {
 			newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
 			newUser.setUserType(user.getUserType());
 			newUser.setActive(user.getActive());
+			if(user.getAccountAccessKey().equalsIgnoreCase("trial")) {
+				newUser.setAccountAccessKey(user.getAccountAccessKey());
+				newUser.setAccountAccessDate(LocalDate.now());
+				newUser.setAccountExpire(LocalDate.now().plusMonths(1));
+			}else {
+
+				if(user.getAccountAccessKey().equalsIgnoreCase("permanet")){
+					newUser.setAccountAccessKey(user.getAccountAccessKey());
+					return new ApiResponse<>(HttpStatus.OK.value(), "User saved successfully.",	userDao.save(newUser));//return ;
+				}
+
+			}
 			return new ApiResponse<>(HttpStatus.OK.value(), "User saved successfully.",	userDao.save(newUser));//return ;
 		}else{
 			return new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "User Already exsist.",null);//return ;
