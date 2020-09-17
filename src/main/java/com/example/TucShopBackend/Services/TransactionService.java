@@ -92,16 +92,7 @@ public class TransactionService {
 
     public List<TransactionsDTO>getAll (String startDate, String endDate){
 
-//        LocalDate date1=LocalDate.now();
-//        String endDate=date1.toString();
-//        LocalDate date=LocalDate.now();
-//        String startDate= "1-"+  date.getMonth() + "-"+date.getYear();
-        List<TransactionsDTO> transactionList =transactionsRepository.getTotalTransactionByDate(startDate,endDate);
-        LocalDate date1=LocalDate.now();
-        String endDate=date1.toString();
-        LocalDate date=LocalDate.now();
-        String startDate= date.getYear()+"-"+date.getMonth()+"-1";
-        List<Transactions> transactionList =transactionsRepository.getMonthTransactions(startDate,endDate);
+       List<TransactionsDTO> transactionList =transactionsRepository.getTotalTransactionByDate(startDate,endDate);
         return transactionList;
     }
 

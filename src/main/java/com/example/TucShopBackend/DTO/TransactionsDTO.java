@@ -117,6 +117,8 @@ public class TransactionsDTO  implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
     public Double getDiscount() {
         return discount;
     }
