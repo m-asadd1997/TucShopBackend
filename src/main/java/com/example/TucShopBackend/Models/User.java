@@ -26,27 +26,32 @@ public class User {
     
     @Column
     private Long clientId;
+	
+    @Column
+	  private String date;
+
+	  @Column
+	  private String time;
 
     @Column
-	private String date;
+	  private String accountAccessKey;
 
     @Column
-	private String time;
+	  LocalDate accountExpire;
 
     @Column
-	private String accountAccessKey;
-
-    @Column
-	LocalDate accountExpire;
-
-    @Column
-	LocalDate accountAccessDate;
+	  LocalDate accountAccessDate;
 
 	public User() {
 	}
 
-	public User(String date) {
-		this.date = date;
+	public User(String email, String name, String password, Boolean active, String userType, Long clientId) {
+		this.email = email;
+		this.name = name;
+		this.password = password;
+		this.active = active;
+		this.userType = userType;
+		this.clientId = clientId;
 	}
 
 	public Long getId() {
@@ -55,25 +60,6 @@ public class User {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-
-
-	public String getUserType() {
-		return userType;
-	}
-
-	public void setUserType(String userType) {
-		this.userType = userType;
 	}
 
 	public String getEmail() {
@@ -92,12 +78,28 @@ public class User {
 		this.name = name;
 	}
 
-	public Boolean isActive() {
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public Boolean getActive() {
 		return active;
 	}
 
-	public void setActive(Boolean isActive) {
-		this.active = isActive;
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
 	}
 
 	public Long getClientId() {

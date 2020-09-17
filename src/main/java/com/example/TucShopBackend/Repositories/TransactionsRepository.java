@@ -79,6 +79,8 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
     List<CategoryQuantityDTO> getFilteredTransactionMethod(String startDate, String endDate);
 
 
+    @Query(value = "select * from transactions where closing_status='OPEN' and created_by=:user",nativeQuery = true)
+    List<Transactions> getTransactionsOnClosing(@Param("user") String user);
 
 }
 

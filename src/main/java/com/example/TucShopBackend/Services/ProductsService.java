@@ -11,9 +11,11 @@ import com.example.TucShopBackend.DTO.VariantsDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
+//import org.springframework.mock.web.MockMultipartFile;
 import com.example.TucShopBackend.Repositories.ProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -23,6 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+//import sun.misc.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,6 +49,9 @@ public class    ProductsService {
     @Value("${product.image.url}")
     String productImageUrl;
 
+    @Value("${product.defaultImage.url}")
+    String productDeafultImageUrl;
+
     public ApiResponse getVariants(String keyword){
         List<VariantsDTO> variantsList = productsRepository.getVariants(keyword);
         return new ApiResponse(Status.Status_Ok,"Success",variantsList);
@@ -62,12 +68,13 @@ public class    ProductsService {
 
     public ApiResponse saveProducts(ProductsDTO productsDTO){
 
-       List< Product> productName = productsRepository.findByName(productsDTO.getName(), productsDTO.getVariants());
 
+       List< Product> productName = productsRepository.findByName(productsDTO.getName(), productsDTO.getVariants());
+//
         Boolean flag = false;
         Boolean duplicateCheck = false;
 
-        for(int i = 0; i< productName.size(); i++){
+        for(int i = 0; i< productName.size();   i++){
 
                 if(productName.get(i).getVariants().equals(productsDTO.getVariants()) ){
                 flag = true;
@@ -86,14 +93,24 @@ public class    ProductsService {
             }
                 switch (profile){
                     case CustomConstants.DEV:
-                        if(saveProductImage(productsDTO.getImage(),category.getName(),unique)){
 
+                        if(productsDTO.getImage()==null){
                             Product product = new Product();
-                            product.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+                            product.setImage(productDeafultImageUrl);
                             product.setCategory(category);
                             product.setDescription(productsDTO.getDescription());
                             product.setPrice(productsDTO.getPrice());
-                            product.setQty(productsDTO.getQuantity());
+                            if(productsDTO.getQuantity()==0)
+                            {
+                                product.setInfiniteQuantity(true);
+                                product.setQty(1000000);
+
+                            }
+                            else
+                            {
+                                product.setInfiniteQuantity(false);
+                                product.setQty(productsDTO.getQuantity());
+                            }
                             product.setCostprice(productsDTO.getCostprice());
                             product.setName(productsDTO.getName());
                             product.setDate1(productsDTO.getDate1());
@@ -101,8 +118,39 @@ public class    ProductsService {
                             product.setActive(true);
                             productsRepository.save(product);
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
+
+
+                        }else if(saveProductImage(productsDTO.getImage(),category.getName(),unique)){
+
+
+                            Product product = new Product();
+                            product.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+                            product.setCategory(category);
+                            product.setDescription(productsDTO.getDescription());
+                            product.setPrice(productsDTO.getPrice());
+                            if(productsDTO.getQuantity()==0)
+                            {
+                                product.setInfiniteQuantity(true);
+                                product.setQty(1000000);
+
+                            }
+                            else
+                            {
+                                product.setInfiniteQuantity(false);
+                                product.setQty(productsDTO.getQuantity());
+                            }
+                            product.setCostprice(productsDTO.getCostprice());
+                            product.setName(productsDTO.getName());
+                            product.setDate1(productsDTO.getDate1());
+                            product.setVariants(productsDTO.getVariants());
+                            product.setActive(true);
+                            productsRepository.save(product);
+                            return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
+
                         }
                         break;
+
+
 
                     case CustomConstants.PROD:
                         try {
@@ -112,7 +160,17 @@ public class    ProductsService {
                             product.setCategory(category);
                             product.setDescription(productsDTO.getDescription());
                             product.setPrice(productsDTO.getPrice());
-                            product.setQty(productsDTO.getQuantity());
+                            if(productsDTO.getQuantity()==0)
+                            {
+                                product.setInfiniteQuantity(true);
+                                product.setQty(1000000);
+
+                            }
+                            else
+                            {
+                                product.setInfiniteQuantity(false);
+                                product.setQty(productsDTO.getQuantity());
+                            }
                             product.setCostprice(productsDTO.getCostprice());
                             product.setName(productsDTO.getName());
                             product.setVariants(productsDTO.getVariants());
@@ -131,7 +189,17 @@ public class    ProductsService {
                 product.setCategory(category);
                 product.setDescription(productsDTO.getDescription());
                 product.setPrice(productsDTO.getPrice());
-                product.setQty(productsDTO.getQuantity());
+                if(productsDTO.getQuantity()==0)
+                {
+                    product.setInfiniteQuantity(true);
+                    product.setQty(1000000);
+
+                }
+                else
+                {
+                    product.setInfiniteQuantity(false);
+                    product.setQty(productsDTO.getQuantity());
+                }
                 product.setCostprice(productsDTO.getCostprice());
                 product.setName(productsDTO.getName());
                 product.setVariants(productsDTO.getVariants());
@@ -149,7 +217,17 @@ public class    ProductsService {
                 product.setCategory(category);
                 product.setDescription(productsDTO.getDescription());
                 product.setPrice(productsDTO.getPrice());
-                product.setQty(productsDTO.getQuantity());
+                if(productsDTO.getQuantity()==0)
+                {
+                    product.setInfiniteQuantity(true);
+                    product.setQty(1000000);
+
+                }
+                else
+                {
+                    product.setInfiniteQuantity(false);
+                    product.setQty(productsDTO.getQuantity());
+                }
                 product.setCostprice(productsDTO.getCostprice());
                 product.setName(productsDTO.getName());
                 product.setDate1(productsDTO.getDate1());
@@ -211,10 +289,12 @@ public class    ProductsService {
 //
 //    }
 
+
     public ApiResponse getProductsByCategory(String category){
         Category category1 = categoryRepository.findCategoriesByName(category);
 
         List<Product> products = productsRepository.getAllByCategoryId(category1.getId());
+
 
         return new ApiResponse(Status.Status_Ok,CustomConstants.PROD_GET,products); //products;
     }
@@ -360,20 +440,22 @@ public class    ProductsService {
         int count=0;
     public ApiResponse AddQty(Long id,UpdateStockDTO pdt ){
         Product pdt1 = getProductById(id);
-//            ProductsDTO pdt= new ProductsDTO();
-        double quantity=pdt1.getQty();
-        if(quantity-1<0){
+       boolean isInfinite= pdt1.isInfiniteQuantity();
+       if(!isInfinite) {
+           double quantity = pdt1.getQty();
+           if (quantity - 1 < 0) {
 
-            pdt.setQuantity(0.0);
-            return this.updateStockById(id,pdt);
-        }
-        else{
+               pdt.setQuantity(0.0);
+               return this.updateStockById(id, pdt);
+           } else {
 //            pdt1.setQty(quantity-1);
-               pdt.setCount((pdt.getCount()+1));
-            pdt.setQuantity(quantity-1);
-            return this.updateStockById(id,pdt);
+               pdt.setCount((pdt.getCount() + 1));
+               pdt.setQuantity(quantity - 1);
+               return this.updateStockById(id, pdt);
 
-        }
+           }
+       }
+       else return new ApiResponse(Status.Status_Ok,"Updated",pdt1);
     }
 
 
@@ -381,21 +463,21 @@ public class    ProductsService {
         Product pdt1 = getProductById(id);
 
         double quantity=pdt1.getQty();
-        if(pdt.getCount()>0){
+        boolean isInfinite= pdt1.isInfiniteQuantity();
+        if(!isInfinite) {
+            if (pdt.getCount() > 0) {
 
-            pdt.setQuantity(quantity+1);
-            pdt.setCount(pdt.getCount()-1);
-            return this.updateStockById(id,pdt);
+                pdt.setQuantity(quantity + 1);
+                pdt.setCount(pdt.getCount() - 1);
+                return this.updateStockById(id, pdt);
+            } else {
+                pdt.setQuantity(quantity);
+
+                return this.updateStockById(id, pdt);
+            }
         }
-
-        else {
-            pdt.setQuantity(quantity);
-
-            return this.updateStockById(id,pdt);
+        else return new ApiResponse(Status.Status_Ok,"Updated",pdt1);
         }
-
-
-    }
 
 
     public ApiResponse MinusAllQty(Long id , UpdateStockDTO pdt){

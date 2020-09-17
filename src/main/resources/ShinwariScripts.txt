@@ -1,0 +1,102 @@
+-- phpMyAdmin SQL Dump
+-- version 4.8.5
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Sep 15, 2020 at 07:21 PM
+-- Server version: 10.1.39-MariaDB
+-- PHP Version: 7.3.5
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `tucshop`
+--
+
+--
+-- Dumping data for table `category`
+--
+
+INSERT INTO `category` (`id`, `image`, `name`) VALUES
+(1, 'http://localhost:8080/api/category/image/BBQ/1600108584317bbqCategory.png', 'BBQ'),
+(2, 'http://localhost:8080/api/category/image/Chicken Karahi/1600108636310chickenKarahi.jpg', 'Chicken Karahi'),
+(3, 'http://localhost:8080/api/category/image/Mutton Karahi/1600108652822muttonKarahi.jpg', 'Mutton Karahi'),
+(4, 'http://localhost:8080/api/category/image/Katakat/1600108681632katakatPlate.jpg', 'Katakat'),
+(5, 'http://localhost:8080/api/category/image/Shaheen Shinwari Special/1600108711543mandi.jpg', 'Shaheen Shinwari Special'),
+(6, 'http://localhost:8080/api/category/image/Tandoori/1600108737909qandhaniNaan.jpg', 'Tandoori'),
+(7, 'http://localhost:8080/api/category/image/Hot&Cool/1600108766551cold-drinks-300x286.jpg', 'Hot&Cool');
+
+--
+-- Dumping data for table `product`
+--
+
+INSERT INTO `product` (`id`, `costprice`, `date1`, `description`, `image`, `name`, `price`, `qty`, `variants`, `category_id`) VALUES
+(1, 150, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/BBQ/Chicken Tikka/1600108951757Chicken Tikka.png', 'Chicken Tikka', 200, 99, 'LEG', 1),
+(2, 150, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/BBQ/Chicken Reshmi Kabab/1600109001189Chicken Reshmi Kabab.png', 'Chicken Reshmi Kabab', 200, 97, 'REGULAR', 1),
+(3, 140, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/BBQ/Chicken Seekh Kabab/1600109810721Chicken Seekh Kabab.png', 'Chicken Seekh Kabab', 200, 100, 'REGULAR', 1),
+(4, 160, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/BBQ/Chicken Malai Tikka/1600109902030Chicken Malai Tikka.png', 'Chicken Malai Tikka', 210, 100, 'REGULAR', 1),
+(5, 700, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Chicken Karahi/Chicken Karahi/1600110039636Chicken Karahi.png', 'Chicken Karahi', 1000, 100, 'FULL', 2),
+(6, 800, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Chicken Karahi/Chicken White Karahi/1600110141683Chicken White Karahi.png', 'Chicken White Karahi', 1100, 100, 'FULL', 2),
+(7, 750, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Chicken Karahi/Chicken Green Karahi/1600110202729Chicken Green Karahi.png', 'Chicken Green Karahi', 1050, 100, 'FULL', 2),
+(8, 900, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Chicken Karahi/Chicken Butter Karahi/1600110231197Chicken Butter Karahi.png', 'Chicken Butter Karahi', 1300, 100, 'FULL', 2),
+(9, 1200, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Mutton Karahi/Mutton Karahi/1600110279717Mutton Karahi.png', 'Mutton Karahi', 2000, 100, 'FULL', 3),
+(10, 1000, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Mutton Karahi/Mutton Ran/1600110325717Mutton Ran.png', 'Mutton Ran', 1500, 100, 'FULL', 3),
+(11, 300, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Katakat/Katakat plate/1600110466299Katakat plate.png', 'Katakat plate', 450, 100, 'FULL', 4),
+(12, 400, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Katakat/Maghaz Plate/1600110490624Maghaz Plate.png', 'Maghaz Plate', 600, 100, 'FULL', 4),
+(13, 1500, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Shaheen Shinwari Special/Mandi/1600110723034Mandi.png', 'Mandi', 2000, 100, 'FULL', 5),
+(14, 500, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Shaheen Shinwari Special/Namqeen Roast/1600110756218Namqeen Roast.png', 'Namqeen Roast', 1000, 100, 'FULL', 5),
+(15, 140, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Shaheen Shinwari Special/Kabli Pulaow/1600110857627Kabli Pulaow.png', 'Kabli Pulaow', 250, 100, 'FULL', 5),
+(16, 30, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Tandoori/Roghni Naam/1600110922172Roghni Naam.png', 'Roghni Naam', 40, 1000, '1', 6),
+(17, 30, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Tandoori/Qandhani Naam/1600110966340Qandhani Naam.png', 'Qandhani Naam', 50, 1000, '1', 6),
+(18, 15, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Tandoori/Plain Naan/1600111008155Plain Naan.png', 'Plain Naan', 20, 1000, '1', 6),
+(19, 30, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Tandoori/Puri Paratha/1600111041554Puri Paratha.png', 'Puri Paratha', 50, 1000, '1', 6),
+(20, 10, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Tandoori/Chapati/1600111082876Chapati.png', 'Chapati', 15, 10000, '1', 6),
+(21, 25, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Hot&Cool/Cold Drink/1600111195055Cold Drink.png', 'Cold Drink', 35, 1000, '250ML', 7),
+(22, 50, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Hot&Cool/Mineral Water/1600111257479Mineral Water.png', 'Mineral Water', 70, 1000, '1 LITER', 7),
+(23, 50, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Hot&Cool/Salad/1600111288928Salad.png', 'Salad', 80, 1000, 'PLATE', 7),
+(24, 30, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/Hot&Cool/Tea/1600111347068Tea.png', 'Tea', 40, 1000, 'Full', 7),
+(25, 450, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Chicken Karahi/Chicken karahi/1600183085069Chicken karahi.png', 'Chicken karahi', 500, 1000, 'HALF', 2),
+(26, 450, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Chicken Karahi/chicken karahi green/1600183262999chicken karahi green.png', 'chicken karahi green', 500, 1000, 'HALF', 2),
+(27, 550, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Chicken Karahi/special butter chicken /1600183537692special butter chicken .png', 'special butter chicken ', 600, 1000, 'HALF', 2),
+(28, 330, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/BBQ/seekh boti/1600184512027seekh boti.png', 'seekh boti', 380, 1000, 'REGULAR', 1),
+(29, 430, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/BBQ/behari chicken/1600184756926behari chicken.png', 'behari chicken', 480, 1000, 'REGULAR', 1),
+(30, 330, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/BBQ/beef behari kabab/1600184928501beef behari kabab.png', 'beef behari kabab', 380, 1000, 'REGULAR', 1),
+(31, 330, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/BBQ/chapli kabab/1600185064560chapli kabab.png', 'chapli kabab', 380, 1000, 'REGULAR', 1),
+(32, 30, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Hot&Cool/raita/1600185272231raita.png', 'raita', 80, 1000, 'BOWL', 7),
+(33, 20, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Hot&Cool/green tea/1600186074577green tea.png', 'green tea', 50, 1000, 'FULL', 7),
+(34, 650, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Katakat/special butter katakat/1600186657073special butter katakat.png', 'special butter katakat', 700, 1000, 'FULL', 4),
+(35, 900, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Mutton Karahi/mutton karahi/1600186986375mutton karahi.png', 'mutton karahi', 950, 1000, 'HALF', 3),
+(36, 1850, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Mutton Karahi/mutton karahi green  /1600187160597mutton karahi green  .png', 'mutton karahi green  ', 1900, 1000, 'FULL', 3),
+(37, 1950, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Mutton Karahi/mutton white karahi/1600187354137mutton white karahi.png', 'mutton white karahi', 2000, 1000, 'FULL', 3),
+(38, 1850, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Mutton Karahi/Mutton Brown Karahi/1600187636365Mutton Brown Karahi.png', 'Mutton Brown Karahi', 1900, 1000, 'FULL', 3),
+(39, 900, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Mutton Karahi/Mutton Brown/1600187903101Mutton Brown.png', 'Mutton Brown', 950, 1000, 'HALF', 3),
+(40, 2050, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Mutton Karahi/Special Zaitoon Mutton Karahi/1600188108344Special Zaitoon Mutton Karahi.png', 'Special Zaitoon Mutton Karahi', 2100, 1000, 'FULL', 3),
+(41, 2050, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Mutton Karahi/Special Butter Mutton Karahi/1600188304592Special Butter Mutton Karahi.png', 'Special Butter Mutton Karahi', 2100, 1000, 'FULL', 3),
+(42, 2150, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Mutton Karahi/Special Butter White Mutton Karahi/1600188499598Special Butter White Mutton Karahi.png', 'Special Butter White Mutton Karahi', 2200, 1000, 'FULL', 3),
+(43, 1150, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Shaheen Shinwari Special/Laham Mandi/1600188958806Laham Mandi.png', 'Laham Mandi', 1200, 1000, '1 PERSON', 5),
+(44, 4550, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Shaheen Shinwari Special/Laham Mandi/1600189104760Laham Mandi.png', 'Laham Mandi', 4600, 1000, '4 PERSON', 5),
+(45, 300, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Shaheen Shinwari Special/Liver Plate/1600189551952Liver Plate.png', 'Liver Plate', 350, 1000, 'FULL', 5),
+(46, 230, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Shaheen Shinwari Special/Afhgani Kabli Pulao chicken/1600189742380Afhgani Kabli Pulao chicken.png', 'Afhgani Kabli Pulao chicken', 280, 1000, 'FULL', 5),
+(47, 450, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Shaheen Shinwari Special/Afhgani Kabli Pulao Mutton/1600189877819Afhgani Kabli Pulao Mutton.png', 'Afhgani Kabli Pulao Mutton', 500, 1000, 'FULL', 5);
+
+--
+-- Dumping data for table `user`
+--
+
+INSERT INTO `user` (`id`, `active`, `client_id`, `email`, `name`, `password`, `user_type`) VALUES
+(1, b'1', 1, 'a@a.com', 'Admin', '$2a$10$mqYUcawO4Gt0SFQLh.FXWeK8ChCT.nb8QLj6BfgIhja6caMoANoxy', 'ADMIN'),
+(3, b'1', 1, 's@s.com', 'shezy', '$2a$10$hYb5sTZM/8Xrrw4KOGwqTu9myvdk8rkH53frOZ.xyesR5zFgq6jnu', 'USER');
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

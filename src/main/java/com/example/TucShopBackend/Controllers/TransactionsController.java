@@ -6,11 +6,16 @@ import com.example.TucShopBackend.DTO.TransactionsDTO;
 import com.example.TucShopBackend.Models.Transactions;
 import com.example.TucShopBackend.Models.User;
 import com.example.TucShopBackend.Services.TransactionService;
+import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transaction;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -22,7 +27,7 @@ public class TransactionsController {
     TransactionService transactionService;
 
     @PostMapping("/post")
-    public ApiResponse postTransaction(@RequestBody TransactionsDTO transactionsDTO, HttpServletRequest  request){
+    public ApiResponse postTransaction(@RequestBody TransactionsDTO transactionsDTO, HttpServletRequest  request) throws FileNotFoundException, DocumentException {
         request.getAttribute("loggedinUser");
         User user = (User) request.getAttribute("loggedinUser");
 
@@ -66,6 +71,17 @@ public class TransactionsController {
       return  this.transactionService.getAllPending();
 
     }
+    @GetMapping("/deleteTransaction/{id}")
+    public ApiResponse deleteTransaction(@PathVariable("id") Long id){
+        return this.transactionService.deleteTransaction((id));
+
+    }
+
+    @GetMapping("/closing/{user}")
+    public ResponseEntity<InputStreamResource> onClosing(@PathVariable("user") String user) throws IOException {
+        return transactionService.onClosing(user);
+    }
+
 
     @GetMapping("/getRecentTransactionByUser/{user}")
     public List<Transactions> getRecentTransactionsByUser(@PathVariable("user")String user ){
@@ -83,6 +99,5 @@ public class TransactionsController {
      return transactionService.getTotalTransactionByDate(startDate,endDate);
 
     }
-
 
 }

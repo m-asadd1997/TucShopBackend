@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
-//@JsonInclude(JsonInclude.Include.NON_NULL)
 public class TransactionsDTO  implements Serializable {
 
     Double amount;
@@ -20,8 +19,19 @@ public class TransactionsDTO  implements Serializable {
     String createdBy;
     String updatedBy;
     String status;
+    Double discount;
+
 
    List<ProductTransaction> productTransactions;
+
+
+    public TransactionsDTO(Double amount, String action, String requestedUser, Double discount, List<ProductTransaction> productTransactions) {
+        this.amount = amount;
+        this.action = action;
+        this.requestedUser = requestedUser;
+        this.discount = discount;
+        this.productTransactions = productTransactions;
+    }
 
     public TransactionsDTO() {
     }
@@ -69,7 +79,6 @@ public class TransactionsDTO  implements Serializable {
         this.productTransactions = productTransactions;
     }
 
-
     public Double getTotalAmount() {
         return totalAmount;
     }
@@ -108,5 +117,11 @@ public class TransactionsDTO  implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
     }
 }
