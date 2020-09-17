@@ -1,5 +1,7 @@
 package com.example.TucShopBackend.DTO;
 
+import java.time.LocalDate;
+
 public class UserDto {
 
     private String name;
@@ -10,8 +12,11 @@ public class UserDto {
     private Long clientId;
     private String date;
     private String time;
+    private String accountAccessKey;
+    private LocalDate accountExpire;
+    private LocalDate accountAccessDate;
 
-	public UserDto(String name, String date, String time, String email, String password, Boolean active, String userType, Long clientId) {
+	public UserDto(String name, LocalDate accountAccessDate, String accountAccessKey, LocalDate accountExpire, String date, String time, String email, String password, Boolean active, String userType, Long clientId) {
 		this.name = name;
 		this.email = email;
 		this.password = password;
@@ -20,6 +25,9 @@ public class UserDto {
 		this.clientId = clientId;
 		this.date = date;
 		this.time = time;
+		this.accountAccessKey = accountAccessKey;
+		this.accountExpire = accountExpire;
+		this.accountAccessDate = accountAccessDate;
 	}
 
 
@@ -90,5 +98,30 @@ public class UserDto {
 
 	public void setTime(String time) {
 		this.time = time;
+	}
+
+
+	public String getAccountAccessKey() {
+		return accountAccessKey;
+	}
+
+	public void setAccountAccessKey(String accountAccessKey) {
+		this.accountAccessKey = accountAccessKey;
+	}
+
+	public LocalDate getAccountExpire() {
+		return accountExpire;
+	}
+
+	public void setAccountExpire(LocalDate accountExpire) {
+		this.accountExpire = accountExpire;
+	}
+
+	public LocalDate getAccountAccessDate() {
+		return accountAccessDate;
+	}
+
+	public void setAccountAccessDate(LocalDate accountAccessDate) {
+		this.accountAccessDate = accountAccessDate;
 	}
 }

@@ -2,6 +2,7 @@ package com.example.TucShopBackend.Repositories;
 
 import com.example.TucShopBackend.DTO.CategoryQuantityDTO;
 import com.example.TucShopBackend.DTO.ChartDataDTO;
+import com.example.TucShopBackend.DTO.TransactionsDTO;
 import com.example.TucShopBackend.Models.Transactions;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,13 +19,18 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
 
                    //id,created_by,updated_by,date
 
-    @Query(value = "select *, sum(amount)amount from transactions t  WHERE t.date BETWEEN :date1 AND :date2 group by created_by AND  t.status='complete'", nativeQuery = true)
+    @Query(value = "select *, SUM(amount) from transactions t  WHERE t.date BETWEEN :date1 AND :date2 group by created_by AND  t.status='complete'", nativeQuery = true)
     public List<Transactions> getMonthTransactions(@Param("date1") String date1,@Param("date2") String date2);
+
+
+
+    @Query(value = "select new com.example.TucShopBackend.DTO.TransactionsDTO (t.amount, t.action,t.requestedUser,sum(t.amount), t.date, t.createdBy, t.updatedBy, t.status) from Transactions t WHERE t.date BETWEEN cast(:startDate as date) AND cast(:endDate as date) AND t.status='complete'")
+    public List<TransactionsDTO> getTotalTransactionByDate(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
 
     public List<Transactions> findBycreatedBy(String user);
 
-    @Query(value = "SELECT * FROM transactions WHERE  date BETWEEN :date1 AND :date2 and created_by=:user AND  t.status='complete' ", nativeQuery = true)
+    @Query(value = "SELECT * FROM transactions t WHERE  date BETWEEN :date1 AND :date2 and created_by=:user AND  t.status='complete' ", nativeQuery = true)
     public List<Transactions> scearchTransactionsOfUser(@Param("date1") String date1,@Param("date2") String date2,@Param("user") String user);
 
     @Query(value = "select SUM(amount) from transactions t where t.status='complete'", nativeQuery = true)
