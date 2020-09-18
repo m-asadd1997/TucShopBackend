@@ -279,8 +279,8 @@ public class TransactionService {
                 discount += transaction.getDiscount();
                 totalAfterDiscount = total - discount;
                 transactionsRepository.save(transaction);
+                productsName = new StringBuilder();
                 for (ProductTransaction products : transaction.getProductTransactions()) {
-                    productsName = new StringBuilder();
                     productsName.append(products.getProduct().getName());
                     productsName.append("(");
                     productsName.append(products.getQuantity());
@@ -307,6 +307,7 @@ public class TransactionService {
             discountPara.setAlignment(Element.ALIGN_RIGHT);
             totalDiscountPara = new Paragraph("\n"+ "Total Amount after Discount : " + totalAfterDiscount);
             totalDiscountPara.setAlignment(Element.ALIGN_RIGHT);
+            table.setWidthPercentage(100);
             document.add(table);
             document.add(totalPara);
             document.add(discountPara);
