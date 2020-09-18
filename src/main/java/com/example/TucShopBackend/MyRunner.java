@@ -24,7 +24,7 @@ public class MyRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//        userRepository.save(new User("h@h.com","Nouman",bcryptEncoder.encode("123"),true,"ADMIN",1l,null,null));
+  userRepository.save(new User("t@t.com ", "test", bcryptEncoder.encode("111"),true, "USER", 1L, "TRAIL"));
 //        categoryRepository.save(new Category("Chips",null,null));
 
     }
