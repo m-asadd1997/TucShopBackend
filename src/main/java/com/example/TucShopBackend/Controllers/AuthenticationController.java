@@ -55,7 +55,17 @@ public class AuthenticationController {
         final User user = userService.findOne(loginUser.getUsername());
         final String token = jwtTokenUtil.generateToken(user);
         LocalDate accessDate = LocalDate.now();
-        if(user.getAccountAccessDate()==null && user.getAccountExpire()==null){
+        if(user.getAccountAccessKey().equalsIgnoreCase("trial")){
+            if (accessDate.isBefore(user.getAccountAccessDate()) || accessDate.isAfter(user.getAccountExpire())) {
+                if (accessDate.isAfter(user.getAccountExpire())) {
+
+                    final User userr = userService.findOne(loginUser.getUsername());
+                    userr.setActive(false);
+                    userDaoRepo.save(user);
+                    return new ApiResponse<>(200, "Trial Version has Expired", null);
+                }
+                return new ApiResponse<>(200, "Trial Version has Expired", null);
+            }
             LocalDateTime loginTime = LocalDateTime.now();
             String date = loginTime.toLocalDate().toString();
             String time = loginTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
@@ -76,7 +86,6 @@ public class AuthenticationController {
             }
 
         } else {
-
             if (accessDate.isBefore(user.getAccountAccessDate()) || accessDate.isAfter(user.getAccountExpire())) {
 
                 if (accessDate.isAfter(user.getAccountExpire())) {
@@ -87,6 +96,25 @@ public class AuthenticationController {
                     return new ApiResponse<>(200, "Trial Version has Expired", null);
                 }
                 return new ApiResponse<>(200, "Trial Version has Expired", null);
+            }
+
+            LocalDateTime loginTime = LocalDateTime.now();
+            String date = loginTime.toLocalDate().toString();
+            String time = loginTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+            if (user.getDate() == null && user.getTime() == null) {
+                user.setTime(time);
+                user.setDate(date);
+                userDaoRepo.save(user);
+                return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+            } else {
+                if (user.getDate().equals(date)) {
+                    return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+                } else if (user.getDate() != date && user.getTime() != time) {
+                    user.setTime(time);
+                    user.setDate(date);
+                    userDaoRepo.save(user);
+                    return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+                }
             }
         }
         return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
