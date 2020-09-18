@@ -89,6 +89,8 @@ public class UserServiceImpl implements UserDetailsService {
 
 				if(user.getAccountAccessKey().equalsIgnoreCase("permanet")){
 					newUser.setAccountAccessKey(user.getAccountAccessKey());
+					newUser.setAccountAccessDate(LocalDate.now());
+					newUser.setAccountExpire(LocalDate.now().plusYears(1));
 					return new ApiResponse<>(HttpStatus.OK.value(), "User saved successfully.",	userDao.save(newUser));//return ;
 				}
 
