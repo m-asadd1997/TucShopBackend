@@ -73,15 +73,15 @@ public class AuthenticationController {
                 user.setTime(time);
                 user.setDate(date);
                 userDaoRepo.save(user);
-                return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+                return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail(),user.getAccountAccessKey()));
             } else {
                 if (user.getDate().equals(date)) {
-                    return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+                    return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail(), user.getAccountAccessKey()));
                 } else if (user.getDate() != date && user.getTime() != time) {
                     user.setTime(time);
                     user.setDate(date);
                     userDaoRepo.save(user);
-                    return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+                    return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail(),user.getAccountAccessKey()));
                 }
             }
 
@@ -105,19 +105,19 @@ public class AuthenticationController {
                 user.setTime(time);
                 user.setDate(date);
                 userDaoRepo.save(user);
-                return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+                return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail(), user.getAccountAccessKey()));
             } else {
                 if (user.getDate().equals(date)) {
-                    return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+                    return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail(),user.getAccountAccessKey()));
                 } else if (user.getDate() != date && user.getTime() != time) {
                     user.setTime(time);
                     user.setDate(date);
                     userDaoRepo.save(user);
-                    return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+                    return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail(),user.getAccountAccessKey()));
                 }
             }
         }
-        return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail()));
+        return new ApiResponse<>(200, "success", new AuthToken(token, user.getName(), user.getUserType(), user.getEmail(),user.getAccountAccessKey()));
     }
 
 
