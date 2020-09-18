@@ -5,20 +5,34 @@ public class AuthToken {
     private String token;
     private String username;
     private String userType;
-    private  String email;
+    private String email;
+    private String accountAccessKey;
 
-    public AuthToken(String token, String username, String userType) {
+    public AuthToken(String token, String username, String userType ) {
         this.token = token;
         this.username = username;
         this.userType = userType;
     }
 
-    public AuthToken(String token, String username, String userType, String email) {
+    public AuthToken(String token, String username, String userType, String email, String accountAccessKey) {
         this.token = token;
         this.username = username;
         this.userType = userType;
         this.email = email;
+        this.accountAccessKey = accountAccessKey;
+
     }
+
+//    public AuthToken(String token, String username, String userType, String email, String accountAccessKey) {
+//        this.token = token;
+//        this.username = username;
+//        this.userType = userType;
+//        this.email = email;
+//        this.accountAccessKey = accountAccessKey;
+//
+//    }
+
+
 
     public AuthToken(){
 
@@ -58,5 +72,13 @@ public class AuthToken {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getAccountAccessKey() {
+        return accountAccessKey;
+    }
+
+    public void setAccountAccessKey(String accountAccessKey) {
+        this.accountAccessKey = accountAccessKey;
     }
 }
