@@ -45,7 +45,7 @@ public class User {
 	public User() {
 	}
 
-	public User(String email, String name, String password, Boolean active, String userType, Long clientId, String accountAccessKey) {
+	public User(String email, String name, String password, Boolean active, String userType, Long clientId, LocalDate accountAccessDate, LocalDate accountExpire, String accountAccessKey) {
 		this.email = email;
 		this.name = name;
 		this.password = password;
@@ -53,6 +53,8 @@ public class User {
 		this.userType = userType;
 		this.clientId = clientId;
 		this.accountAccessKey = accountAccessKey;
+		this.accountAccessDate = accountAccessDate;
+		this.accountExpire = accountExpire;
 	}
 
 	public User(String email, String name, String password, Boolean active, String userType, Long clientId) {
