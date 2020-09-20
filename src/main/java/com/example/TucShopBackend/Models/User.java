@@ -45,13 +45,14 @@ public class User {
 	public User() {
 	}
 
-	public User(String email, String name, String password, Boolean active, String userType, Long clientId) {
+	public User(String email, String name, String password, Boolean active, String userType, Long clientId, String accountAccessKey) {
 		this.email = email;
 		this.name = name;
 		this.password = password;
 		this.active = active;
 		this.userType = userType;
 		this.clientId = clientId;
+		this.accountAccessKey = accountAccessKey;
 	}
 
 	public Long getId() {
