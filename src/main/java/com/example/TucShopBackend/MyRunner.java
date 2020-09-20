@@ -27,6 +27,9 @@ public class MyRunner implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        userRepository.save(new User("b@b.com", "Admin", bcryptEncoder.encode("111"),true, "ADMIN", 1L, "TRAIL"));
+
+
         //Uncomment below lines if you want to create User and Admin By My runner.
 
 //        LocalDate accessDate = LocalDate.now();
