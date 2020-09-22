@@ -31,6 +31,8 @@ public class Transactions {
     String closingStatus;
     LocalTime transactionTime;
     Double discount;
+    String waiterName;
+    Long tableNumber;
 
 
                        //request user
@@ -173,6 +175,22 @@ public class Transactions {
 
     public void setDiscount(Double discount) {
         this.discount = discount;
+    }
+
+    public String getWaiterName() {
+        return waiterName;
+    }
+
+    public void setWaiterName(String waiterName) {
+        this.waiterName = waiterName;
+    }
+
+    public Long getTableNumber() {
+        return tableNumber;
+    }
+
+    public void setTableNumber(Long tableNumber) {
+        this.tableNumber = tableNumber;
     }
 }
 

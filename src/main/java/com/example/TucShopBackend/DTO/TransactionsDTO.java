@@ -20,6 +20,8 @@ public class TransactionsDTO  implements Serializable {
     String updatedBy;
     String status;
     Double discount;
+    String waiterName;
+    Long tableNumber;
 
 
    List<ProductTransaction> productTransactions;
@@ -125,5 +127,21 @@ public class TransactionsDTO  implements Serializable {
 
     public void setDiscount(Double discount) {
         this.discount = discount;
+    }
+
+    public String getWaiterName() {
+        return waiterName;
+    }
+
+    public void setWaiterName(String waiterName) {
+        this.waiterName = waiterName;
+    }
+
+    public Long getTableNumber() {
+        return tableNumber;
+    }
+
+    public void setTableNumber(Long tableNumber) {
+        this.tableNumber = tableNumber;
     }
 }

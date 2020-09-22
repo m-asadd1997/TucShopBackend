@@ -65,6 +65,8 @@ public class TransactionService {
         transactions.setAction(transactionsDTO.getAction());
         transactions.setClosingStatus("OPEN");
         transactions.setDiscount(transactionsDTO.getDiscount());
+        transactions.setWaiterName(transactionsDTO.getWaiterName());
+        transactions.setTableNumber(transactionsDTO.getTableNumber());
         if( transactionsDTO.getAction().equals("SC") ){
             transactions.setStatus("complete");
             transactions.setRequestedUser(user.getName());
