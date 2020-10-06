@@ -8,6 +8,8 @@
 		<version>2.2.3.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+
+	<packaging>jar</packaging>
 	<groupId>com.example</groupId>
 	<artifactId>TucShopBackend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
