@@ -100,5 +100,13 @@ public class TransactionsController {
 
     }
 
+    @PutMapping("/{id}")
+    public ApiResponse updateTransaction(@PathVariable("id") Long id, @RequestBody TransactionsDTO transactionsDTO,HttpServletRequest  request) throws FileNotFoundException, DocumentException {
+        request.getAttribute("loggedinUser");
+        User user = (User) request.getAttribute("loggedinUser");
+        return transactionService.updateTransaction(id,transactionsDTO,user);
+    }
+
+
 
 }

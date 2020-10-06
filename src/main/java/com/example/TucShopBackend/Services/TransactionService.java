@@ -19,10 +19,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -53,10 +51,12 @@ public class TransactionService {
     @Autowired
     SettingsRepository settingsRepository;
 
+
     public ApiResponse saveTransactions(TransactionsDTO transactionsDTO,User user) throws FileNotFoundException, DocumentException {
 
 
         Transactions transactions = new Transactions();
+
         transactions.setAmount(transactionsDTO.getAmount());
         transactions.setCreatedBy(user.getName());
         transactions.setDate(LocalDate.now());
@@ -90,6 +90,24 @@ public class TransactionService {
 
         return new ApiResponse(Status.Status_Ok,"Transaction saved successfully",transactions);
     }
+
+    public ApiResponse updateTransaction(Long id, TransactionsDTO transactionsDTO, User user) throws FileNotFoundException, DocumentException{
+
+
+
+        Optional<Transactions> findTransaction = transactionsRepository.findById(id);
+
+            Transactions transactionFind = findTransaction.get();
+
+            transactionsRepository.delete(transactionFind);
+            this.saveTransactions(transactionsDTO,user);
+
+        return new ApiResponse(Status.Status_Ok,"Successfully Updated", null);
+
+
+    }
+
+
 
 
     public List<TransactionsDTO>getAll (String startDate, String endDate){

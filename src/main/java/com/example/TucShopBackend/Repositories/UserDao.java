@@ -18,6 +18,6 @@ public interface UserDao extends JpaRepository<User, Long> {
     List<User> getAllUsers();
 
 
-    @Query(value = "select * from user u where u.name=:user and u.user_type='USER' ", nativeQuery = true)
-    List <User> getUserByLogin(String user);
+    @Query(value = "select * from user u where u.name =:user and u.user_type='USER' ", nativeQuery = true)
+    List <User> getUserByLogin(@Param("user") String user);
 }
