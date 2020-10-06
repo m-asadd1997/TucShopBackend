@@ -39,6 +39,7 @@ public class ProductsDTO {
     Double costprice;
     String variants;
     boolean active;
+    String sku;
     public String  getDate1() {
 
 
@@ -62,7 +63,7 @@ public class ProductsDTO {
     public ProductsDTO() {
     }
 
-    public ProductsDTO(String name, MultipartFile image, String description, double price, Category category, double qty, double costprice, String variants,boolean active) {
+    public ProductsDTO(@NotNull(message = "Name cannot be null") @NotBlank(message = "Name cannot be blank") @Size(min = 3) String name, MultipartFile image, @NotNull(message = "Description not found") @Size(min = 3) String description, @NotNull(message = "Price cannot be null") @Positive(message = "Price cannot be negative or 0") double price, @NotNull(message = "Category not found") Category category, Double quantity, Double costprice, String variants, boolean active, String sku, String date1) {
         this.name = name;
         this.image = image;
         this.description = description;
@@ -71,10 +72,18 @@ public class ProductsDTO {
         this.quantity = quantity;
         this.costprice = costprice;
         this.variants = variants;
-        this.active=active;
-
+        this.active = active;
+        this.sku = sku;
+        this.date1 = date1;
     }
 
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
 
     public String getName() {
         return name;

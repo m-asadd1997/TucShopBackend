@@ -116,6 +116,7 @@ public class    ProductsService {
                             product.setDate1(productsDTO.getDate1());
                             product.setVariants(productsDTO.getVariants());
                             product.setActive(true);
+                            product.setSku(productsDTO.getSku());
                             productsRepository.save(product);
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
 
@@ -144,6 +145,7 @@ public class    ProductsService {
                             product.setDate1(productsDTO.getDate1());
                             product.setVariants(productsDTO.getVariants());
                             product.setActive(true);
+                            product.setSku(productsDTO.getSku());
                             productsRepository.save(product);
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
 
@@ -174,6 +176,7 @@ public class    ProductsService {
                             product.setCostprice(productsDTO.getCostprice());
                             product.setName(productsDTO.getName());
                             product.setVariants(productsDTO.getVariants());
+                            product.setSku(productsDTO.getSku());
                             productsRepository.save(product);
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
                         } catch (IOException e) {
@@ -203,6 +206,7 @@ public class    ProductsService {
                 product.setCostprice(productsDTO.getCostprice());
                 product.setName(productsDTO.getName());
                 product.setVariants(productsDTO.getVariants());
+                product.setSku(productsDTO.getSku());
                 productsRepository.save(product);
                 return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
             }
@@ -233,6 +237,7 @@ public class    ProductsService {
                 product.setDate1(productsDTO.getDate1());
                 product.setVariants(productsDTO.getVariants());
                 product.setActive(true);
+                product.setSku(productsDTO.getSku());
                 productsRepository.save(product);
                 return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
             }
@@ -396,6 +401,7 @@ public class    ProductsService {
                         product.setCostprice(productsDTO.getCostprice());
                         product.setCategory(category);
                         product.setVariants(productsDTO.getVariants());
+                        product.setSku(productsDTO.getSku());
                         productsRepository.save(product);
                         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
                     }
@@ -411,6 +417,7 @@ public class    ProductsService {
                         product.setQty(productsDTO.getQuantity());
                         product.setCostprice(productsDTO.getCostprice());
                         product.setCategory(category);
+                        product.setSku(productsDTO.getSku());
                         productsRepository.save(product);
                         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
                     } catch (IOException e) {
@@ -433,6 +440,7 @@ public class    ProductsService {
         product.setQty(productsDTO.getQuantity());
         product.setCostprice(productsDTO.getCostprice());
         product.setCategory(category);
+        product.setSku(productsDTO.getSku());
         productsRepository.save(product);
         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
 
