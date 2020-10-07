@@ -350,7 +350,17 @@ public class TransactionService {
 
     }
 
+    public ApiResponse updateTransaction(Long id, TransactionsDTO transactionsDTO,User user) throws FileNotFoundException, DocumentException {
+
+        Transactions transaction =transactionsRepository.findById(id).get();
+        transactionsRepository.delete(transaction);
+
+      return saveTransactions(transactionsDTO,user);
+
+    }
+    }
 
 
 
-}
+
+
