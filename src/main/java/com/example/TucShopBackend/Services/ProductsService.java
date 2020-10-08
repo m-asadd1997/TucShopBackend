@@ -560,4 +560,14 @@ public class    ProductsService {
 
         return  true;
     }
+
+    public ApiResponse getProductByBarCode(String code){
+      Product product = productsRepository.getProductByBarCode(code);
+        if(product!=null){
+            return new ApiResponse(Status.Status_Ok,"Success",product);
+        }else{
+            return new ApiResponse(Status.Status_ERROR,"Product not in Database",null);
+        }
+
+    }
 }

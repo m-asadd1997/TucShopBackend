@@ -148,4 +148,8 @@ public class ProductsController {
         return productsService.joinAllProducts(PageRequest.of(page,10));
 
     }
+    @GetMapping("/getbybarcode/{code}")
+    public ApiResponse getByBarCode(@PathVariable("code") String code){
+        return this.productsService.getProductByBarCode(code);
+    }
 }

@@ -21,7 +21,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     public List<Product> getAllByCategoryId(@Param("id") Long id);
 
     @Query(value="select * from product where name = :name and variants= :variant", nativeQuery = true)
-    public List<Product> findByName(String name, String variant);
+    public List<Product> findByName(@Param("name") String name, @Param("variant") String variant);
 
 //    @Query(value = "select variants from products",nativeQuery = true)
 //    public List<String> findByVariants();
@@ -91,4 +91,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
 
     @Query(value = "select * from tucshop.product where active = 1", nativeQuery = true)
     Page<Product> findByCondition(Pageable pageable);
+
+    @Query(value="select * from tucshop.product where product.sku=:code",nativeQuery = true)
+    public Product getProductByBarCode(@Param("code") String code);
 }
