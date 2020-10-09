@@ -192,7 +192,9 @@ public class DashboardService {
             String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
             saveSettingslogo (settingsDTO.getLogo(),unique);
             Settings settings = new Settings();
-            settings.setLogo(settingLogoUrl + unique + settingsDTO.getLogo().getOriginalFilename());
+            if(settingsDTO.getLogo()!=null) {
+                settings.setLogo(settingLogoUrl + unique + settingsDTO.getLogo().getOriginalFilename());
+            }
             settings.setHeader(settingsDTO.getHeader());
             settings.setFooter(settingsDTO.getFooter());
             settingsRepository.save(settings);
@@ -205,9 +207,18 @@ public class DashboardService {
                 File folder = new File(folderPath);
                 settingsRepository.deleteAll();
                 deleteDirectory(folder);
+
                 String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
-                if (saveSettingslogo(settingsDTO.getLogo(), unique)) {
+            if(settingsDTO.getLogo()==null){
+                Settings settings = new Settings();
+                settings.setHeader(settingsDTO.getHeader());
+                settings.setFooter(settingsDTO.getFooter());
+                settingsRepository.save(settings);
+                return new ApiResponse(Status.Status_Ok, CustomConstants.SETTING_POSTED, null);
+            }
+               else if (saveSettingslogo(settingsDTO.getLogo(), unique)) {
                     Settings settings = new Settings();
+                    if(settingsDTO.getLogo()!=null)
                     settings.setLogo(settingLogoUrl + unique + settingsDTO.getLogo().getOriginalFilename());
                     settings.setHeader(settingsDTO.getHeader());
                     settings.setFooter(settingsDTO.getFooter());
@@ -215,6 +226,13 @@ public class DashboardService {
                     return new ApiResponse(Status.Status_Ok, CustomConstants.SETTING_POSTED, settings);
 
                 }
+//                else if(settingsDTO.getLogo()==null){
+//                    Settings settings = new Settings();
+//                    settings.setHeader(settingsDTO.getHeader());
+//                    settings.setFooter(settingsDTO.getFooter());
+//                    settingsRepository.save(settings);
+//                    return new ApiResponse(Status.Status_Ok, CustomConstants.SETTING_POSTED, settings);
+//                }
             }
             return new ApiResponse(Status.Status_ERROR, CustomConstants.SETTINGIMAGE_ERROR, null);
         }
