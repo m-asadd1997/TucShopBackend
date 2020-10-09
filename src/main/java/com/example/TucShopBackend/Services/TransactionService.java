@@ -166,13 +166,23 @@ public class TransactionService {
         Optional<Transactions> transactions=transactionsRepository.findById(id);
 
 
-        if (transactions.isPresent()){
-            transactions.get().setStatus("deleted");
-            transactionsRepository.save(transactions.get());
-            return new ApiResponse(200,"Successfully deleted",transactions.get());
+//        if (transactions.isPresent()){
+//            transactions.get().setStatus("deleted");
+//            transactionsRepository.save(transactions.get());
+//            return new ApiResponse(200,"Successfully deleted",transactions.get());
+//
+//        }
+//        else{
+//            return new ApiResponse(200,"not found",transactions.get());
+//        }
 
+//        Transactions transaction=transactionsRepository.findById(id).get();
+        try {
+            transactionsRepository.deleteById(id);
+            return new ApiResponse(200,"Successfully deleted",transactions.get());
         }
-        else{
+        catch (Exception e)
+        {
             return new ApiResponse(200,"not found",transactions.get());
         }
 
@@ -203,6 +213,7 @@ public class TransactionService {
 
     public ResponseEntity<InputStreamResource> onClosing(String user) throws IOException {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String todayDate = LocalDate.now().toString();
         List<Settings> settings = settingsRepository.findAll();
         String header;
         Integer srno = 1;
@@ -210,7 +221,7 @@ public class TransactionService {
             header = settings.get(0).getHeader();
         }
         else{
-            header = "Daily Report";
+            header = "Today Date:"+ todayDate;
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -355,7 +366,7 @@ public class TransactionService {
         Transactions transaction =transactionsRepository.findById(id).get();
         transactionsRepository.delete(transaction);
 
-      return saveTransactions(transactionsDTO,user);
+        return saveTransactions(transactionsDTO,user);
 
     }
     }

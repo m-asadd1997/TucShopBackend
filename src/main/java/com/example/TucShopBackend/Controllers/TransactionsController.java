@@ -71,7 +71,7 @@ public class TransactionsController {
       return  this.transactionService.getAllPending();
 
     }
-    @GetMapping("/deleteTransaction/{id}")
+    @DeleteMapping("/deleteTransaction/{id}")
     public ApiResponse deleteTransaction(@PathVariable("id") Long id){
         return this.transactionService.deleteTransaction((id));
 
@@ -106,7 +106,14 @@ public class TransactionsController {
         User user = (User) request.getAttribute("loggedinUser");
         return transactionService.updateTransaction(id,transactionsDTO,user);
     }
+
+//    @DeleteMapping("/{id}")
+//    public ApiResponse deleteTransaction(@PathVariable("id") Long id )  {
+//        return transactionService.delete
+//    }
     }
+
+
 
 
 
