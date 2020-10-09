@@ -203,6 +203,7 @@ public class TransactionService {
 
     public ResponseEntity<InputStreamResource> onClosing(String user) throws IOException {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String todayDate = LocalDate.now().toString();
         List<Settings> settings = settingsRepository.findAll();
         String header;
         Integer srno = 1;
@@ -210,7 +211,7 @@ public class TransactionService {
             header = settings.get(0).getHeader();
         }
         else{
-            header = "Daily Report";
+            header = "Today Date:"+ todayDate;
         }
 
         LocalDateTime now = LocalDateTime.now();
