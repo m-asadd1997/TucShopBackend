@@ -166,13 +166,23 @@ public class TransactionService {
         Optional<Transactions> transactions=transactionsRepository.findById(id);
 
 
-        if (transactions.isPresent()){
-            transactions.get().setStatus("deleted");
-            transactionsRepository.save(transactions.get());
-            return new ApiResponse(200,"Successfully deleted",transactions.get());
+//        if (transactions.isPresent()){
+//            transactions.get().setStatus("deleted");
+//            transactionsRepository.save(transactions.get());
+//            return new ApiResponse(200,"Successfully deleted",transactions.get());
+//
+//        }
+//        else{
+//            return new ApiResponse(200,"not found",transactions.get());
+//        }
 
+//        Transactions transaction=transactionsRepository.findById(id).get();
+        try {
+            transactionsRepository.deleteById(id);
+            return new ApiResponse(200,"Successfully deleted",transactions.get());
         }
-        else{
+        catch (Exception e)
+        {
             return new ApiResponse(200,"not found",transactions.get());
         }
 
@@ -356,7 +366,7 @@ public class TransactionService {
         Transactions transaction =transactionsRepository.findById(id).get();
         transactionsRepository.delete(transaction);
 
-      return saveTransactions(transactionsDTO,user);
+        return saveTransactions(transactionsDTO,user);
 
     }
     }
