@@ -92,9 +92,6 @@ INSERT INTO `product` (`id`, `costprice`, `date1`, `description`, `image`, `name
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `active`, `client_id`, `email`, `name`, `password`, `user_type`) VALUES
-(1, b'1', 1, 'a@a.com', 'Admin', '$2a$10$mqYUcawO4Gt0SFQLh.FXWeK8ChCT.nb8QLj6BfgIhja6caMoANoxy', 'ADMIN'),
-(3, b'1', 1, 's@s.com', 'shezy', '$2a$10$hYb5sTZM/8Xrrw4KOGwqTu9myvdk8rkH53frOZ.xyesR5zFgq6jnu', 'USER');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

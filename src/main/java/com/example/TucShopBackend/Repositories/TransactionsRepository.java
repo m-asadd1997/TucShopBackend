@@ -17,7 +17,7 @@ import java.util.List;
 @Repository
 public interface TransactionsRepository extends JpaRepository<Transactions,Long> {
 
-                   //id,created_by,updated_by,date
+
 
     @Query(value = "select *, SUM(amount) from transactions t  WHERE t.date BETWEEN :date1 AND :date2 group by created_by AND  t.status='complete'", nativeQuery = true)
     public List<Transactions> getMonthTransactions(@Param("date1") String date1,@Param("date2") String date2);
@@ -50,7 +50,7 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
     @Query(value = "select * from transactions t where t.status='complete' and closing_status='OPEN' and created_by=:userName order by (id) DESC LIMIT 30", nativeQuery = true)
     public List<Transactions> recentTransactionsOfUser(@Param("userName") String userName);
 
-    @Query(value = "select SUM(amount) from transactions t where t.status='complete' and closing_status='OPEN' and created_by=:userName", nativeQuery = true)
+    @Query(value = "select sum(amountfrom transactions t where t.status='complete' and closing_status='OPEN' and created_by=:userName", nativeQuery = true)
     public Double totalTransactionsOfUser(@Param("userName") String userName);
 
 
