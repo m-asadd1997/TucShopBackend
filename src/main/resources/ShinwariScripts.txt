@@ -35,6 +35,8 @@ INSERT INTO `category` (`id`, `image`, `name`) VALUES
 (6, 'http://localhost:8080/api/category/image/Tandoori/1600108737909qandhaniNaan.jpg', 'Tandoori'),
 (7, 'http://localhost:8080/api/category/image/Hot&Cool/1600108766551cold-drinks-300x286.jpg', 'Hot&Cool');
 
+SET SQL_SAFE_UPDATES = 0;
+UPDATE category SET active =1;
 --
 -- Dumping data for table `product`
 --
@@ -88,6 +90,8 @@ INSERT INTO `product` (`id`, `costprice`, `date1`, `description`, `image`, `name
 (46, 230, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Shaheen Shinwari Special/Afhgani Kabli Pulao chicken/1600189742380Afhgani Kabli Pulao chicken.png', 'Afhgani Kabli Pulao chicken', 280, 1000, 'FULL', 5),
 (47, 450, '2020-09-15', NULL, 'http://localhost:8080/api/products/image/Shaheen Shinwari Special/Afhgani Kabli Pulao Mutton/1600189877819Afhgani Kabli Pulao Mutton.png', 'Afhgani Kabli Pulao Mutton', 500, 1000, 'FULL', 5);
 
+ SET SQL_SAFE_UPDATES = 0;
+ UPDATE product SET active =1;
 --
 -- Dumping data for table `user`
 --
