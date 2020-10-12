@@ -13,6 +13,7 @@ import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
 //import org.springframework.mock.web.MockMultipartFile;
 import com.example.TucShopBackend.Repositories.ProductsRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -68,6 +69,9 @@ public class    ProductsService {
 
     public ApiResponse saveProducts(ProductsDTO productsDTO){
 
+        if (checkProductBarcodeExsist(productsDTO)){
+            return new ApiResponse(Status.Status_Ok, "Barcode already exist", null);
+        }
 
        List< Product> productName = productsRepository.findByName(productsDTO.getName(), productsDTO.getVariants());
 //
@@ -367,6 +371,10 @@ public class    ProductsService {
     }
 
     public ApiResponse updateById(Long id , ProductsDTO productsDTO) {
+        if (checkProductBarcodeExsist(productsDTO)){
+            return new ApiResponse(Status.Status_Ok, "Barcode already exist", null);
+        }
+
 
         Category category = getCategoryById(productsDTO.getCategory().getId());
 
@@ -431,6 +439,16 @@ public class    ProductsService {
 
         }
 
+    }
+
+    private boolean checkProductBarcodeExsist(ProductsDTO productsDTO) {
+        if(StringUtils.isNotBlank(productsDTO.getSku())){
+            Product barCodeExist = productsRepository.getProductByBarCode(productsDTO.getSku());
+            if(barCodeExist!=null){
+                return true;
+            }
+        }
+        return false;
     }
 
     private ApiResponse populateResponse(ProductsDTO productsDTO, Category category, Product product) {
