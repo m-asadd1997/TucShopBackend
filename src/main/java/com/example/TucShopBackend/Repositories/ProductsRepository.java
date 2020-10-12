@@ -92,6 +92,6 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     @Query(value = "select * from tucshop.product where active = 1", nativeQuery = true)
     Page<Product> findByCondition(Pageable pageable);
 
-    @Query(value="select * from tucshop.product where product.sku=:code",nativeQuery = true)
+    @Query(value="select * from tucshop.product where product.sku=:code AND product.active =1",nativeQuery = true)
     public Product getProductByBarCode(@Param("code") String code);
 }
