@@ -257,6 +257,11 @@ public class    ProductsService {
     }
 
     public Boolean saveProductImage(MultipartFile file, String name, String unique  ){
+
+        if(file == null){
+            return  true;
+        }
+
         try{
 
         String UPLOADED_FOLDER_NEW = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+name+"//"+"products"+"//";
@@ -385,12 +390,12 @@ public class    ProductsService {
         Optional<Product>findProduct = productsRepository.findById(id);
         Product product = findProduct.get();
 
-        if(productsDTO.getImage().getOriginalFilename().isEmpty()) {
+        if(productsDTO.getImage()!=null && productsDTO.getImage().getOriginalFilename().isEmpty()) {
             product.setImage(null);
             return populateResponse(productsDTO, category, product);
         }
 
-         if(product.getImage()!=null && product.getImage().equalsIgnoreCase( productsDTO.getImage().getName())){
+         if(product.getImage()!=null && productsDTO.getImage()!=null && product.getImage().equalsIgnoreCase(productsDTO.getImage().getName())){
 
              return populateResponse(productsDTO, category, product);
          }
@@ -399,10 +404,15 @@ public class    ProductsService {
                 case CustomConstants.DEV:
                     String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
 
+
                     if (saveProductImage(productsDTO.getImage(), category.getName(), unique)) {
 
                         product.setName(productsDTO.getName());
-                        product.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+                        if(productsDTO.getImage()!=null) {
+                            product.setImage(productImageUrl + category.getName() + "/" + productsDTO.getName() + "/" + unique + productsDTO.getImage().getOriginalFilename());
+                        }else{
+                            product.setImage(productDeafultImageUrl);
+                        }
                         product.setDescription(productsDTO.getDescription());
                         product.setPrice(productsDTO.getPrice());
                         product.setQty(productsDTO.getQuantity());
@@ -419,6 +429,7 @@ public class    ProductsService {
                     try {
                         Map map =  cloudinaryService.upload(productsDTO.getImage());
                         product.setName(productsDTO.getName());
+                        if(productsDTO.getImage()!=null)
                         product.setImage(map.get("url").toString());
                         product.setDescription(productsDTO.getDescription());
                         product.setPrice(productsDTO.getPrice());
@@ -444,9 +455,10 @@ public class    ProductsService {
     private boolean checkProductBarcodeExsist(ProductsDTO productsDTO) {
         if(StringUtils.isNotBlank(productsDTO.getSku())){
             Product barCodeExist = productsRepository.getProductByBarCode(productsDTO.getSku());
-            if(barCodeExist!=null){
+            if(barCodeExist!=null&& !barCodeExist.getSku().equalsIgnoreCase(productsDTO.getSku())){
                 return true;
             }
+
         }
         return false;
     }
