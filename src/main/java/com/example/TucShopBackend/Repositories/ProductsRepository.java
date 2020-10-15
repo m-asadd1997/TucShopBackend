@@ -55,7 +55,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     public List<VariantsDTO> getVariants(@Param("keyword")String keyword);
 
 
-    @Query(value = "SELECT * FROM product WHERE name LIKE :keyword% AND active =1 " , nativeQuery = true)
+    @Query(value = "SELECT * FROM product WHERE name LIKE %:keyword% AND active =1 " , nativeQuery = true)
     public List<Product> searchProductByKeyword(@Param("keyword")String keyword);
 
 
@@ -94,4 +94,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
 
     @Query(value="select * from tucshop.product where product.sku=:code AND product.active =1",nativeQuery = true)
     public Product getProductByBarCode(@Param("code") String code);
+
+    @Query(value="select * from tucshop.product where product.sku=:code AND product.active =1 AND product.id !=:id",nativeQuery = true)
+    public Product getDistinctProductByBarCode(@Param("code") String code,@Param("id") Long id );
 }

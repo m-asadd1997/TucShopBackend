@@ -69,8 +69,8 @@ public class    ProductsService {
 
     public ApiResponse saveProducts(ProductsDTO productsDTO){
 
-        if (checkProductBarcodeExsist(productsDTO)){
-            return new ApiResponse(Status.Status_Ok, "Barcode already exist", null);
+        if (checkProductBarcodeExsist(productsDTO,null)){
+            return new ApiResponse(Status.Status_DUPLICATE, "Barcode already exist", null);
         }
 
        List< Product> productName = productsRepository.findByName(productsDTO.getName(), productsDTO.getVariants());
@@ -376,8 +376,8 @@ public class    ProductsService {
     }
 
     public ApiResponse updateById(Long id , ProductsDTO productsDTO) {
-        if (checkProductBarcodeExsist(productsDTO)){
-            return new ApiResponse(Status.Status_Ok, "Barcode already exist", null);
+        if (checkProductBarcodeExsist(productsDTO,id)){
+            return new ApiResponse(Status.Status_DUPLICATE, "Barcode already exist", null);
         }
 
 
@@ -452,12 +452,21 @@ public class    ProductsService {
 
     }
 
-    private boolean checkProductBarcodeExsist(ProductsDTO productsDTO) {
+    private boolean checkProductBarcodeExsist(ProductsDTO productsDTO,Long id) {
         if(StringUtils.isNotBlank(productsDTO.getSku())){
-            Product barCodeExist = productsRepository.getProductByBarCode(productsDTO.getSku());
-            if(barCodeExist!=null&& !barCodeExist.getSku().equalsIgnoreCase(productsDTO.getSku())){
-                return true;
+            if(id !=null){
+                Product barCodeExist = productsRepository.getDistinctProductByBarCode(productsDTO.getSku(),id);
+                if(barCodeExist!=null){
+                    return true;
+                }
+            }else{
+                Product barCodeExist = productsRepository.getProductByBarCode(productsDTO.getSku());
+                if(barCodeExist!=null){
+                    return true;
+                }
             }
+
+
 
         }
         return false;
@@ -594,7 +603,19 @@ public class    ProductsService {
     public ApiResponse getProductByBarCode(String code){
       Product product = productsRepository.getProductByBarCode(code);
         if(product!=null){
-            return new ApiResponse(Status.Status_Ok,"Success",product);
+
+            if(product.isInfiniteQuantity()){
+                return new ApiResponse(Status.Status_Ok,"Success",product);
+            }
+
+            if(product.getQty()>0 ){
+            product.setQty(product.getQty()-1);
+            Product p = productsRepository.save(product);
+                return new ApiResponse(Status.Status_Ok,"Success",p);
+            }else {
+                return new ApiResponse(Status.Status_ERROR,"Out of Stock",null);
+            }
+
         }else{
             return new ApiResponse(Status.Status_ERROR,"Product not in Database",null);
         }
