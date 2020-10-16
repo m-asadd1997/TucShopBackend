@@ -84,6 +84,8 @@ public interface TransactionsRepository extends JpaRepository<Transactions,Long>
     @Query(value = "select * from transactions where closing_status='OPEN' and status='complete'",nativeQuery = true)
     List<Transactions> getTransactionsOnClosing(@Param("user") String user);
 
+    @Query(value = "SELECT * FROM transactions t WHERE  t.date BETWEEN :startDate AND :endDate AND t.status='complete' ", nativeQuery = true)
+    List<Transactions> downloadTransactionByDate(@Param("startDate") String startDate,@Param("endDate") String endDate);
 
 
 
