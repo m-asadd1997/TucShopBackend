@@ -106,7 +106,13 @@ public class TransactionsController {
         User user = (User) request.getAttribute("loggedinUser");
         return transactionService.updateTransaction(id,transactionsDTO,user);
     }
+
+    @GetMapping("/downloadtransaction/{startDate}/{endDate}")
+    public ResponseEntity<InputStreamResource> downloadAllTransaction(@PathVariable("startDate") String startDate, @PathVariable ("endDate") String endDate) throws IOException {
+        return transactionService.downloadAllTransaction(startDate, endDate);
     }
+
+}
 
 
 

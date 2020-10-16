@@ -22,17 +22,21 @@ public class TransactionsDTO  implements Serializable {
     Double discount;
     String waiterName;
     Long tableNumber;
+    Double profit;
+    Double costprice;
 
 
    List<ProductTransaction> productTransactions;
 
 
-    public TransactionsDTO(Double amount, String action, String requestedUser, Double discount, List<ProductTransaction> productTransactions) {
+    public TransactionsDTO(Double amount, Double costprice,  String action, String requestedUser, Double discount, List<ProductTransaction> productTransactions) {
         this.amount = amount;
         this.action = action;
         this.requestedUser = requestedUser;
         this.discount = discount;
         this.productTransactions = productTransactions;
+        this.costprice = costprice;
+
     }
 
     public TransactionsDTO() {
@@ -47,6 +51,7 @@ public class TransactionsDTO  implements Serializable {
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.status = status;
+        this.profit = profit;
     }
 
     public Double getAmount() {
@@ -143,5 +148,21 @@ public class TransactionsDTO  implements Serializable {
 
     public void setTableNumber(Long tableNumber) {
         this.tableNumber = tableNumber;
+    }
+
+    public Double getProfit() {
+        return profit;
+    }
+
+    public void setProfit(Double profit) {
+        this.profit = profit;
+    }
+
+    public Double getCostprice() {
+        return costprice;
+    }
+
+    public void setCostprice(Double costprice) {
+        this.costprice = costprice;
     }
 }
