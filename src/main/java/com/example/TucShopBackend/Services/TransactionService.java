@@ -181,252 +181,66 @@ public class TransactionService {
 
 
         if (transactions.isPresent()) {
-            transactions.get().setStatus("deleted");
-            transactionsRepository.save(transactions.get());
-            return new ApiResponse(200, "Successfully deleted", transactions.get());
+            try {
+                transactionsRepository.deleteById(id);
+                return new ApiResponse(200, "Successfully deleted", transactions.get());
+            } catch (Exception e) {
+                return new ApiResponse(200, "not found", transactions.get());
+            }
 
-        } else {
+        }else{
             return new ApiResponse(200, "not found", transactions.get());
-//        if (transactions.isPresent()){
-//            transactions.get().setStatus("deleted");
-//            transactionsRepository.save(transactions.get());
-//            return new ApiResponse(200,"Successfully deleted",transactions.get());
-//
-//        }
-//        else{
-//            return new ApiResponse(200,"not found",transactions.get());
-//        }
-
-//        Transactions transaction=transactionsRepository.findById(id).get();
-        try {
-            transactionsRepository.deleteById(id);
-            return new ApiResponse(200,"Successfully deleted",transactions.get());
-        }
-        catch (Exception e)
-        {
-            return new ApiResponse(200,"not found",transactions.get());
         }
 
     }
 
-    void sendMail(File file1) {
+
+        void sendMail (File file1){
 
 //        SimpleMailMessage msg = new SimpleMailMessage();
 //        msg.setTo(recevierEmail);
 //
 //        msg.setSubject("Transaction Report");
 //        msg.setText("Daily transaction report from tucshop application");
-        try {
-            MimeMessage message = javaMailSender.createMimeMessage();
-
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-//            helper.setFrom(from);
-            helper.setTo("qureshiasad1000@gmail.com");
-            helper.setSubject("Transaction Report");
-            helper.setText("Daily transaction report from tucshop application");
-
-            FileSystemResource file = new FileSystemResource(file1);
-            helper.addAttachment("transactionReport.pdf", file);
-
-            javaMailSender.send(message);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public ResponseEntity<InputStreamResource> onClosing(String user) throws IOException {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String todayDate = LocalDate.now().toString();
-        List<Settings> settings = settingsRepository.findAll();
-           String header;
-        Integer srno = 1;
-        if (!settings.isEmpty()) {
-            header = settings.get(0).getHeader();
-        } else {
-            header = "Today Date:" + todayDate;
-        }
-
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println(dtf.format(now));
-        StringBuilder productsName = null;
-        Double total = 0D;
-        Double discount = 0D;
-        Double totalAfterDiscount = 0D;
-        Double totalProfit = 0D;
-
-        List<Transactions> transactions = transactionsRepository.getTransactionsOnClosing(user);
-        try {
-            Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream("TransactionReport.pdf"));
-
-            Font fontHeader = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-            Paragraph headingPara, totalPara, profitPara, discountPara, totalDiscountPara;
-            headingPara = new Paragraph(header + "\n" + "\n");
-            headingPara.setAlignment(Element.ALIGN_CENTER);
-
-//            Chunk chunk = new Chunk(header, fontHeader);
-
-//            Chunk newLine = new Chunk("\n");
-
-            PdfPTable table = new PdfPTable(8);
-            table.setWidths(new float[] { 2f, 5f, 5f, 5f, 9f, 5f, 4f, 4f});
-//            document.open();
-
-            PdfPCell c1 = new PdfPCell(new Phrase("SR#"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
-
-            c1 = new PdfPCell(new Phrase("Transaction By"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
-
-            c1 = new PdfPCell(new Phrase("Transaction Date"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
-
-            c1 = new PdfPCell(new Phrase("Transaction Time"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
-
-            c1 = new PdfPCell(new Phrase("Products"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
-
-            c1 = new PdfPCell(new Phrase("Transaction Amount"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
-
-            c1 = new PdfPCell(new Phrase("Discount"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
-
-            c1 = new PdfPCell(new Phrase("Profit"));
-            c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-            table.addCell(c1);
-
-
-
-            table.setHeaderRows(1);
-//            table.setFooterRows(1);
-
-            document.open();
-            document.addTitle("Transaction Report");
-            document.add(headingPara);
-
-            Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-            for (Transactions transaction : transactions) {
-
-                transaction.setClosingStatus("CLOSED");
-                total += transaction.getAmount();
-                discount += transaction.getDiscount();
-                totalAfterDiscount = total - discount;
-                totalProfit += transaction.getProfit();
-                transactionsRepository.save(transaction);
-                productsName = new StringBuilder();
-                for (ProductTransaction products : transaction.getProductTransactions()) {
-                    productsName.append(products.getProduct().getName());
-                    productsName.append("(");
-                    productsName.append(products.getQuantity());
-                    productsName.append(")");
-                    productsName.append(",");
-
-                }
-//                Chunk chunk = new Chunk("Transaction by " + transaction.getCreatedBy() + "of products " + productsName + " of amount " + transaction.getAmount(), font);
-                table.addCell(srno.toString());
-                table.addCell(transaction.getCreatedBy());
-                table.addCell(transaction.getDate().toString());
-                table.addCell(transaction.getTransactionTime().toString());
-                table.addCell(productsName.toString());
-                table.addCell(transaction.getAmount().toString());
-                table.addCell(transaction.getDiscount().toString());
-                table.addCell(transaction.getProfit().toString());
-                // table.
-                srno++;
-
-
-            }
-            totalPara = new Paragraph("\n" + "Total Amount : " + total);
-            totalPara.setAlignment(Element.ALIGN_RIGHT);
-            profitPara = new Paragraph("\n" + "Profit : " + totalProfit);
-            profitPara.setAlignment(Element.ALIGN_RIGHT);
-            discountPara = new Paragraph("\n" + "Discount Amount : " + discount);
-            discountPara.setAlignment(Element.ALIGN_RIGHT);
-            totalDiscountPara = new Paragraph("\n" + "Total Amount after Discount : " + totalAfterDiscount);
-            totalDiscountPara.setAlignment(Element.ALIGN_RIGHT);
-            table.setWidthPercentage(100);
-            document.add(table);
-            document.add(totalPara);
-            document.add(profitPara);
-            document.add(discountPara);
-            document.add(totalDiscountPara);
-
-//            document.add
-            document.close();
             try {
-                sendMail(new File("TransactionReport.pdf"));
-            } catch (Exception mail) {
-                mail.printStackTrace();
+                MimeMessage message = javaMailSender.createMimeMessage();
+
+                MimeMessageHelper helper = new MimeMessageHelper(message, true);
+//            helper.setFrom(from);
+                helper.setTo("qureshiasad1000@gmail.com");
+                helper.setSubject("Transaction Report");
+                helper.setText("Daily transaction report from tucshop application");
+
+                FileSystemResource file = new FileSystemResource(file1);
+                helper.addAttachment("transactionReport.pdf", file);
+
+                javaMailSender.send(message);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public ResponseEntity<InputStreamResource> onClosing (String user) throws IOException {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String todayDate = LocalDate.now().toString();
+            List<Settings> settings = settingsRepository.findAll();
+            String header;
+            Integer srno = 1;
+            if (!settings.isEmpty()) {
+                header = settings.get(0).getHeader();
+            } else {
+                header = "Today Date:" + todayDate;
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            LocalDateTime now = LocalDateTime.now();
+            System.out.println(dtf.format(now));
+            StringBuilder productsName = null;
+            Double total = 0D;
+            Double discount = 0D;
+            Double totalAfterDiscount = 0D;
+            Double totalProfit = 0D;
 
-        File f = new File("TransactionReport.pdf");
-        Resource file = new UrlResource(f.toURI());
-        return ResponseEntity
-                .ok()
-                .contentLength(file.contentLength())
-                .contentType(
-                        MediaType.parseMediaType("application/pdf"))
-                .body(new InputStreamResource(file.getInputStream()));
-
-//        return new ApiResponse(200,"closing successful",transactions);
-
-
-    }
-
-    public ApiResponse getTotalTransactionByDate(String startDate, String endDate) {
-
-        return new ApiResponse(Status.Status_Ok, "Successfully fetch Total Transaction", transactionsRepository.getTotalTransactionByDate(startDate, endDate));
-
-    }
-
-    public ApiResponse updateTransaction(Long id, TransactionsDTO transactionsDTO, User user) throws FileNotFoundException, DocumentException {
-
-        Transactions transaction = transactionsRepository.findById(id).get();
-        transactionsRepository.delete(transaction);
-
-        return saveTransactions(transactionsDTO,user);
-
-    }
-
-
-    public ResponseEntity<InputStreamResource> downloadAllTransaction(String startDate, String endDate) throws IOException {
-
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String todayDate = LocalDate.now().toString();
-        List<Settings> settings = settingsRepository.findAll();
-        String header;
-        Integer srno = 1;
-        if (!settings.isEmpty()) {
-            header = settings.get(0).getHeader();
-        } else {
-            header = "Today Date:"+ todayDate;
-        }
-
-
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println(dtf.format(now));
-        StringBuilder productsName = null;
-        Double total = 0D;
-        Double discount = 0D;
-        Double totalAfterDiscount = 0D;
-        Double totalProfit = 0D;
-
-
-        List<Transactions> transactions = transactionsRepository.downloadTransactionByDate(startDate, endDate);
-        if(!transactions.isEmpty()) {
+            List<Transactions> transactions = transactionsRepository.getTransactionsOnClosing(user);
             try {
                 Document document = new Document();
                 PdfWriter.getInstance(document, new FileOutputStream("TransactionReport.pdf"));
@@ -441,8 +255,7 @@ public class TransactionService {
 //            Chunk newLine = new Chunk("\n");
 
                 PdfPTable table = new PdfPTable(8);
-                table.setWidths(new float[] { 2f, 5f, 5f, 5f, 9f, 5f, 4f, 4f});
-
+                table.setWidths(new float[]{2f, 5f, 5f, 5f, 9f, 5f, 4f, 4f});
 //            document.open();
 
                 PdfPCell c1 = new PdfPCell(new Phrase("SR#"));
@@ -488,12 +301,12 @@ public class TransactionService {
                 Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
                 for (Transactions transaction : transactions) {
 
-                    // transaction.setClosingStatus("CLOSED");
+                    transaction.setClosingStatus("CLOSED");
                     total += transaction.getAmount();
                     discount += transaction.getDiscount();
                     totalAfterDiscount = total - discount;
                     totalProfit += transaction.getProfit();
-                    // transactionsRepository.save(transaction);
+                    transactionsRepository.save(transaction);
                     productsName = new StringBuilder();
                     for (ProductTransaction products : transaction.getProductTransactions()) {
                         productsName.append(products.getProduct().getName());
@@ -534,26 +347,196 @@ public class TransactionService {
 
 //            document.add
                 document.close();
+                try {
+                    sendMail(new File("TransactionReport.pdf"));
+                } catch (Exception mail) {
+                    mail.printStackTrace();
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else
-        {
-           return null;
 
-        }
             File f = new File("TransactionReport.pdf");
             Resource file = new UrlResource(f.toURI());
-             return ResponseEntity
+            return ResponseEntity
+                    .ok()
+                    .contentLength(file.contentLength())
+                    .contentType(
+                            MediaType.parseMediaType("application/pdf"))
+                    .body(new InputStreamResource(file.getInputStream()));
+
+//        return new ApiResponse(200,"closing successful",transactions);
+
+
+        }
+
+        public ApiResponse getTotalTransactionByDate (String startDate, String endDate){
+
+            return new ApiResponse(Status.Status_Ok, "Successfully fetch Total Transaction", transactionsRepository.getTotalTransactionByDate(startDate, endDate));
+
+        }
+
+        public ApiResponse updateTransaction (Long id, TransactionsDTO transactionsDTO, User user) throws
+        FileNotFoundException, DocumentException {
+
+            Transactions transaction = transactionsRepository.findById(id).get();
+            transactionsRepository.delete(transaction);
+
+            return saveTransactions(transactionsDTO, user);
+
+        }
+
+
+        public ResponseEntity<InputStreamResource> downloadAllTransaction (String startDate, String endDate) throws  IOException {
+
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String todayDate = LocalDate.now().toString();
+            List<Settings> settings = settingsRepository.findAll();
+            String header;
+            Integer srno = 1;
+            if (!settings.isEmpty()) {
+                header = settings.get(0).getHeader();
+            } else {
+                header = "Today Date:" + todayDate;
+            }
+
+
+            LocalDateTime now = LocalDateTime.now();
+            System.out.println(dtf.format(now));
+            StringBuilder productsName = null;
+            Double total = 0D;
+            Double discount = 0D;
+            Double totalAfterDiscount = 0D;
+            Double totalProfit = 0D;
+
+
+            List<Transactions> transactions = transactionsRepository.downloadTransactionByDate(startDate, endDate);
+            if (!transactions.isEmpty()) {
+                try {
+                    Document document = new Document();
+                    PdfWriter.getInstance(document, new FileOutputStream("TransactionReport.pdf"));
+
+                    Font fontHeader = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+                    Paragraph headingPara, totalPara, profitPara, discountPara, totalDiscountPara;
+                    headingPara = new Paragraph(header + "\n" + "\n");
+                    headingPara.setAlignment(Element.ALIGN_CENTER);
+
+//            Chunk chunk = new Chunk(header, fontHeader);
+
+//            Chunk newLine = new Chunk("\n");
+
+                    PdfPTable table = new PdfPTable(8);
+                    table.setWidths(new float[]{2f, 5f, 5f, 5f, 9f, 5f, 4f, 4f});
+
+//            document.open();
+
+                    PdfPCell c1 = new PdfPCell(new Phrase("SR#"));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+
+                    c1 = new PdfPCell(new Phrase("Transaction By"));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+
+                    c1 = new PdfPCell(new Phrase("Transaction Date"));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+
+                    c1 = new PdfPCell(new Phrase("Transaction Time"));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+
+                    c1 = new PdfPCell(new Phrase("Products"));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+
+                    c1 = new PdfPCell(new Phrase("Transaction Amount"));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+
+                    c1 = new PdfPCell(new Phrase("Discount"));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+
+                    c1 = new PdfPCell(new Phrase("Profit"));
+                    c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    table.addCell(c1);
+
+
+                    table.setHeaderRows(1);
+//            table.setFooterRows(1);
+
+                    document.open();
+                    document.addTitle("Transaction Report");
+                    document.add(headingPara);
+
+                    Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+                    for (Transactions transaction : transactions) {
+
+                        // transaction.setClosingStatus("CLOSED");
+                        total += transaction.getAmount();
+                        discount += transaction.getDiscount();
+                        totalAfterDiscount = total - discount;
+                        totalProfit += transaction.getProfit();
+                        // transactionsRepository.save(transaction);
+                        productsName = new StringBuilder();
+                        for (ProductTransaction products : transaction.getProductTransactions()) {
+                            productsName.append(products.getProduct().getName());
+                            productsName.append("(");
+                            productsName.append(products.getQuantity());
+                            productsName.append(")");
+                            productsName.append(",");
+
+                        }
+//                Chunk chunk = new Chunk("Transaction by " + transaction.getCreatedBy() + "of products " + productsName + " of amount " + transaction.getAmount(), font);
+                        table.addCell(srno.toString());
+                        table.addCell(transaction.getCreatedBy());
+                        table.addCell(transaction.getDate().toString());
+                        table.addCell(transaction.getTransactionTime().toString());
+                        table.addCell(productsName.toString());
+                        table.addCell(transaction.getAmount().toString());
+                        table.addCell(transaction.getDiscount().toString());
+                        table.addCell(transaction.getProfit().toString());
+                        // table.
+                        srno++;
+
+
+                    }
+                    totalPara = new Paragraph("\n" + "Total Amount : " + total);
+                    totalPara.setAlignment(Element.ALIGN_RIGHT);
+                    profitPara = new Paragraph("\n" + "Profit : " + totalProfit);
+                    profitPara.setAlignment(Element.ALIGN_RIGHT);
+                    discountPara = new Paragraph("\n" + "Discount Amount : " + discount);
+                    discountPara.setAlignment(Element.ALIGN_RIGHT);
+                    totalDiscountPara = new Paragraph("\n" + "Total Amount after Discount : " + totalAfterDiscount);
+                    totalDiscountPara.setAlignment(Element.ALIGN_RIGHT);
+                    table.setWidthPercentage(100);
+                    document.add(table);
+                    document.add(totalPara);
+                    document.add(profitPara);
+                    document.add(discountPara);
+                    document.add(totalDiscountPara);
+
+//            document.add
+                    document.close();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                return null;
+
+            }
+            File f = new File("TransactionReport.pdf");
+            Resource file = new UrlResource(f.toURI());
+            return ResponseEntity
                     .ok()
                     .contentLength(file.contentLength())
                     .contentType(
                             MediaType.parseMediaType("application/pdf"))
                     .body(new InputStreamResource(file.getInputStream()));
         }
-
-
 
 
 
