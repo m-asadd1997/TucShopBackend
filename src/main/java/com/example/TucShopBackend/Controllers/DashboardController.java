@@ -23,7 +23,7 @@ import java.util.List;
  */
 @CrossOrigin
 @RestController
-@RequestMapping("/api/dashboard")
+    @RequestMapping("/api/dashboard")
 public class DashboardController {
 
     @Autowired
@@ -88,9 +88,10 @@ public class DashboardController {
     public ApiResponse getMonthlySales(){
         return dashboardService.getMonthlySales();
     }
-
     @PostMapping ("/settings")
-    public  ApiResponse settings(@Valid @RequestParam ("logo")MultipartFile logo, SettingsDTO settingsDTO){ settingsDTO.setLogo(logo);
+    public  ApiResponse settings(@Valid @RequestParam (value = "logo",required = false)MultipartFile logo, SettingsDTO settingsDTO)
+    {   if(logo!=null)
+        settingsDTO.setLogo(logo);
       return  dashboardService.postSettings(settingsDTO);
     }
 

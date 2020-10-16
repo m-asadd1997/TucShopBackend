@@ -71,7 +71,7 @@ public class TransactionsController {
       return  this.transactionService.getAllPending();
 
     }
-    @GetMapping("/deleteTransaction/{id}")
+    @DeleteMapping("/deleteTransaction/{id}")
     public ApiResponse deleteTransaction(@PathVariable("id") Long id){
         return this.transactionService.deleteTransaction((id));
 
@@ -110,9 +110,17 @@ public class TransactionsController {
     @GetMapping("/downloadtransaction/{startDate}/{endDate}")
     public ResponseEntity<InputStreamResource> downloadAllTransaction(@PathVariable("startDate") String startDate, @PathVariable ("endDate") String endDate) throws IOException {
         return transactionService.downloadAllTransaction(startDate, endDate);
+      
+      
+//    @DeleteMapping("/{id}")
+//    public ApiResponse deleteTransaction(@PathVariable("id") Long id )  {
+//        return transactionService.delete
+//    }
     }
 
 }
+
+
 
 
 
