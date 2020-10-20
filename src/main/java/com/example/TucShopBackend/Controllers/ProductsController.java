@@ -99,8 +99,12 @@ public class ProductsController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse updateById(@PathVariable("id") Long id ,@RequestParam("image") MultipartFile image, ProductsDTO productsDTO){
-       productsDTO.setImage(image);
+    public ApiResponse updateById(@PathVariable("id") Long id ,@RequestParam(value = "image",required = false) MultipartFile image, ProductsDTO productsDTO){
+      if(image!=null){
+          productsDTO.setImage(image);
+      }
+
+
         return productsService.updateById(id,productsDTO);
     }
     @RequestMapping(value ="/image/{category}/{productName}/{filename:.+}", method = RequestMethod.GET)
@@ -147,5 +151,9 @@ public class ProductsController {
     {
         return productsService.joinAllProducts(PageRequest.of(page,10));
 
+    }
+    @GetMapping("/getbybarcode/{code}")
+    public ApiResponse getByBarCode(@PathVariable("code") String code){
+        return this.productsService.getProductByBarCode(code);
     }
 }

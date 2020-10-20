@@ -13,6 +13,7 @@ import com.example.TucShopBackend.Models.Product;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
 //import org.springframework.mock.web.MockMultipartFile;
 import com.example.TucShopBackend.Repositories.ProductsRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
@@ -68,6 +69,9 @@ public class    ProductsService {
 
     public ApiResponse saveProducts(ProductsDTO productsDTO){
 
+        if (checkProductBarcodeExsist(productsDTO,null)){
+            return new ApiResponse(Status.Status_DUPLICATE, "Barcode already exist", null);
+        }
 
        List< Product> productName = productsRepository.findByName(productsDTO.getName(), productsDTO.getVariants());
 //
@@ -116,6 +120,7 @@ public class    ProductsService {
                             product.setDate1(productsDTO.getDate1());
                             product.setVariants(productsDTO.getVariants());
                             product.setActive(true);
+                            product.setSku(productsDTO.getSku());
                             productsRepository.save(product);
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
 
@@ -144,6 +149,7 @@ public class    ProductsService {
                             product.setDate1(productsDTO.getDate1());
                             product.setVariants(productsDTO.getVariants());
                             product.setActive(true);
+                            product.setSku(productsDTO.getSku());
                             productsRepository.save(product);
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
 
@@ -174,6 +180,7 @@ public class    ProductsService {
                             product.setCostprice(productsDTO.getCostprice());
                             product.setName(productsDTO.getName());
                             product.setVariants(productsDTO.getVariants());
+                            product.setSku(productsDTO.getSku());
                             productsRepository.save(product);
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
                         } catch (IOException e) {
@@ -203,6 +210,7 @@ public class    ProductsService {
                 product.setCostprice(productsDTO.getCostprice());
                 product.setName(productsDTO.getName());
                 product.setVariants(productsDTO.getVariants());
+                product.setSku(productsDTO.getSku());
                 productsRepository.save(product);
                 return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
             }
@@ -233,6 +241,7 @@ public class    ProductsService {
                 product.setDate1(productsDTO.getDate1());
                 product.setVariants(productsDTO.getVariants());
                 product.setActive(true);
+                product.setSku(productsDTO.getSku());
                 productsRepository.save(product);
                 return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
             }
@@ -248,6 +257,11 @@ public class    ProductsService {
     }
 
     public Boolean saveProductImage(MultipartFile file, String name, String unique  ){
+
+        if(file == null){
+            return  true;
+        }
+
         try{
 
         String UPLOADED_FOLDER_NEW = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+name+"//"+"products"+"//";
@@ -362,6 +376,10 @@ public class    ProductsService {
     }
 
     public ApiResponse updateById(Long id , ProductsDTO productsDTO) {
+        if (checkProductBarcodeExsist(productsDTO,id)){
+            return new ApiResponse(Status.Status_DUPLICATE, "Barcode already exist", null);
+        }
+
 
         Category category = getCategoryById(productsDTO.getCategory().getId());
 
@@ -372,12 +390,12 @@ public class    ProductsService {
         Optional<Product>findProduct = productsRepository.findById(id);
         Product product = findProduct.get();
 
-        if(productsDTO.getImage().getOriginalFilename().isEmpty()) {
+        if(productsDTO.getImage()!=null && productsDTO.getImage().getOriginalFilename().isEmpty()) {
             product.setImage(null);
             return populateResponse(productsDTO, category, product);
         }
 
-         if(product.getImage()!=null && product.getImage().equalsIgnoreCase( productsDTO.getImage().getName())){
+         if(product.getImage()!=null && productsDTO.getImage()!=null && product.getImage().equalsIgnoreCase(productsDTO.getImage().getName())){
 
              return populateResponse(productsDTO, category, product);
          }
@@ -386,16 +404,22 @@ public class    ProductsService {
                 case CustomConstants.DEV:
                     String unique = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
 
+
                     if (saveProductImage(productsDTO.getImage(), category.getName(), unique)) {
 
                         product.setName(productsDTO.getName());
-                        product.setImage(productImageUrl+category.getName()+"/"+productsDTO.getName()+"/"+unique+productsDTO.getImage().getOriginalFilename());
+                        if(productsDTO.getImage()!=null) {
+                            product.setImage(productImageUrl + category.getName() + "/" + productsDTO.getName() + "/" + unique + productsDTO.getImage().getOriginalFilename());
+                        }else{
+                            product.setImage(productDeafultImageUrl);
+                        }
                         product.setDescription(productsDTO.getDescription());
                         product.setPrice(productsDTO.getPrice());
                         product.setQty(productsDTO.getQuantity());
                         product.setCostprice(productsDTO.getCostprice());
                         product.setCategory(category);
                         product.setVariants(productsDTO.getVariants());
+                        product.setSku(productsDTO.getSku());
                         productsRepository.save(product);
                         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
                     }
@@ -405,12 +429,14 @@ public class    ProductsService {
                     try {
                         Map map =  cloudinaryService.upload(productsDTO.getImage());
                         product.setName(productsDTO.getName());
+                        if(productsDTO.getImage()!=null)
                         product.setImage(map.get("url").toString());
                         product.setDescription(productsDTO.getDescription());
                         product.setPrice(productsDTO.getPrice());
                         product.setQty(productsDTO.getQuantity());
                         product.setCostprice(productsDTO.getCostprice());
                         product.setCategory(category);
+                        product.setSku(productsDTO.getSku());
                         productsRepository.save(product);
                         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
                     } catch (IOException e) {
@@ -426,6 +452,26 @@ public class    ProductsService {
 
     }
 
+    private boolean checkProductBarcodeExsist(ProductsDTO productsDTO,Long id) {
+        if(StringUtils.isNotBlank(productsDTO.getSku())){
+            if(id !=null){
+                Product barCodeExist = productsRepository.getDistinctProductByBarCode(productsDTO.getSku(),id);
+                if(barCodeExist!=null){
+                    return true;
+                }
+            }else{
+                Product barCodeExist = productsRepository.getProductByBarCode(productsDTO.getSku());
+                if(barCodeExist!=null){
+                    return true;
+                }
+            }
+
+
+
+        }
+        return false;
+    }
+
     private ApiResponse populateResponse(ProductsDTO productsDTO, Category category, Product product) {
         product.setName(productsDTO.getName());
         product.setDescription(productsDTO.getDescription());
@@ -433,6 +479,7 @@ public class    ProductsService {
         product.setQty(productsDTO.getQuantity());
         product.setCostprice(productsDTO.getCostprice());
         product.setCategory(category);
+        product.setSku(productsDTO.getSku());
         productsRepository.save(product);
         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
 
@@ -551,5 +598,27 @@ public class    ProductsService {
         }
 
         return  true;
+    }
+
+    public ApiResponse getProductByBarCode(String code){
+      Product product = productsRepository.getProductByBarCode(code);
+        if(product!=null){
+
+            if(product.isInfiniteQuantity()){
+                return new ApiResponse(Status.Status_Ok,"Success",product);
+            }
+
+            if(product.getQty()>0 ){
+            product.setQty(product.getQty()-1);
+            Product p = productsRepository.save(product);
+                return new ApiResponse(Status.Status_Ok,"Success",p);
+            }else {
+                return new ApiResponse(Status.Status_ERROR,"Out of Stock",null);
+            }
+
+        }else{
+            return new ApiResponse(Status.Status_ERROR,"Product not in Database",null);
+        }
+
     }
 }
