@@ -1,8 +1,9 @@
 package com.example.TucShopBackend.Models;
 
+import com.example.TucShopBackend.Config.LocalDateEncryptDecryptConverter;
+
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.TimeZone;
 
 @Entity
 @Table(name = "user")
@@ -36,17 +37,18 @@ public class User {
     @Column
 	  private String accountAccessKey;
 
-    @Column
-	  LocalDate accountExpire;
+//	 @Column
+	 @Convert(converter = LocalDateEncryptDecryptConverter.class)
+     LocalDate accountExpire;
 
-    @Column
-	  LocalDate accountAccessDate;
+//	@Column
+	@Convert(converter = LocalDateEncryptDecryptConverter.class)
+	LocalDate accountAccessDate;
 
-	public User() {
+
+
+    public User() {
 	}
-
-
-
 
 	public User(String s, String usertest, String encode, boolean b, String user, long l, LocalDate accessDate, LocalDate expireDate, String trial) {
 

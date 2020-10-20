@@ -2,8 +2,11 @@ package com.example.TucShopBackend.Services;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.Status;
+import com.example.TucShopBackend.DTO.TokenDTO;
 import com.example.TucShopBackend.DTO.UserDto;
+import com.example.TucShopBackend.Models.Token;
 import com.example.TucShopBackend.Models.User;
+import com.example.TucShopBackend.Repositories.TokenRepository;
 import com.example.TucShopBackend.Repositories.UserDao;
 import org.apache.tomcat.jni.Local;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +29,10 @@ public class UserServiceImpl implements UserDetailsService {
 	
 	@Autowired
 	private UserDao userDao;
+
+	@Autowired
+	private TokenRepository tokenRepository;
+
 
 
 	@Autowired
@@ -73,6 +80,7 @@ public class UserServiceImpl implements UserDetailsService {
 
     public ApiResponse save(UserDto user) {
 		User founduser = userDao.findByEmail(user.getEmail());
+	//	Token subscriptionToken = tokenRepository.findSubscriptionToken(tokenDTO.getToken());
 		if(founduser == null) {
 			User newUser = new User();
 			newUser.setEmail(user.getEmail());
