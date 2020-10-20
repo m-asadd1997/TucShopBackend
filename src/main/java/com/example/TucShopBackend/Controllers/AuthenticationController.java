@@ -55,6 +55,9 @@ public class AuthenticationController {
         final User user = userService.findOne(loginUser.getUsername());
         final String token = jwtTokenUtil.generateToken(user);
         LocalDate accessDate = LocalDate.now();
+        if(!user.getActive()){
+            return new ApiResponse<>(200, "User is Expired! Please Contact to Support.", null);
+        }
         if(user.getAccountAccessKey().equalsIgnoreCase("trial")){
             if (accessDate.isBefore(user.getAccountAccessDate()) || accessDate.isAfter(user.getAccountExpire())) {
                 if (accessDate.isAfter(user.getAccountExpire())) {
