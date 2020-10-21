@@ -30,10 +30,6 @@ public class UserServiceImpl implements UserDetailsService {
 	@Autowired
 	private UserDao userDao;
 
-	@Autowired
-	private TokenRepository tokenRepository;
-
-
 
 	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
@@ -80,7 +76,6 @@ public class UserServiceImpl implements UserDetailsService {
 
     public ApiResponse save(UserDto user) {
 		User founduser = userDao.findByEmail(user.getEmail());
-	//	Token subscriptionToken = tokenRepository.findSubscriptionToken(tokenDTO.getToken());
 		if(founduser == null) {
 			User newUser = new User();
 			newUser.setEmail(user.getEmail());
@@ -90,10 +85,11 @@ public class UserServiceImpl implements UserDetailsService {
 			newUser.setUserType(user.getUserType());
 			newUser.setActive(user.getActive());
 			if(user.getAccountAccessKey().equalsIgnoreCase("trial")) {
-				newUser.setAccountAccessKey(user.getAccountAccessKey());
-				newUser.setAccountAccessDate(LocalDate.now());
-				newUser.setAccountExpire(LocalDate.now().plusMonths(1));
-			}else {
+					newUser.setAccountAccessKey(user.getAccountAccessKey());
+					newUser.setAccountAccessDate(LocalDate.now());
+					newUser.setAccountExpire(LocalDate.now().plusMonths(1));
+			}
+			else {
 
 				if(user.getAccountAccessKey().equalsIgnoreCase("permanet")){
 					newUser.setAccountAccessKey(user.getAccountAccessKey());

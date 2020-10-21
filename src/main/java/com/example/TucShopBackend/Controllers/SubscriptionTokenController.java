@@ -3,22 +3,29 @@ package com.example.TucShopBackend.Controllers;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.DTO.TokenDTO;
+import com.example.TucShopBackend.DTO.UserDto;
 import com.example.TucShopBackend.Models.Token;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.TucShopBackend.Services.TokenService;
+import com.example.TucShopBackend.Services.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @CrossOrigin
 @RestController
 @RequestMapping ("/api/subscription")
 public class SubscriptionTokenController {
 
-//    @GetMapping("/token")
-//    public Token subscriptionToken (TokenDTO tokenDTO){
-//
-//
-//    }
+    @Autowired
+    TokenService tokenService;
 
+    @Autowired
+    UserServiceImpl userService;
+
+    @PostMapping("/{token}")
+    public ApiResponse subscriptionToken (@PathVariable ("token") String token,  @RequestBody UserDto userDto ){
+        return tokenService.validateSubscriptionToken(token, userDto )  ;
+    }
 
 }
