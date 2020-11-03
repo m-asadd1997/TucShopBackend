@@ -37,6 +37,7 @@ public class TokenService {
                   user.setActive(Boolean.TRUE);
               }
               userDao.saveAll(founduser);
+              tokenRepository.deleteById(subscriptionToken.getId());
            }
         }else{
             return new ApiResponse(Status.Status_ERROR, "Invalid Subscription Token", token);
