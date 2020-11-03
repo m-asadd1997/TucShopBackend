@@ -33,6 +33,7 @@ public class Transactions {
     Double discount;
     String waiterName;
     Long tableNumber;
+    Double profit;
 
 
                        //request user
@@ -52,10 +53,11 @@ public class Transactions {
     public Transactions() {
     }
 
-    public Transactions(Long id, LocalDate date, Double amount, String createdBy, String updatedBy, String requestedUser, String status, String action, Double discount, Set<ProductTransaction> productTransactions) {
+    public Transactions(Long id, Double profit, LocalDate date, Double amount, String createdBy, String updatedBy, String requestedUser, String status, String action, Double discount, Set<ProductTransaction> productTransactions) {
         this.id = id;
         this.date = date;
         this.amount = amount;
+        this.profit = profit;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.requestedUser = requestedUser;
@@ -191,6 +193,14 @@ public class Transactions {
 
     public void setTableNumber(Long tableNumber) {
         this.tableNumber = tableNumber;
+    }
+
+    public Double getProfit() {
+        return profit;
+    }
+
+    public void setProfit(Double profit) {
+        this.profit = profit;
     }
 }
 

@@ -2,8 +2,11 @@ package com.example.TucShopBackend.Services;
 
 import com.example.TucShopBackend.Commons.ApiResponse;
 import com.example.TucShopBackend.Commons.Status;
+import com.example.TucShopBackend.DTO.TokenDTO;
 import com.example.TucShopBackend.DTO.UserDto;
+import com.example.TucShopBackend.Models.Token;
 import com.example.TucShopBackend.Models.User;
+import com.example.TucShopBackend.Repositories.TokenRepository;
 import com.example.TucShopBackend.Repositories.UserDao;
 import org.apache.tomcat.jni.Local;
 import org.jetbrains.annotations.NotNull;
@@ -82,10 +85,11 @@ public class UserServiceImpl implements UserDetailsService {
 			newUser.setUserType(user.getUserType());
 			newUser.setActive(user.getActive());
 			if(user.getAccountAccessKey().equalsIgnoreCase("trial")) {
-				newUser.setAccountAccessKey(user.getAccountAccessKey());
-				newUser.setAccountAccessDate(LocalDate.now());
-				newUser.setAccountExpire(LocalDate.now().plusMonths(1));
-			}else {
+					newUser.setAccountAccessKey(user.getAccountAccessKey());
+					newUser.setAccountAccessDate(LocalDate.now());
+					newUser.setAccountExpire(LocalDate.now().plusMonths(1));
+			}
+			else {
 
 				if(user.getAccountAccessKey().equalsIgnoreCase("permanet")){
 					newUser.setAccountAccessKey(user.getAccountAccessKey());

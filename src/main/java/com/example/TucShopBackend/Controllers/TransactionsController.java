@@ -107,11 +107,18 @@ public class TransactionsController {
         return transactionService.updateTransaction(id,transactionsDTO,user);
     }
 
+    @GetMapping("/downloadtransaction/{startDate}/{endDate}")
+    public ResponseEntity<InputStreamResource> downloadAllTransaction(@PathVariable("startDate") String startDate, @PathVariable ("endDate") String endDate) throws IOException {
+        return transactionService.downloadAllTransaction(startDate, endDate);
+      
+      
 //    @DeleteMapping("/{id}")
 //    public ApiResponse deleteTransaction(@PathVariable("id") Long id )  {
 //        return transactionService.delete
 //    }
     }
+
+}
 
 
 
