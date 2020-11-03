@@ -21,7 +21,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     public List<Product> getAllByCategoryId(@Param("id") Long id);
 
     @Query(value="select * from product where name = :name and variants= :variant", nativeQuery = true)
-    public List<Product> findByName(String name, String variant);
+    public List<Product> findByName(@Param("name") String name, @Param("variant") String variant);
 
 //    @Query(value = "select variants from products",nativeQuery = true)
 //    public List<String> findByVariants();
@@ -55,7 +55,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     public List<VariantsDTO> getVariants(@Param("keyword")String keyword);
 
 
-    @Query(value = "SELECT * FROM product WHERE name LIKE :keyword% AND active =1 " , nativeQuery = true)
+    @Query(value = "SELECT * FROM product WHERE name LIKE %:keyword% AND active =1 " , nativeQuery = true)
     public List<Product> searchProductByKeyword(@Param("keyword")String keyword);
 
 
@@ -91,4 +91,10 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
 
     @Query(value = "select * from tucshop.product where active = 1", nativeQuery = true)
     Page<Product> findByCondition(Pageable pageable);
+
+    @Query(value="select * from tucshop.product where product.sku=:code AND product.active =1",nativeQuery = true)
+    public Product getProductByBarCode(@Param("code") String code);
+
+    @Query(value="select * from tucshop.product where product.sku=:code AND product.active =1 AND product.id !=:id",nativeQuery = true)
+    public Product getDistinctProductByBarCode(@Param("code") String code,@Param("id") Long id );
 }

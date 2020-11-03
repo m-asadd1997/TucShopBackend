@@ -1,0 +1,27 @@
+
+
+
+Post call =  http://localhost:8080/token/user
+
+For admin
+
+{
+	"name": "admintest",
+	"email": "a@a.com",
+	"password": "111",
+	 "active":  true,
+	 "userType": "ADMIN",
+	 "accountAccessKey":"trial"
+
+}
+
+For User
+{
+	"name": "usertest",
+	"email": "t@t.com",
+	"password": "111",
+	 "active":  true,
+	 "userType": "USER",
+	 "accountAccessKey":"trial"
+
+}
