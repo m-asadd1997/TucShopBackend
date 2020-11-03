@@ -7,6 +7,7 @@ public class AuthToken {
     private String userType;
     private String email;
     private String accountAccessKey;
+    private Boolean active;
 
     public AuthToken(String token, String username, String userType ) {
         this.token = token;
@@ -14,12 +15,13 @@ public class AuthToken {
         this.userType = userType;
     }
 
-    public AuthToken(String token, String username, String userType, String email, String accountAccessKey) {
+    public AuthToken(String token, String username, String userType, String email, String accountAccessKey, Boolean active) {
         this.token = token;
         this.username = username;
         this.userType = userType;
         this.email = email;
         this.accountAccessKey = accountAccessKey;
+        this.active = active;
 
     }
 
@@ -80,5 +82,13 @@ public class AuthToken {
 
     public void setAccountAccessKey(String accountAccessKey) {
         this.accountAccessKey = accountAccessKey;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

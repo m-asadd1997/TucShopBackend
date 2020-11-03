@@ -1,5 +1,7 @@
 package com.example.TucShopBackend.Config;
 
+import org.springframework.stereotype.Service;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -9,6 +11,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.util.Base64;
 
+@Service
 public class AttributeEncryptor implements AttributeConverter<String, String> {
 
     private static final String AES = "AES";

@@ -56,6 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/transaction/recent-transactions").permitAll()
                 .antMatchers("/*").permitAll()
                 .antMatchers("/assets/*").permitAll()
+                .antMatchers("/api/subscription/*").permitAll()
+
                 //.antMatchers("/api/product/image/****").permitAll()
                 ///api/product/image/chips/lays/1585405177003lays.jpg
 //                .antMatchers("/api/*").hasAuthority("ADMIN")

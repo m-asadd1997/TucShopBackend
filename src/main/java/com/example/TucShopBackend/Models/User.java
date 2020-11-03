@@ -38,11 +38,11 @@ public class User {
 	  private String accountAccessKey;
 
 	 @Column
-	// @Convert(converter = LocalDateEncryptDecryptConverter.class)
+	 @Convert(converter = LocalDateEncryptDecryptConverter.class)
      LocalDate accountExpire;
 
 	@Column
-//	@Convert(converter = LocalDateEncryptDecryptConverter.class)
+	@Convert(converter = LocalDateEncryptDecryptConverter.class)
 	LocalDate accountAccessDate;
 
 
