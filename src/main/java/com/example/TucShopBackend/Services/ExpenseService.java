@@ -66,7 +66,7 @@ public class ExpenseService {
 
             Expense expense1 = expenseOptional.get();
             expense1.setTotal(expenseDTO.getTotal());
-            expense1.setDate(LocalDate.now());
+            expense1.setDate(expenseDTO.getDate());
 
             List<Expense_Details> listForUpdate = new ArrayList<>();
             List<Expense_Details> expenseDetailsList1 = expenseDetailsRepository.getExpenseDetailsByForeignKey(id);
