@@ -544,29 +544,116 @@ public class TransactionService {
 
 
     public ResponseEntity<InputStreamResource> downloadBalanceSheet (String startDate, String endDate) throws  IOException {
-
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        List<Settings> settings = settingsRepository.findAll();
         Integer srno = 1;
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println(dtf.format(now));
         Double total = 0D;
         List<Expense> expenses = expenseRepository.downloadExpenseByDate(startDate, endDate);
         if (expenses.size()>0) {
             try {
                 Document document = new Document();
                 PdfWriter.getInstance(document, new FileOutputStream("TransactionReport.pdf"));
+                Font fontHeader = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
 
-                for (Expense expense : expenses) {
-                    String header=expense.getDate().toString();
+                   for (Expense expense : expenses) {
+                       String header = expense.getDate().toString();
 
-                    Font fontHeader = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+                       Paragraph headingPara, totalPara;
+                       headingPara = new Paragraph(header + "\n" + "\n");
+                       headingPara.setAlignment(Element.ALIGN_CENTER);
+
+                       PdfPTable table = new PdfPTable(7);
+                       table.setWidths(new float[]{2f, 10f, 5f, 5f, 5f, 3f, 6f});
+
+                       PdfPCell c1 = new PdfPCell(new Phrase("SR#"));
+                       c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                       table.addCell(c1);
+
+                       c1 = new PdfPCell(new Phrase("Subject"));
+                       c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                       table.addCell(c1);
+
+                       c1 = new PdfPCell(new Phrase("Amount"));
+                       c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                       table.addCell(c1);
+
+                       c1 = new PdfPCell(new Phrase("Debit"));
+                       c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                       table.addCell(c1);
+
+                       c1 = new PdfPCell(new Phrase("Credit"));
+                       c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                       table.addCell(c1);
+
+                       c1 = new PdfPCell(new Phrase("Type"));
+                       c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                       table.addCell(c1);
+
+                       c1 = new PdfPCell(new Phrase("Balance"));
+                       c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                       table.addCell(c1);
+
+                       table.setHeaderRows(1);
+                       document.open();
+                       document.addTitle("Transaction Report");
+                       document.add(headingPara);
+
+                       Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+
+                       for (Expense_Details expense_details : expense.getExpenseDetailsList()) {
+                           table.addCell(srno.toString());
+                           table.addCell(expense_details.getSubject());
+                           table.addCell(expense_details.getAmount().toString());
+                           table.addCell(expense_details.getDebit().toString());
+                           table.addCell(expense_details.getCredit().toString());
+                           table.addCell(expense_details.getType());
+                           table.addCell(expense_details.getBalance().toString());
+                           srno++;
+
+                       }
+                       total = expense.getTotal();
+
+                       totalPara = new Paragraph("\n" + "Total Amount : " + total);
+                       totalPara.setAlignment(Element.ALIGN_RIGHT);
+                       table.setWidthPercentage(100);
+                       document.add(table);
+                       document.add(totalPara);
+                       document.newPage();
+                   }
+                document.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            return null;
+
+        }
+        File f = new File("TransactionReport.pdf");
+        Resource file = new UrlResource(f.toURI());
+        return ResponseEntity
+                .ok()
+                .contentLength(file.contentLength())
+                .contentType(
+                        MediaType.parseMediaType("application/pdf"))
+                .body(new InputStreamResource(file.getInputStream()));
+    }
+
+
+    public ResponseEntity<InputStreamResource> balanceSheet(String startDate) throws  IOException {
+        Integer srno = 1;
+        Double total = 0D;
+        Expense expenses = expenseRepository.expenseByDate(startDate);
+        if (expenses !=null) {
+            try {
+                Document document = new Document();
+                PdfWriter.getInstance(document, new FileOutputStream("TransactionReport.pdf"));
+                Font fontHeader = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
+
+                    String header = expenses.getDate().toString();
                     Paragraph headingPara, totalPara;
                     headingPara = new Paragraph(header + "\n" + "\n");
                     headingPara.setAlignment(Element.ALIGN_CENTER);
 
                     PdfPTable table = new PdfPTable(7);
-                    table.setWidths(new float[]{2f, 10f, 5f, 5f, 5f, 6f, 3f});
+                    table.setWidths(new float[]{2f, 10f, 5f, 5f, 5f, 3f, 6f});
 
                     PdfPCell c1 = new PdfPCell(new Phrase("SR#"));
                     c1.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -602,9 +689,8 @@ public class TransactionService {
                     document.add(headingPara);
 
                     Font font = FontFactory.getFont(FontFactory.COURIER, 16, BaseColor.BLACK);
-//                for (Expense expense : expenses) {
-//                    total = expense.getTotal();
-                    for (Expense_Details expense_details : expense.getExpenseDetailsList()) {
+
+                    for (Expense_Details expense_details : expenses.getExpenseDetailsList()) {
                         table.addCell(srno.toString());
                         table.addCell(expense_details.getSubject());
                         table.addCell(expense_details.getAmount().toString());
@@ -615,15 +701,15 @@ public class TransactionService {
                         srno++;
 
                     }
-                    total = expense.getTotal();
-//                }
+
+                    total = expenses.getTotal();
                     totalPara = new Paragraph("\n" + "Total Amount : " + total);
                     totalPara.setAlignment(Element.ALIGN_RIGHT);
+
                     table.setWidthPercentage(100);
                     document.add(table);
                     document.add(totalPara);
                     document.close();
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

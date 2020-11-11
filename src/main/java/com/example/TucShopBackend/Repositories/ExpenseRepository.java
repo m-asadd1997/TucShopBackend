@@ -17,4 +17,6 @@ public interface ExpenseRepository extends JpaRepository<Expense,Long> {
     @Query(value = "SELECT * FROM expense e WHERE  e.date BETWEEN :startDate AND :endDate", nativeQuery = true)
     List<Expense> downloadExpenseByDate(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
+    @Query(value = "SELECT * FROM expense e WHERE  e.date=:startDate", nativeQuery = true)
+    Expense expenseByDate(@Param("startDate") String startDate);
 }
