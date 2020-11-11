@@ -621,4 +621,13 @@ public class    ProductsService {
         }
 
     }
+
+    public void subtractQuantityById(Long id , Long quantity){
+        Product product =  productsRepository.findById(id).get();
+        Double updatedQuantity = (product.getQty()-quantity);
+        product.setQty(updatedQuantity);
+
+        productsRepository.save(product);
+//        productsRepository.updateQuantity(id,quantity);
+    }
 }
