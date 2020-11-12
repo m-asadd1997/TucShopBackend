@@ -110,13 +110,23 @@ public class TransactionsController {
     @GetMapping("/downloadtransaction/{startDate}/{endDate}")
     public ResponseEntity<InputStreamResource> downloadAllTransaction(@PathVariable("startDate") String startDate, @PathVariable ("endDate") String endDate) throws IOException {
         return transactionService.downloadAllTransaction(startDate, endDate);
-      
-      
+    }
+
+    @GetMapping("/downloadbalancesheet/{startDate}/{endDate}")
+        public ResponseEntity<InputStreamResource> downloadBalanceSheet(@PathVariable("startDate") String startDate, @PathVariable ("endDate") String endDate) throws IOException {
+        return transactionService.downloadBalanceSheet(startDate, endDate);
+    }
+
+    @GetMapping("/balancesheet/{startDate}")
+    public ResponseEntity<InputStreamResource> balanceSheet(@PathVariable("startDate") String startDate) throws IOException {
+        return transactionService.balanceSheet(startDate);
+
+    }
 //    @DeleteMapping("/{id}")
 //    public ApiResponse deleteTransaction(@PathVariable("id") Long id )  {
 //        return transactionService.delete
 //    }
-    }
+
 
 }
 
