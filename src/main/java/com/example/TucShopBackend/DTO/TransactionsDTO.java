@@ -24,6 +24,7 @@ public class TransactionsDTO  implements Serializable {
     Long tableNumber;
     Double profit;
     Double costprice;
+    Long phoneNumber;
 
 
    List<ProductTransaction> productTransactions;
@@ -164,5 +165,13 @@ public class TransactionsDTO  implements Serializable {
 
     public void setCostprice(Double costprice) {
         this.costprice = costprice;
+    }
+
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

@@ -20,7 +20,6 @@ public class Transactions {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
     LocalDate date;
     Double amount;
     String createdBy;
@@ -34,6 +33,7 @@ public class Transactions {
     String waiterName;
     Long tableNumber;
     Double profit;
+    Long phoneNumber;
 
 
                        //request user
@@ -65,6 +65,8 @@ public class Transactions {
         this.action = action;
         this.productTransactions = productTransactions;
     }
+
+
 
 //    public Transactions(String name, ProductTransaction... productTransactions) {
 //        this.name = name;
@@ -201,6 +203,14 @@ public class Transactions {
 
     public void setProfit(Double profit) {
         this.profit = profit;
+    }
+
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }
 
