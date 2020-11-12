@@ -80,7 +80,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
             "where pt.product.id = p.id AND pt.transaction.id = t.id AND t.status='complete' ")
     public  List<Object>  getTotalprofit();
 
-    @Query(value = "Select Sum(costprice*qty) from tucshop.product where active =1;",nativeQuery = true)
+    @Query(value = "Select Sum(costprice*qty) from tucshop.product where active =1 AND infinite_quantity=0",nativeQuery = true)
     public Long getTotalInventory();
 
 
