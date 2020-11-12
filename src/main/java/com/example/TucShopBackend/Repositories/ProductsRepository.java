@@ -7,10 +7,12 @@ import com.example.TucShopBackend.Models.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -78,7 +80,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
             "where pt.product.id = p.id AND pt.transaction.id = t.id AND t.status='complete' ")
     public  List<Object>  getTotalprofit();
 
-    @Query(value = "Select Sum(costprice*qty) from tucshop.product where active =1;",nativeQuery = true)
+    @Query(value = "Select Sum(costprice*qty) from tucshop.product where active =1 AND infinite_quantity=0",nativeQuery = true)
     public Long getTotalInventory();
 
 
@@ -97,4 +99,8 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
 
     @Query(value="select * from tucshop.product where product.sku=:code AND product.active =1 AND product.id !=:id",nativeQuery = true)
     public Product getDistinctProductByBarCode(@Param("code") String code,@Param("id") Long id );
+
+    @Modifying @Transactional
+    @Query(value = "UPDATE product SET qty=qty-:quantity WHERE id=:id",nativeQuery = true)
+    void updateQuantity(@Param("id") Long id, @Param("quantity") Long quantity);
 }

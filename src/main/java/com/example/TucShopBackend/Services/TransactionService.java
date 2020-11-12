@@ -58,7 +58,11 @@ public class TransactionService {
     SettingsRepository settingsRepository;
 
     @Autowired
+    ProductsService productsService;
+    
+    @Autowired
     ExpenseRepository expenseRepository;
+
 
     @Autowired
     PdfUtil pdfUtil;
@@ -106,7 +110,18 @@ public class TransactionService {
         transactions.setUpdatedBy(user.getName());
 
 
-        transactionsRepository.save(transactions);
+
+                for(ProductTransaction productTransaction:productTransactions   )
+                {
+                    productsService.subtractQuantityById(productTransaction.getProduct().getId(),productTransaction.getQuantity());
+                }
+
+
+                transactionsRepository.save(transactions);
+
+
+
+
 
         return new ApiResponse(Status.Status_Ok, "Transaction saved successfully", transactions);
     }
