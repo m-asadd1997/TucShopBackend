@@ -83,6 +83,7 @@ public class TransactionService {
         transactions.setProfit(totalProfit);
         transactions.setWaiterName(transactionsDTO.getWaiterName());
         transactions.setTableNumber(transactionsDTO.getTableNumber());
+        transactions.setPhoneNumber(transactionsDTO.getPhoneNumber());
         if (transactionsDTO.getAction().equals("SC")) {
             transactions.setStatus("complete");
             transactions.setRequestedUser(user.getName());
