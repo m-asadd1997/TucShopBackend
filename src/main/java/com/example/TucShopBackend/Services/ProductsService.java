@@ -5,6 +5,7 @@ import com.example.TucShopBackend.Commons.CustomConstants;
 
 import com.example.TucShopBackend.Commons.Status;
 
+import com.example.TucShopBackend.Config.CompressImage;
 import com.example.TucShopBackend.DTO.ProductsDTO;
 import com.example.TucShopBackend.DTO.UpdateStockDTO;
 import com.example.TucShopBackend.DTO.VariantsDTO;
@@ -46,6 +47,9 @@ public class    ProductsService {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    CompressImage compressImage;
 
     @Value("${product.image.url}")
     String productImageUrl;
@@ -275,9 +279,9 @@ public class    ProductsService {
                 dir.mkdirs();
             }
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename());
-            Files.write(path, bytes);
-
+            compressImage.saveCompressImage(bytes, name, unique, file.getOriginalFilename());
+//            Path path = Paths.get(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename());
+//            Files.write(path, bytes);
         }
         catch (IOException e){
             e.printStackTrace();
