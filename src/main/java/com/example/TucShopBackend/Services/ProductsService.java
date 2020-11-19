@@ -5,6 +5,7 @@ import com.example.TucShopBackend.Commons.CustomConstants;
 
 import com.example.TucShopBackend.Commons.Status;
 
+import com.example.TucShopBackend.Config.CompressImage;
 import com.example.TucShopBackend.DTO.ProductsDTO;
 import com.example.TucShopBackend.DTO.UpdateStockDTO;
 import com.example.TucShopBackend.DTO.VariantsDTO;
@@ -28,12 +29,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 //import sun.misc.IOUtils;
 
-import java.io.File;
-import java.io.IOException;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,6 +50,9 @@ public class    ProductsService {
 
     @Autowired
     ProductsRepository productsRepository;
+
+    @Autowired
+    CompressImage compressImage;
 
     @Autowired
     CategoryRepository categoryRepository;
@@ -275,8 +285,11 @@ public class    ProductsService {
                 dir.mkdirs();
             }
             byte[] bytes = file.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename());
-            Files.write(path, bytes);
+
+            compressImage.saveCompressImage(bytes, name, unique, file.getOriginalFilename());
+
+//            Path path = Paths.get(UPLOADED_FOLDER_NEW + unique+ file.getOriginalFilename());
+//            Files.write(path, bytes);
 
         }
         catch (IOException e){
