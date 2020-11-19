@@ -1,52 +1,21 @@
--- phpMyAdmin SQL Dump
--- version 4.8.5
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1
--- Generation Time: Oct 22, 2020 at 08:49 PM
--- Server version: 10.1.39-MariaDB
--- PHP Version: 7.3.5
+INSERT INTO `category` (`id`, `active`, `image`, `name`) VALUES
+(1, b'1', 'http://localhost:8080/api/category/image/BBQ/1600108584317bbqCategory.png', 'BBQ'),
+(2, b'1', 'http://localhost:8080/api/category/image/Chicken Karahi/1600108636310chickenKarahi.jpg', 'Chicken Karahi'),
+(3, b'1', 'http://localhost:8080/api/category/image/Mutton Karahi/1600108652822muttonKarahi.jpg', 'Mutton Karahi'),
+(4, b'1', 'http://localhost:8080/api/category/image/Katakat/1600108681632katakatPlate.jpg', 'Katakat'),
+(5, b'1', 'http://localhost:8080/api/category/image/Shaheen Shinwari Special/1600108711543mandi.jpg', 'Shaheen Shinwari Special'),
+(6, b'1', 'http://localhost:8080/api/category/image/Tandoori/1600108737909qandhaniNaan.jpg', 'Tandoori'),
+(7, b'1', 'http://localhost:8080/api/category/image/Hot&Cool/1600108766551cold-drinks-300x286.jpg', 'Hot&Cool'),
+(8, b'1', 'http://localhost:8080/api/category/image/Mutton Handi/1603296738942Muttonhandi.jpg', 'Mutton Handi'),
+(9, b'1', 'http://localhost:8080/api/category/image/Chicken Handi/1603298473400Chicken Handi.jpg', 'Chicken Handi'),
+(10, b'1', 'http://localhost:8080/api/category/image/Arabian Mandi/1603298951680Arabian Mandi.jpg', 'Arabian Mandi'),
+(11, b'1', 'http://localhost:8080/api/category/image/Special Chicken Zaitoon/1603299461819Special Chicken Zaitoon.jpg', 'Special Chicken Zaitoon'),
+(12, b'1', 'http://localhost:8080/api/category/image/Special Chicken Butter/1603299859351Special Chicken Butter.jpg', 'Special Chicken Butter'),
+(13, b'1', 'http://localhost:8080/api/category/image/Daal/1603300110804Daal.jpg', 'Daal'),
+(14, b'1', 'http://localhost:8080/api/category/image/Salada Raita/1603300419035Salada Raita.jpg', 'Salada Raita'),
+(15, b'1', 'http://localhost:8080/api/category/image/Fish/1603300563213Fish.jpg', 'Fish'),
+(16, b'1', 'http://localhost:8080/api/category/image/Ice Cream/1603301561871Ice Cream.jpg', 'Ice Cream');
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `tucshop`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product`
---
-
-CREATE TABLE `product` (
-  `id` bigint(20) NOT NULL,
-  `active` bit(1) NOT NULL,
-  `costprice` double NOT NULL,
-  `date1` varchar(255) DEFAULT NULL,
-  `description` varchar(255) DEFAULT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `infinite_quantity` bit(1) NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `price` double NOT NULL,
-  `qty` double NOT NULL,
-  `sku` varchar(255) DEFAULT NULL,
-  `variants` varchar(255) DEFAULT NULL,
-  `category_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `product`
---
 
 INSERT INTO `product` (`id`, `active`, `costprice`, `date1`, `description`, `image`, `infinite_quantity`, `name`, `price`, `qty`, `sku`, `variants`, `category_id`) VALUES
 (1, b'1', 150, '2020-09-14', NULL, 'http://localhost:8080/api/products/image/BBQ/Chicken Tikka/1600108951757Chicken Tikka.png', b'0', 'Chicken Tikka', 200, 99, NULL, 'LEG', 1),
@@ -175,39 +144,3 @@ INSERT INTO `product` (`id`, `active`, `costprice`, `date1`, `description`, `ima
 (124, b'1', 500, '2020-10-22', NULL, 'http://localhost:8080/api/products/image/Chicken Karahi/Chicken Green Makhni Karahi/1603390883563Chicken Green Makhni Karahi.png', b'1', 'Chicken Green Makhni Karahi', 625, 1000000, NULL, 'HALF', 2),
 (125, b'1', 1000, '2020-10-22', NULL, 'http://localhost:8080/api/products/image/Chicken Karahi/Chicken Makhni Chicken Zaitoon/1603390979615Chicken Makhni Chicken Zaitoon.png', b'1', 'Chicken Makhni Chicken Zaitoon', 1150, 1000000, NULL, 'FULL', 2),
 (126, b'1', 500, '2020-10-22', NULL, 'http://localhost:8080/api/products/image/Chicken Karahi/Chicken Makhni Chicken Zaitoon/1603391015049Chicken Makhni Chicken Zaitoon.png', b'1', 'Chicken Makhni Chicken Zaitoon', 575, 1000000, NULL, 'HALF', 2);
-
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `product`
---
-ALTER TABLE `product`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `FK1mtsbur82frn64de7balymq9s` (`category_id`);
-
---
--- AUTO_INCREMENT for dumped tables
---
-
---
--- AUTO_INCREMENT for table `product`
---
-ALTER TABLE `product`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
-
---
--- Constraints for dumped tables
---
-
---
--- Constraints for table `product`
---
-ALTER TABLE `product`
-  ADD CONSTRAINT `FK1mtsbur82frn64de7balymq9s` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
