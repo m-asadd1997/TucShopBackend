@@ -1,11 +1,8 @@
 package com.example.TucShopBackend.Models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +22,7 @@ public class Product {
     boolean active;
     boolean infiniteQuantity;
     String sku;
+    String onlineProduct;
 
     public String getDate1() {
         return date1;
@@ -50,6 +48,18 @@ public class Product {
     @JsonIgnore
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     private Set<ProductTransaction> productTransactions = new HashSet<>();
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private Set<ProductCart> productCartSet = new HashSet<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product")
+    List<Review> reviews;
+
+    @OneToMany(mappedBy = "product",cascade = {CascadeType.ALL})
+    private List<ProductGallery> productGalleryImages;
 
 
     public Product() {
@@ -191,5 +201,37 @@ public class Product {
 
     public void setProductTransactions(Set<ProductTransaction> productTransactions) {
         this.productTransactions = productTransactions;
+    }
+
+    public Set<ProductCart> getProductCartSet() {
+        return productCartSet;
+    }
+
+    public void setProductCartSet(Set<ProductCart> productCartSet) {
+        this.productCartSet = productCartSet;
+    }
+
+    public String getOnlineProduct() {
+        return onlineProduct;
+    }
+
+    public void setOnlineProduct(String onlineProduct) {
+        this.onlineProduct = onlineProduct;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public List<ProductGallery> getProductGalleryImages() {
+        return productGalleryImages;
+    }
+
+    public void setProductGalleryImages(List<ProductGallery> productGalleryImages) {
+        this.productGalleryImages = productGalleryImages;
     }
 }

@@ -61,10 +61,10 @@ public class ProductsController {
 
     //Post Product
     @PostMapping("/postproduct")
-    public ApiResponse saveProducts(@Valid @RequestParam(value = "image",required = false) MultipartFile image, ProductsDTO productsDTO){
+    public ApiResponse saveProducts(@RequestParam(value = "productImages",required = false) MultipartFile[] partImages, ProductsDTO productsDTO){
 //        productsDTO.setImage(image);
 
-        return productsService.saveProducts(productsDTO);
+        return productsService.saveProducts(partImages,productsDTO);
     }
     //Get Product according to Category
     @GetMapping("/category/{category}")
@@ -99,13 +99,8 @@ public class ProductsController {
     }
 
     @PutMapping("/{id}")
-    public ApiResponse updateById(@PathVariable("id") Long id ,@RequestParam(value = "image",required = false) MultipartFile image, ProductsDTO productsDTO){
-      if(image!=null){
-          productsDTO.setImage(image);
-      }
-
-
-        return productsService.updateById(id,productsDTO);
+    public ApiResponse updateById(@PathVariable("id") Long id ,@RequestParam("productImages") MultipartFile[] productImages, ProductsDTO productsDTO){
+        return productsService.updateById(id,productImages,productsDTO);
     }
     @RequestMapping(value ="/image/{category}/{productName}/{filename:.+}", method = RequestMethod.GET)
     public ResponseEntity<InputStreamResource> getProductImage(@PathVariable("filename") String filename,  @PathVariable("category") String category)
@@ -155,5 +150,15 @@ public class ProductsController {
     @GetMapping("/getbybarcode/{code}")
     public ApiResponse getByBarCode(@PathVariable("code") String code){
         return this.productsService.getProductByBarCode(code);
+    }
+
+    @GetMapping("/onlineproducts")
+    public ApiResponse getOnlineProducts(){
+        return productsService.getOnlineProductsOnHomePage();
+    }
+
+    @GetMapping("/onlineproductbyid/{id}")
+    public ApiResponse getOnlineProductById(@PathVariable("id") Long id){
+        return productsService.getOnlineProductById(id);
     }
 }

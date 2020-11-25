@@ -10,13 +10,14 @@ import com.example.TucShopBackend.DTO.UpdateStockDTO;
 import com.example.TucShopBackend.DTO.VariantsDTO;
 import com.example.TucShopBackend.Models.Category;
 import com.example.TucShopBackend.Models.Product;
+import com.example.TucShopBackend.Models.ProductGallery;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
 //import org.springframework.mock.web.MockMultipartFile;
+import com.example.TucShopBackend.Repositories.ProductGalleryRepository;
 import com.example.TucShopBackend.Repositories.ProductsRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -34,6 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -46,6 +48,10 @@ public class    ProductsService {
 
     @Autowired
     CategoryRepository categoryRepository;
+
+    @Autowired
+    ProductGalleryRepository productGalleryRepository;
+
 
     @Value("${product.image.url}")
     String productImageUrl;
@@ -67,7 +73,7 @@ public class    ProductsService {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    public ApiResponse saveProducts(ProductsDTO productsDTO){
+    public ApiResponse saveProducts(MultipartFile[] productImages,ProductsDTO productsDTO){
 
         if (checkProductBarcodeExsist(productsDTO,null)){
             return new ApiResponse(Status.Status_DUPLICATE, "Barcode already exist", null);
@@ -120,8 +126,10 @@ public class    ProductsService {
                             product.setDate1(productsDTO.getDate1());
                             product.setVariants(productsDTO.getVariants());
                             product.setActive(true);
+                            product.setOnlineProduct(productsDTO.getOnlineProduct());
                             product.setSku(productsDTO.getSku());
                             productsRepository.save(product);
+
                             return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
 
 
@@ -149,9 +157,22 @@ public class    ProductsService {
                             product.setDate1(productsDTO.getDate1());
                             product.setVariants(productsDTO.getVariants());
                             product.setActive(true);
+                            product.setOnlineProduct(productsDTO.getOnlineProduct());
                             product.setSku(productsDTO.getSku());
-                            productsRepository.save(product);
-                            return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, product);
+                            Product productObj = productsRepository.save(product);
+                            if(productObj != null && productsDTO.getOnlineProduct().equals("yes")){
+                                Arrays.asList(productImages).stream().forEach(file->{
+                                    ProductGallery productGallery = new ProductGallery();
+                                    String uniqueForGallery = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+                                    if(saveProductImage(file,category.getName(),uniqueForGallery)){
+                                        productGallery.setImage(productImageUrl+category.getName()+"/"+productObj.getName()+"/"+uniqueForGallery+file.getOriginalFilename());
+                                        productGallery.setProduct(productObj);
+                                        productGalleryRepository.save(productGallery);
+                                    }
+                                });
+                                return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_POSTED, productObj);
+                            }
+                            return new ApiResponse(Status.Status_Ok, "Product saved without gallery images", productObj);
 
                         }
                         break;
@@ -375,7 +396,7 @@ public class    ProductsService {
        return new ApiResponse(Status.Status_Ok, CustomConstants.PROD_DELETE, null);
     }
 
-    public ApiResponse updateById(Long id , ProductsDTO productsDTO) {
+    public ApiResponse updateById(Long id ,MultipartFile[] productImages,ProductsDTO productsDTO) {
         if (checkProductBarcodeExsist(productsDTO,id)){
             return new ApiResponse(Status.Status_DUPLICATE, "Barcode already exist", null);
         }
@@ -389,6 +410,7 @@ public class    ProductsService {
 
         Optional<Product>findProduct = productsRepository.findById(id);
         Product product = findProduct.get();
+        List<ProductGallery> productGalleryImages = productGalleryRepository.findByProductId(id);
 
         if(productsDTO.getImage()!=null && productsDTO.getImage().getOriginalFilename().isEmpty()) {
             product.setImage(null);
@@ -420,7 +442,25 @@ public class    ProductsService {
                         product.setCategory(category);
                         product.setVariants(productsDTO.getVariants());
                         product.setSku(productsDTO.getSku());
-                        productsRepository.save(product);
+                        product.setOnlineProduct(productsDTO.getOnlineProduct());
+                        Product productObj = productsRepository.save(product);
+                        if(!productGalleryImages.isEmpty()){
+                            productGalleryImages.forEach(imgObj -> {
+                                deleteGalleryImageById(imgObj.getId());
+                            });
+                            if(productObj != null && productsDTO.getOnlineProduct().equals("yes")) {
+                                Arrays.asList(productImages).stream().forEach(file -> {
+                                    ProductGallery productGallery = new ProductGallery();
+                                    String uniqueForGallery = String.valueOf(new Timestamp(System.currentTimeMillis()).getTime());
+                                    if (saveProductImage(file, category.getName(), uniqueForGallery)) {
+                                        productGallery.setImage(productImageUrl + category.getName() + "/" + productObj.getName() + "/" + uniqueForGallery + file.getOriginalFilename());
+                                        productGallery.setProduct(productObj);
+                                        productGalleryRepository.save(productGallery);
+                                    }
+                                });
+                            }
+                            return new ApiResponse(200, CustomConstants.PROD_UPDATE + " with gallery images", productObj);
+                        }
                         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
                     }
                     break;
@@ -438,6 +478,7 @@ public class    ProductsService {
                         product.setCategory(category);
                         product.setSku(productsDTO.getSku());
                         productsRepository.save(product);
+
                         return new ApiResponse(200, CustomConstants.PROD_UPDATE, product);
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -579,6 +620,25 @@ public class    ProductsService {
             return  productsRepository.findByCondition(pageable);
     }
 
+    public ApiResponse deleteGalleryImageById(Long id) {
+
+        Optional<ProductGallery> productGallery = productGalleryRepository.findById(id);
+        if (productGallery.isPresent()) {
+            String imgPath = productGallery.get().getImage();
+            String path1 = getImagePath(imgPath);
+            if (deleteProductImage(path1)) {
+
+                productGalleryRepository.deleteById(id);
+
+                return new ApiResponse(200, "Picture deleted", null);
+
+            } else {
+                return new ApiResponse(400, "Error deleting Picture", null);
+            }
+        }
+        return new ApiResponse(400, "Picture not found", null);
+    }
+
     public Boolean deleteProductImage(String path) {
         String filepath = CustomConstants.SERVER_PATH+"//"+"serverFiles//"+path;
         File f = new File(filepath);
@@ -598,6 +658,23 @@ public class    ProductsService {
         }
 
         return  true;
+    }
+
+    public String getImagePath(String dbPath) {
+
+        String[] path = dbPath.split("/");
+        String path1 = "";
+        for (Integer i = 6; i < path.length; i++) {
+            if (i == path.length - 1) {
+                path1 += path[i];
+            } else if (i == 7) {
+
+                path1 += "products//";
+            } else {
+                path1 += path[i] + "//";
+            }
+        }
+        return path1;
     }
 
     public ApiResponse getProductByBarCode(String code){
@@ -620,5 +697,26 @@ public class    ProductsService {
             return new ApiResponse(Status.Status_ERROR,"Product not in Database",null);
         }
 
+
+
+    }
+
+    public ApiResponse getOnlineProductsOnHomePage(){
+        List<Object> onlineProducts = productsRepository.getOnlineProductsForHomePage();
+        if(!onlineProducts.isEmpty()){
+            return new ApiResponse(Status.Status_Ok,"Online products found",onlineProducts);
+        }
+        else{
+            return new ApiResponse(Status.Status_ERROR,"Online products not found",null);
+        }
+    }
+
+    public ApiResponse getOnlineProductById(Long id){
+        List<Product> onlineProducts = productsRepository.getOnlineProductById(id);
+        if(!onlineProducts.isEmpty()){
+            return new ApiResponse(Status.Status_Ok,"Online product found",onlineProducts);
+        }else{
+            return new ApiResponse(Status.Status_ERROR,"Online product not found",null);
+        }
     }
 }
