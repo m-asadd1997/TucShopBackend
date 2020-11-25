@@ -10,6 +10,8 @@ public class CategoryDTO {
 
     @NotNull(message = "Name cannot be null")
     String name;
+    Long parentID;
+    Long childID;
     MultipartFile image;
 
     List<Product> productList;
@@ -40,4 +42,14 @@ public class CategoryDTO {
     public void setProductList(List<Product> productList) {
         this.productList = productList;
     }
+
+    public Long getParentID() {
+        return parentID;
+    }
+
+    public void setParentID(Long parentID) {
+        this.parentID = parentID;
+    }
+
+
 }

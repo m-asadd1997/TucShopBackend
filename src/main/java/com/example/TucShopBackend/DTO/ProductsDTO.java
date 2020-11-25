@@ -40,6 +40,7 @@ public class ProductsDTO {
     String variants;
     boolean active;
     String sku;
+
     public String  getDate1() {
 
 
