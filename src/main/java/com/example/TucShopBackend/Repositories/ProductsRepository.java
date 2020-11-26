@@ -103,4 +103,7 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     @Modifying @Transactional
     @Query(value = "UPDATE product SET qty=qty-:quantity WHERE id=:id",nativeQuery = true)
     void updateQuantity(@Param("id") Long id, @Param("quantity") Long quantity);
+
+    @Query(value = "select * from product where active = 1", nativeQuery = true)
+    Page<Product> getAllProducts(Pageable pageable);
 }

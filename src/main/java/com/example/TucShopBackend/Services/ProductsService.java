@@ -589,7 +589,11 @@ public class    ProductsService {
 
 
     public Page<Product> joinAllProducts(Pageable pageable){
-            return  productsRepository.findByCondition(pageable);
+        return  productsRepository.findByCondition(pageable);
+    }
+
+    public Page<Product> getAllProducts(Pageable pageable){
+        return  productsRepository.getAllProducts(pageable);
     }
 
     public Boolean deleteProductImage(String path) {

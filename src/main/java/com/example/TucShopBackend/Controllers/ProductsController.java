@@ -156,4 +156,9 @@ public class ProductsController {
     public ApiResponse getByBarCode(@PathVariable("code") String code){
         return this.productsService.getProductByBarCode(code);
     }
+
+    @GetMapping(value = "/paginatedproduct")
+    public Page <Product> getAllPaginateProduct(@RequestParam(defaultValue = "0") int page) {
+        return productsService.getAllProducts(PageRequest.of(page,20));
+    }
 }
