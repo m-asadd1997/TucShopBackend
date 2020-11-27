@@ -104,5 +104,8 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     @Query(value = "select * from product where online_product = 'yes' and id=:id",nativeQuery = true)
     public List<Product> getOnlineProductById(@Param("id") Long id);
 
+    @Query(value = "Select new com.example.TucShopBackend.DTO.OnlineProductDTO(p.id,p.name,p.image,p.price,p.category.id) from Product p where p.price BETWEEN :minPrice AND :maxPrice")
+    public List<Object> getFilteredOnlineProductsForHomePage(@Param("minPrice") double minPrice,@Param("maxPrice") double maxPrice);
+
 
 }

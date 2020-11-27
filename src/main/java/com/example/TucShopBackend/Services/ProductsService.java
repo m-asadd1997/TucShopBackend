@@ -719,4 +719,13 @@ public class    ProductsService {
             return new ApiResponse(Status.Status_ERROR,"Online product not found",null);
         }
     }
+
+    public ApiResponse getOnlineProductByMinAndMaxPrice(double minPrice,double maxPrice){
+        List<Object> onlineProducts = productsRepository.getFilteredOnlineProductsForHomePage(minPrice,maxPrice);
+        if(!onlineProducts.isEmpty()){
+            return new ApiResponse(Status.Status_Ok,"Online products by filtered price found",onlineProducts);
+        }else{
+            return new ApiResponse(Status.Status_ERROR,"Online products by filtered price not found",null);
+        }
+    }
 }
