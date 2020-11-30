@@ -1,0 +1,4 @@
+#Key and value types
+#Wed Apr 15 19:55:10 PKT 2020
+valueType=com.example.TucShopBackend.Commons.ApiResponse
+keyType=java.lang.String

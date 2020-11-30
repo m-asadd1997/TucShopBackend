@@ -35,10 +35,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class    ProductsService {
@@ -722,6 +719,24 @@ public class    ProductsService {
 
     public ApiResponse getOnlineProductByMinAndMaxPrice(double minPrice,double maxPrice){
         List<Object> onlineProducts = productsRepository.getFilteredOnlineProductsForHomePage(minPrice,maxPrice);
+        if(!onlineProducts.isEmpty()){
+            return new ApiResponse(Status.Status_Ok,"Online products by filtered price found",onlineProducts);
+        }else{
+            return new ApiResponse(Status.Status_ERROR,"Online products by filtered price not found",null);
+        }
+    }
+
+    public ApiResponse sortedOnlineProductby(String sortedValue){
+        List<Object> onlineProducts = new ArrayList<>();
+        if(sortedValue.equals("asc")){
+            onlineProducts = productsRepository.sortOnlineProductsByAscending();
+        }
+        else if(sortedValue.equals("desc")){
+            onlineProducts = productsRepository.sortOnlineProductsByDescending();
+        }
+        else if(sortedValue.equals("new")){
+            onlineProducts = productsRepository.sortOnlineProductsByNewness();
+        }
         if(!onlineProducts.isEmpty()){
             return new ApiResponse(Status.Status_Ok,"Online products by filtered price found",onlineProducts);
         }else{

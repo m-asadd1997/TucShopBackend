@@ -107,5 +107,13 @@ public interface ProductsRepository extends JpaRepository<Product,Long> {
     @Query(value = "Select new com.example.TucShopBackend.DTO.OnlineProductDTO(p.id,p.name,p.image,p.price,p.category.id) from Product p where p.price BETWEEN :minPrice AND :maxPrice")
     public List<Object> getFilteredOnlineProductsForHomePage(@Param("minPrice") double minPrice,@Param("maxPrice") double maxPrice);
 
+    @Query(value = "Select new com.example.TucShopBackend.DTO.OnlineProductDTO(p.id,p.name,p.image,p.price,p.category.id) from Product p ORDER BY p.price ASC")
+    public List<Object> sortOnlineProductsByAscending();
+
+    @Query(value = "Select new com.example.TucShopBackend.DTO.OnlineProductDTO(p.id,p.name,p.image,p.price,p.category.id) from Product p ORDER BY p.price DESC")
+    public List<Object> sortOnlineProductsByDescending();
+
+    @Query(value = "Select new com.example.TucShopBackend.DTO.OnlineProductDTO(p.id,p.name,p.image,p.price,p.category.id) from Product p ORDER BY p.id DESC")
+    public List<Object> sortOnlineProductsByNewness();
 
 }

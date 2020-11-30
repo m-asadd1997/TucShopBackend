@@ -161,4 +161,9 @@ public class ProductsController {
     public ApiResponse getOnlineProductById(@PathVariable("id") Long id){
         return productsService.getOnlineProductById(id);
     }
+
+    @GetMapping("/sortedonlineproduct/{sortorder}")
+    public ApiResponse sortedonlineproductby(@PathVariable("sortorder") String sortorder){
+        return productsService.sortedOnlineProductby(sortorder);
+    }
 }
