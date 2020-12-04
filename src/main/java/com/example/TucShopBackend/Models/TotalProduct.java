@@ -1,8 +1,7 @@
 package com.example.TucShopBackend.Models;
 
 public class TotalProduct {
-    Long id
-            ;
+    Long id;
     String date1;
 
     public Long getId() {

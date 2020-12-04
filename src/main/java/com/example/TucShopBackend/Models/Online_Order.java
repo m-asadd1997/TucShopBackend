@@ -1,12 +1,15 @@
 package com.example.TucShopBackend.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 
 @Entity
-public class Order_Details {
+public class Online_Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +31,12 @@ public class Order_Details {
     private LocalDate orderDate;
     private LocalTime orderTime;
 
+    @OneToOne
+    @JoinColumn(name = "cart_id", referencedColumnName = "id", nullable = false)
+    private  Cart cart;
 
-    public Order_Details(Long id, Long uuid, LocalTime orderTime, String orderStatus, LocalDate orderDate, String firstName, String lastName, String address, String townCity, String stateCountry, String emailAddress, String phone, String postCodeZip, double cartSubTotal, double shipping, double orderTotal) {
+
+    public Online_Order(Long id, Long uuid, Cart cart, LocalTime orderTime, String orderStatus, LocalDate orderDate, String firstName, String lastName, String address, String townCity, String stateCountry, String emailAddress, String phone, String postCodeZip, double cartSubTotal, double shipping, double orderTotal) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -46,9 +53,10 @@ public class Order_Details {
         this.orderDate = orderDate;
         this.uuid = uuid;
         this.orderTime = orderTime;
+        this.cart = cart;
     }
 
-    public Order_Details() {
+    public Online_Order() {
     }
 
     public Long getId() {
@@ -178,5 +186,14 @@ public class Order_Details {
 
     public void setOrderTime(LocalTime orderTime) {
         this.orderTime = orderTime;
+    }
+
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }

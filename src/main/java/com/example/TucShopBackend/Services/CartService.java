@@ -28,8 +28,9 @@ public class CartService {
         for (ProductCart productCart :cartDTO.getProductCartList()){
             productCartSet.add(new ProductCart(cart, productCart.getProduct(), productCart.getQuantity()));
         }
-        cart.setProductCartSet(productCartSet);
-       return new ApiResponse(Status.Status_Ok,"Saved to Cart",cartRepository.save(cart));
+        cart.setProducts(productCartSet);
+        cartRepository.save(cart);
+       return new ApiResponse(Status.Status_Ok,"Saved to Cart",cart);
     }
 
 

@@ -1,6 +1,8 @@
 package com.example.TucShopBackend.DTO;
 
-public class OrderDetailsDTO {
+import com.example.TucShopBackend.Models.Cart;
+
+public class OnlineOrderDTO {
 
     String fname;
     String lname;
@@ -14,9 +16,12 @@ public class OrderDetailsDTO {
     double cardAmount;
     double shipping;
     String orderStatus;
+    Cart cart;
 
-    public OrderDetailsDTO() {
+    public OnlineOrderDTO() {
     }
+
+
 
     public String getFname() {
         return fname;
@@ -114,5 +119,11 @@ public class OrderDetailsDTO {
         this.orderStatus = orderStatus;
     }
 
+    public Cart getCart() {
+        return cart;
+    }
 
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
 }
