@@ -15,6 +15,7 @@ public class Category {
     String name;
     String image;
     boolean active;
+    Long parentID;
 
 
     @JsonIgnore
@@ -69,4 +70,14 @@ public class Category {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public Long getParentID() {
+        return parentID;
+    }
+
+    public void setParentID(Long parentID) {
+        this.parentID = parentID;
+    }
+
+
 }

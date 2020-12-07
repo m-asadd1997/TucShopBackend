@@ -87,6 +87,11 @@ public class CategoryService {
                         Category category = new Category();
                         category.setImage(categoryImageUrl+categoryDTO.getName()+"/"+unique+categoryDTO.getImage().getOriginalFilename());
                         category.setName(categoryDTO.getName());
+                        if (categoryDTO.getParentID()!=null)
+                        {
+                           category.setParentID(categoryDTO.getParentID());
+                        }
+
                         category.setActive(true);
                         categoryRepository.save(category);
                         return new ApiResponse(Status.Status_Ok,CustomConstants.CAT_POSTED,category);
@@ -283,4 +288,11 @@ public class CategoryService {
     }
 
 
+    public ApiResponse getSubCategoriesById(Long id) {
+        if (id == 0)
+        {
+            return new ApiResponse(200,"Fetched All SubCategories", categoryRepository.getAllSubCategories());
+        }
+     return  new ApiResponse(200, "Fetched Sucessfully", categoryRepository.getSubCategoriesById(id))  ;
+    }
 }

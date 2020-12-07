@@ -1,6 +1,7 @@
 package com.example.TucShopBackend.DTO;
 
 import com.example.TucShopBackend.Models.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -17,10 +18,12 @@ public class ProductsDTO {
 
     @NotNull(message = "Name cannot be null")
     @NotBlank(message = "Name cannot be blank" )
-    @Size(min = 3)
+  @Size(min = 3)
     String name;
+    //    @NotNull(message = "Image cannot be null")
+    //    @NotBlank(message = "Image cannot be blank" )
     MultipartFile image;
-    @NotNull(message = "Description not found")
+  @NotNull(message = "Description not found")
     @Size(min = 3)
     String description;
     @NotNull(message = "Price cannot be null")

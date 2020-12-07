@@ -64,4 +64,9 @@ public class CategoryController {
             throws IOException {
         return categoryService.getCategoryImage(filename,category);
     }
+
+    @GetMapping("/subcategory/{id}")
+    public ApiResponse getSubCategoriesById(@PathVariable("id") Long id){
+            return categoryService.getSubCategoriesById(id);
+    }
 }
