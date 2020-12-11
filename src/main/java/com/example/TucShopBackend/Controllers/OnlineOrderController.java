@@ -33,6 +33,15 @@ public class OnlineOrderController {
         return this.onlineOrderService.getOrderStatusOnSelect(value);
     }
 
+    @GetMapping ("/phoneno/{value}")
+    public  ApiResponse getPhone(@PathVariable("value")String value){
+    return  this.onlineOrderService.getPhoneNo(value);
+    }
+
+    @GetMapping("/trackingid/{value}")
+    public  ApiResponse getTrackingId (@PathVariable("value") Long value){
+    return  this.onlineOrderService.getTrackingId(value);
+    }
 
 
 

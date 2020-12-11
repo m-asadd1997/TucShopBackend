@@ -118,6 +118,13 @@ public class TransactionsController {
 //    }
     }
 
+    @PostMapping("/onlinetransaction/{id}")
+    public ApiResponse postOnlineTransaction (@PathVariable ("id")Long id, HttpServletRequest  request){
+    request.getAttribute("loggedinUser");
+    User user = (User) request.getAttribute("loggedinUser");
+    return this.transactionService.postTransactionByOnlineOrderId(id, user);
+    }
+
 }
 
 

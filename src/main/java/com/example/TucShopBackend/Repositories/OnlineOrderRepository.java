@@ -15,4 +15,10 @@ public interface OnlineOrderRepository extends JpaRepository<Online_Order,Long> 
     @Query(value = "select * from online_order where order_status =:value",nativeQuery = true)
     List<Online_Order> getAllByOrderStatus(@Param("value") String value);
 
+    @Query(value = "select * from online_order where phone =:value",nativeQuery = true)
+    Online_Order getPhoneNo(@Param("value") String value);
+
+    @Query(value = "select * from online_order where uuid =:value",nativeQuery = true)
+    Online_Order getTrackingId(@Param("value") Long value);
+
 }

@@ -92,6 +92,27 @@ public class OnlineOrderService {
         }
         }
 
+    public  ApiResponse getPhoneNo (String value){
+    Online_Order onlineOrder = onlineOrderRepository.getPhoneNo(value);
+    if(onlineOrder!=null) {
+        return new ApiResponse(Status.Status_Ok, "Order Phone No Successfully Get", onlineOrder);
+    }else{
+        return new ApiResponse(Status.Status_ERROR, "Order Phone no Not Found", null);
+    }
+    }
+
+
+    public  ApiResponse getTrackingId (Long value){
+        Online_Order onlineOrder = onlineOrderRepository.getTrackingId(value);
+        if(onlineOrder!=null) {
+            return new ApiResponse(Status.Status_Ok, "Order Tracking ID Successfully Get", onlineOrder);
+        }else{
+            return new ApiResponse(Status.Status_ERROR, "Order Tracking ID Not Found", null);
+        }
+    }
+
+
+
 
 
 }

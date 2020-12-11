@@ -7,6 +7,7 @@ import com.example.TucShopBackend.DTO.ProductsDTO;
 import com.example.TucShopBackend.DTO.ScearchTransactionDTO;
 import com.example.TucShopBackend.DTO.TransactionsDTO;
 import com.example.TucShopBackend.Models.*;
+import com.example.TucShopBackend.Repositories.OnlineOrderRepository;
 import com.example.TucShopBackend.Repositories.SettingsRepository;
 import com.example.TucShopBackend.Repositories.TransactionsRepository;
 import com.example.TucShopBackend.Repositories.UserDao;
@@ -55,6 +56,9 @@ public class TransactionService {
 
     @Autowired
     SettingsRepository settingsRepository;
+
+    @Autowired
+    OnlineOrderRepository onlineOrderRepository;
 
     @Autowired
     PdfUtil pdfUtil;
@@ -540,6 +544,26 @@ public class TransactionService {
 
 
 
+      public  ApiResponse postTransactionByOnlineOrderId(Long id, User user){
+      Online_Order onlineOrder = onlineOrderRepository.findById(id).get();
+            Transactions transactions = new Transactions();
+            LocalDate localDate = LocalDate.now();
+            LocalTime localTime = LocalTime.now();
+            transactions.setAmount(onlineOrder.getOrderTotal());
+            transactions.setCreatedBy(onlineOrder.getEmailAddress());
+            transactions.setRequestedUser(onlineOrder.getFirstName()+" "+onlineOrder.getLastName());
+            transactions.setUpdatedBy(user.getName());
+            transactions.setStatus("Complete");
+            transactions.setClosingStatus("OPEN");
+            transactions.setTableNumber(null);
+            transactions.setWaiterName(null);
+            transactions.setAction("SC");
+            transactions.setDate(localDate);
+            transactions.setTransactionTime(localTime);
+
+         return new ApiResponse(Status.Status_Ok, "Order Completed! Online Transaction Successfully Saved", transactionsRepository.save(transactions));
+
+    }
 
 }
 
