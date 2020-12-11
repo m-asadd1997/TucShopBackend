@@ -1,9 +1,6 @@
 package com.example.TucShopBackend;
 
 
-import com.example.TucShopBackend.Models.Category;
-import com.example.TucShopBackend.Models.Token;
-import com.example.TucShopBackend.Models.User;
 import com.example.TucShopBackend.Repositories.CategoryRepository;
 import com.example.TucShopBackend.Repositories.TokenRepository;
 import com.example.TucShopBackend.Repositories.UserDao;
@@ -11,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
 
 @Component
 public class MyRunner implements CommandLineRunner {
